@@ -1,0 +1,252 @@
+.patient-immunizations {
+    background-color: @white;
+    height: 100%;
+    width: 100%;
+
+    .flex-stretch {
+        flex: 1 0 200px;
+        position: relative;
+    }
+
+    .flex-no-shrink {
+        flex: none;
+    }
+
+    .flex-column {
+        flex: 1 0 100px;
+        height: 100%;
+        position: relative;
+    }
+
+    .list-immunizations {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        flex: 0 1 auto;
+    }
+
+    .actions-bar {
+        padding: 0px 15px;
+        border-bottom: 3px solid @navy;
+        position: relative;
+        height: 38px;
+        width: 100%;
+    }
+
+    .header3a {
+        margin-right: 10px;
+    }
+
+    .data-grid-table.with-immunizations {
+        width: 100%;
+
+        &, >section, .data-grid-table-container {
+            height: 100%;
+        }
+        .data-grid-table-container {
+            background: white;
+        }
+
+        p {
+            margin: 0px;
+        }
+
+        .is-refused {
+            opacity: 0.5;
+        }
+
+        .vaccine-name {
+            max-width: calc(~"100% - 20px");
+        }
+
+        .icon-info {
+            color: @slate-dark;
+
+            &:hover {
+                color: @sky;
+            }
+        }
+    }
+
+    .radio-button__label::before, .check-box__label::before {
+        background: white;
+    }
+}
+
+.immunizations-bidirectional {
+    .stacked-column {
+        flex: 1 0 auto;
+        position: relative;
+
+        &.allow-shrink {
+            flex: 0 0 auto;
+        }
+    }
+    .scrollable-panel {
+        overflow-y: auto;
+    }
+    .split-button__dropdown-menu-option {
+        white-space: nowrap;
+    }
+    .data-grid-table.is-hoverable {
+        tr,
+        tr:hover {
+            border-top-width: 0px;
+            border-bottom-width: 0px;
+        }
+        tr.table-group-header {
+            :hover {
+                cursor: default;
+                background-color: @white;
+            }
+            td {
+                font-weight: 600;
+            }
+        }
+        tbody {
+            border-top: 1px solid @slate-light;
+        }
+    }
+    .inline-option {
+        .box-spacing(padding; R; md-v2);
+        display: inline-block;
+    }
+    .immunization-comment {
+        width: 100%;
+    }
+    .section-title {
+        margin-top: -8px;
+    }
+
+    .registry-search-container {
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        .vaccine--no-wrap {
+            white-space: nowrap;
+        }
+        .query-registry-error {
+            .box-spacing(padding, TB, sm-v2);
+            .box-spacing(padding, LR, md-v2);
+            border: 1px solid @yellow-dark-v2;
+            background-color: @yellow-light-v2;
+            color: @red-v2;
+            .icon-urgent {
+                .box-spacing(margin, R, sm-v2);
+            }
+        }
+        .registry-query-results-pane {
+            height: calc(~'100% - 60px');
+            .vaccine-data-table {
+                .box-spacing(padding, T, md-v2);
+                max-height: 100%;
+
+                > section {
+                    height: 100%;
+                }
+                .data-grid-table-container {
+                    max-height: 100%;
+                    overflow-x: hidden;
+                }
+            }
+        }
+    }
+
+    .list-immunizations {
+        height: auto;
+    }
+    .split-panel__vertical--closable .close-box {
+        position: absolute;
+        right: 8px;
+        z-index: 9999;
+    }
+
+    .limit-dropdown-width {
+        max-width: 350px;
+    }
+
+    .transmission-errors {
+        .border-color-default;
+        .bg-color-error;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+    }
+
+    .transmission-errors-heading {
+        .box-spacing(padding, A, sm);
+        .icon-urgent {
+            .box-spacing(margin, R, sm-v2);
+        }
+    }
+
+    .transmission-errors-content {
+        display: none;
+    }
+
+    .transmission-error {
+        .border-color-default;
+        .box-spacing(padding, TB, sm);
+        .box-spacing(padding, LR, xl-v2);
+        border-top-width: 1px;
+        border-top-style: solid;
+    }
+
+    .break-all {
+        word-break: break-all;
+    }
+}
+
+.immunizations-print {
+    .table-content {
+        margin: 8px 0 0;
+
+        .table {
+            border: 1px solid @gray-v2;
+        }
+
+        *, p {
+            font-size: 13px;
+        }
+        .row:first-child {
+            border-top: none;
+        }
+        .row {
+            border-bottom: none;
+            margin-left: 0px;
+            margin-right: 0px;
+            > div {
+                .box-spacing(padding, TB, sm-v2);
+                .box-spacing(padding, LR, lg-v2);
+            }
+        }
+        .no-group {
+            border-bottom: 1px solid @gray-v2;
+            .box-spacing(padding, TB, sm-v2);
+        }
+        .immunization-group {
+            .box-spacing(padding, B, sm-v2);
+            border-bottom: 1px solid @gray-v2;
+        }
+        .immunization-group:last-child,
+        .no-group:last-child {
+            border-bottom: none;
+        }
+        .immunization-group-header {
+            font-weight: 600;
+            > div {
+                .box-spacing(padding, TB, md-v2);
+            }
+        }
+        .header-row {
+            background-color: @gray-light-v2;
+            border-bottom: 1px solid @gray-v2;
+            > div {
+                font-weight: normal;
+                font-size: 11px;
+                line-height: 1.2em;
+                text-transform: uppercase;
+            }
+        }
+    }
+}

@@ -1,0 +1,37 @@
+<div class="inline-flex-group">
+    {{#unless isEntitledToEditMedications}}
+        <div class="item gutter-xs"></div>
+    {{/unless}}
+    <div class="item gutter-xs {{unless isEntitledToEditMedications "box-fixed"}}">
+        <a class="btn btn-sm text-left" data-element= "cancel-btn" onclick={{action "cancel"}}>Cancel</a>
+    </div>
+    {{#if isEntitledToEditMedications}}
+        <div class="item gutter-xs box-fixed" data-element="medication-detail-footer-buttons">
+            {{#if session.canEditChart}}
+                {{#if isEditing}}
+                    {{#if canDelete}}
+                        {{#if hasErxOrderDrafts}}
+                            {{#popover-confirm confirmType="warning" isCloseButtonVisible=true isCancelButtonVisible=false isConfirmButtonVisible=false tagName="button" class="btn btn-sm" title="Cannot delete medication" popoverContent="There are prescription drafts associated with this medication. Complete or delete the associated drafts before deleting the medication."}}
+                                Delete
+                            {{/popover-confirm}}
+                        {{else}}
+                            {{#popover-confirm action="deleteMedicationDetail" tagName="button" class="btn btn-sm" title="Delete medication" confirmLabel="Delete" popoverContent="This action is final, and will remove this medication from this patient's history."}}
+                                Delete
+                            {{/popover-confirm}}
+                        {{/if}}
+                    {{else}}
+                        {{#popover-info  tagName="button" class="btn btn-sm" title="Medication Attached to an Encounter" popoverContent="Consider marking this medication historical by setting a stop date"}}
+                            Delete
+                        {{/popover-info}}
+                    {{/if}}
+                {{/if}}
+            {{/if}}
+        </div>
+        <div class="item gutter-xs box-fixed">
+            <a class="btn btn-sm {{unless isMedOrderable "disabled"}}" onclick={{action "createOrder"}} data-element="btn-order-eRx">Order</a>
+        </div>
+        <div class="item gutter-xs box-fixed">
+            <a class="btn btn-sm btn-primary" onclick={{action "saveMedication"}}>Record</a>
+        </div>
+    {{/if}}
+</div>

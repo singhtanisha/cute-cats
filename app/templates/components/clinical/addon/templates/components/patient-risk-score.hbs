@@ -1,0 +1,44 @@
+{{data-tunnel name="patient-risk-score" onDataReceived=(perform loadSocialHistory)}}
+
+{{#composable-card data-element="patient-risk-score-card" as |card|}}
+    {{#card.header as |header|}}
+        {{#header.title}}
+            Patient risk score
+            {{#unless isLoading}}
+                {{#if isAllowedToEditSummary}}
+                    {{#unless patientRiskScore.optionGuid}}
+                        <a onclick={{action "edit"}} class="icon icon-add icon--md text-color-placeholder box-margin-Lmd-v2" data-element="patient-risk-score-add-button"></a>
+                    {{/unless}}
+                {{/if}}
+                <a onclick={{action "print"}} class="icon icon-printer icon--md text-color-placeholder box-margin-Lmd-v2" data-element="print-patient-risk-score-button"></a>
+            {{/unless}}
+        {{/header.title}}
+    {{/card.header}}
+    {{#card.content}}
+        {{#if patientRiskScore.optionGuid}}
+            <ul class="list list--default {{if isAllowedToEditSummary "list--selectable list--hover"}}">
+                <li onclick={{if isAllowedToEditSummary (action "edit")}} data-element="patient-risk-score-item">
+                    <a>{{patientRiskScore.description}}</a>
+                    <span class="box-margin-Lmd-v2">{{patientRiskScore.riskScore}}</span>
+                    <span class="box-margin-Lmd-v2">{{patientRiskScore.dateAssigned}}</span>
+                </li>
+            </ul>
+        {{else}}
+            <p class="text-color-placeholder box-margin-Bn" data-element="patient-risk-score-placeholder-text">
+                {{#if isLoading}}
+                    Loading patient risk score...
+                {{else}}
+                    {{#if error}}
+                        Could not load patient risk score. Try again later.
+                    {{else}}
+                        No patient risk score recorded
+                    {{/if}}
+                {{/if}}
+            </p>
+        {{/if}}
+    {{/card.content}}
+{{/composable-card}}
+
+{{#print-preview-content printTitle=printTitle isVisible=isPrintPreviewVisible}}
+    {{print-patient-risk-score-section content=patientRiskScore patient=patient class="sh-print chart-print-container"}}
+{{/print-preview-content}}

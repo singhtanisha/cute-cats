@@ -1,0 +1,47 @@
+<div class="field-label">Diagnoses attached to this encounter</div>
+{{#unless encounterDiagnoses}}
+    <div class="item">No attached diagnoses.</div>
+{{else}}
+    <div id="medication-list-container">
+        {{#each encounterDiagnoses as |dx|}}
+            <div class="medication-list-item {{if canEditDiagnoses "with-reorder-controls"}}" data-guid="{{dx.diagnosis.diagnosisGuid}}">
+                <div class="close-box-small" {{action "removeDiagnosis" dx.diagnosis}}></div>
+                {{#if canEditDiagnoses}}
+                    <div class="reorder-controls">
+                        <a class="icon icon-move-top" {{action "moveToTop" dx}}></a>
+                        <a class="icon icon-move-up" {{action "moveUp" dx}}></a>
+                    </div>
+                {{/if}}
+                <div class="medication-display">
+                    {{#if dx.diagnosis.needsIcd10Refinement}}
+                        <a {{action "refineDiagnosis" dx.diagnosis}} class="pull-right diagnosis-assessment-list-refine-label icon-urgent" aria-label="refine">
+                        </a>
+                    {{/if}}
+                    <a {{action "editDiagnosis" dx.diagnosis}}>
+                        <span>{{dx.diagnosis.description}}</span>
+                        {{#if dx.diagnosis.isAcute}}
+                            <span>Acute</span>
+                        {{/if}}
+                    </a>
+                    {{#if dx.diagnosis.startDate}}
+                        <span class="hint-text">Start:</span>
+                        {{datetime-formatted datetime=dx.diagnosis.startDate}}
+                    {{/if}}
+                    {{#if dx.diagnosis.stopDate}}
+                        <span class="hint-text">Stop:</span>
+                        {{datetime-formatted datetime=dx.diagnosis.stopDate}}
+                    {{/if}}
+
+                    {{#if dx.diagnosis.diagnosisComment.comment}}
+                        <span class="hint-text">Comment:</span>
+                        {{transcript-comment transcriptComment=dx.diagnosis.diagnosisComment}}
+                    {{/if}}
+                    {{#if dx.diagnosis.encounterCommentsWithComment}}
+                        <span class="hint-text">Encounter Comments:</span>
+                        {{transcript-comments items=dx.diagnosis.encounterCommentsWithComment}}
+                    {{/if}}
+                </div>
+            </div>
+        {{/each}}
+    </div>
+{{/unless}}

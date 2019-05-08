@@ -1,0 +1,27 @@
+<h4>
+    <i class="icon-triangle severitySevere"></i>
+    <a {{action "toggleExpandDuplications"}} data-element="duplicate-therapy-summary">{{duplicateTherapySummaryText}}</a>
+</h4>
+{{#if isDuplicationSummaryExpanded}}
+    <div class="panel-body-interaction">
+        {{#each duplicateTherapyGroups as |group index|}}
+            <label class="field-label box-margin-Txs" data-element="alert-label-{{index}}">{{group.alertLabel}}</label>
+            <p data-element="alert-text-{{index}}">
+                {{group.alertText}}
+                {{#unless group.isAlertTextExpanded}}
+                    <a class="show-more-less-toggle" {{action "toggleExpandDuplicationAlertText" group}} data-element="alert-text-expand-{{index}}">
+                        Show more...
+                    </a>
+                {{/unless}}
+            </p>
+            {{#if group.isAlertTextExpanded}}
+                <div class="box-margin-Bsm">
+                    {{monograph-parser xmlData=group.monograph}}
+                    <a class="show-more-less-toggle" {{action "toggleExpandDuplicationAlertText" group}} data-element="alert-text-detail-expand-{{index}}">
+                        Show less...
+                    </a>
+                </div>
+            {{/if}}
+        {{/each}}
+    </div>
+{{/if}}

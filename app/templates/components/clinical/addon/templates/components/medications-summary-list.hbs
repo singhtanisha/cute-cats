@@ -1,0 +1,109 @@
+{{data-tunnel name="medications-summary-list" onDataReceived=(action "reloadMedications")}}
+{{#composable-card as |card|}}
+    {{#card.header as |header|}}
+        {{#header.title}}
+            Medications
+            {{#if canRecordMedication}}
+                <a onclick={{action "recordMedicationOnSummary"}} data-element="record-medication" class="icon icon-add  icon--md text-color-placeholder box-margin-Lmd-v2"></a>
+            {{/if}}
+            {{#unless isLoading}}
+                {{print-dropdown data-element="print-medications" options=printOptions print=(action "print") useIcons=true}}
+            {{/unless}}
+        {{/header.title}}
+    {{/card.header}}
+    {{#card.content}}
+        {{#if isLoading}}
+            <p>Loading medications...</p>
+        {{else}}
+            {{#if medicationsError}}
+                <p class="text-color-placeholder">Can't load medications. Please <a onclick={{action "reloadMedications"}}>try again.</a></p>
+            {{else}}
+                {{#if isEditing}}
+                    {{#unless selectedDeviceGuid}}
+                        <section class="active">
+                            <div>Record device</div>
+                        </section>
+                    {{/unless}}
+                {{/if}}
+                {{#if medications.groupOfDuplicates}}
+                    {{#popover-info
+                        popoverContent="Select a medication to reconcile therapeutic duplications."
+                        classNames="duplicate-medications-alert bg-color-warning box-padding-LRlg-v2 box-padding-TBxs-v2"
+                        popoverClass="duplicate-medications-alert-popover"
+                        tagName="div"
+                        triggerOn="hover"}}
+                        <span>
+                            <i class="icon-urgent" data-element="duplicate-medication-icon-on-summary"></i>
+                            <span class="p-semibold" data-element="duplicate-medication-warning-on-summary">
+                                You may have therapeutic duplications ({{medications.groupOfDuplicates.length}})
+                            </span>
+                        </span>
+                    {{/popover-info}}
+                {{/if}}
+                {{#if hasErxOrderDrafts}}
+                    <div class="box-margin-Bxs-v2">
+                        <i class="icon-pending icon-slate-dark"></i>
+                        <span class="p-semibold" data-element="prescription-drafts">{{erxOrderDraftCount}} prescription {{pluralize erxOrderDraftCount "draft" "drafts"}}</span>
+                        {{#link-to "timeline.events" patientGuid "erx-order" class="box-margin-Lmd-v2" data-element="view-prescription-drafts"}}View{{/link-to}}
+                    </div>
+                {{/if}}
+                {{#if sortedActiveMedications}}
+                    <ul class="list list--selectable list--hover">
+                        {{#each sortedActiveMedications as |medication|}}
+                            {{medications-summary-list-item
+                                isEntitledToEditMedications=isEntitledToEditMedications
+                                editMedicationOnSummary=(action "editMedicationOnSummary")
+                                openAssessment=(action "openAssessment")
+                                medication=medication
+                                selectedMedicationGuid=selectedMedicationGuid
+                                class="active-medication"}}
+                        {{/each}}
+                    </ul>
+                {{else}}
+                    {{#if canRecordMedication}}
+                        {{#check-box checked=isNoKnownChecked disabled=isLoadingNoKnown data-element="no-active-medications-label"}}
+                            Patient has no active medications
+                        {{/check-box}}
+                    {{else}}
+                        {{#if isNoKnownChecked}}
+                            Patient has no active medications
+                        {{else}}
+                            No medication recorded
+                        {{/if}}
+                    {{/if}}
+                {{/if}}
+                {{#if historicalMedicationsVisible}}
+                    <div class="box-margin-Txs-v2">
+                        <h4 class="h4">Historical medications</h4>
+                        <ul class="list list--selectable list--hover">
+                            {{#each sortedHistoricalMedications as |medication|}}
+                                {{medications-summary-list-item
+                                    isEntitledToEditMedications=isEntitledToEditMedications
+                                    editMedicationOnSummary=(action "editMedicationOnSummary")
+                                    openAssessment=(action "openAssessment")
+                                    medication=medication
+                                    selectedMedicationGuid=selectedMedicationGuid
+                                    class="historical-medication"}}
+                            {{/each}}
+                        </ul>
+                    </div>
+                {{/if}}
+                {{#if historicalPatientMedications}}
+                    <div class="box-margin-Txs-v2">
+                        <a data-element="historical-medications" onclick={{action "toggleHistoricalMedications"}}>
+                            {{#if historicalMedicationsVisible}}
+                                Hide historical
+                            {{else}}
+                                Show historical ({{historicalPatientMedications.length}})
+                            {{/if}}
+                        </a>
+                    </div>
+                {{/if}}
+            {{/if}}
+        {{/if}}
+    {{/card.content}}
+{{/composable-card}}
+
+{{#print-preview-content isVisible=isPrintVisible printTitle=printTitle}}
+    {{print-medications class="chart-print-container" patient=patient sortProperty="fullGenericName" sortAscending=true showHistoricalMeds=showMedicationsHistorical showActiveMeds=showMedicationsActive}}
+{{/print-preview-content}}

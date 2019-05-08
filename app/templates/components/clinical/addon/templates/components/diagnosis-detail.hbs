@@ -1,0 +1,189 @@
+{{#detail-pane config=config
+    close="save" class="side-fixed col-xs-5 summary-details diagnosis-detail"
+    resizables=resizables resizeOnBreakPoint=true session=session
+    topSpacing=50 isToolBoxVisible=isToolboxVisible
+    isSlideOpenToolBox=isFrequentDiagnosisOpen
+    isEditing=isEditing canDelete=canDelete
+    attachedToAdditionalEncounter=attachedToAdditionalEncounter
+    diagnosis=diagnosis
+    canAddMultiple=canAddMultiple
+    isAddingNewDiagnosis=isAddingNewDiagnosis
+    isRefiningDiagnosis=isRefiningDiagnosis
+    deleteMessage=deleteMessage as |section|}}
+
+    {{#detail-pane-header sectionContext=section}}
+        Diagnosis > {{detailsPaneTitle}}
+        <div class="detail-pane-header-help dismissible-help-message">
+            <i class="icon-info" {{action "toggleProperty" "isHelpPopoverVisible"}}></i>
+            {{#popover-modal isPopoverVisible=isHelpPopoverVisible
+                containerSelector=".diagnosis-detail" width=266
+                height="auto" bubbleEvents=true
+                targetSelector=".detail-pane-header-help>i"
+                useTargetOffset=true placement="left"}}
+                <header>
+                    <i class="icon-info"></i>
+                    <div class="title">ICD-10-CM support</div>
+                </header>
+                <div class="content">
+                    <p>Your EHR now supports ICD-10-CM. To learn more about how to use ICD-10 click the learn more button below.</p>
+                </div>
+                <div class="footer">
+                    <div class="pull-right">
+                        <a class="btn btn-sm" target="_blank" href={{config.clinicalIcd10HelpUrl}}>Learn more</a>
+                        <button class="btn btn-sm btn-primary" {{action "toggleProperty" "isHelpPopoverVisible"}}>Close</button>
+                    </div>
+                </div>
+            {{/popover-modal}}
+        </div>
+    {{/detail-pane-header}}
+
+    {{#detail-pane-body sectionContext=section class="type-v2 box box-padding-Alb-v2"}}
+        {{#if displayDiagnosisTypeAhead}}
+            {{#if isEditingDiagnosisDetails}}
+                <div class="diagnosis-description-icd10">
+                    <h4>{{diagnosis.icd10OrSnomedCode}} {{diagnosis.description}}
+                        <a class="box-padding-Lmd-v2" onclick={{action "editDiagnosisSelection"}}>Edit</a>
+                    </h4>
+                </div>
+            {{else}}
+                <label class="add-diagnosis-label field-label is-required">Diagnosis</label>
+                {{diagnosis-typeahead-icd10
+                    canAddCustom=canAddCustom
+                    query=query
+                    diagnosisSelected="diagnosisSelected"
+                    customDiagnosisSelected="customDiagnosisSelected"
+                    data-element="diagnosis-result-search"
+                    searchDataElement="diagnosis-search-input"
+                    canFilterResults=false
+                    refineDx="refineDx"
+                    favoriteSelected="favoriteDiagnosisSelected"
+                    updateFavorites="updateMyDxList"
+                    showDropdown=isSearchControlOpen
+                    tabSelectedDefault=defaultDropdownTab
+                    content=icd10SearchContent
+                    tabSources=tabSources}}
+            {{/if}}
+        {{/if}}
+
+        {{#if isEditingDiagnosisDetails}}
+            {{diagnosis-detail-form-icd10
+                isAllowedToEditDiagnoses=isAllowedToEditDiagnoses
+                isNotAllowedToEditDiagnoses=isNotAllowedToEditDiagnoses
+                diagnosis=diagnosis
+                associatedMedications=associatedMedications
+                isAddingNewDiagnosis=isAddingNewDiagnosis
+                relatedDiagnoses=relatedDiagnoses
+                patientGuid=patientGuid
+                transcriptGuid=transcriptGuid
+                transcriptDate=transcriptDate
+                canToggleAttachToEncounter=canToggleAttachToEncounter
+                disabled=disabled
+                canAddMedications=canAddMedications
+                recordMedication=recordMedicationActionName
+                editMedication=editMedicationActionName
+                isValidDiagnosisChanged="hasValidDatesChanged"
+                refineDiagnosis="refineDiagnosis"
+                associateMedication="associateMedication"
+                disassociateMedication="disassociateMedication"}}
+        {{/if}}
+
+        {{#if isRefiningDiagnosis}}
+            {{diagnosis-refine
+                isAllowedToEditDiagnoses=isAllowedToEditDiagnoses
+                diagnosis=diagnosis
+                diagnoses=relatedDiagnoses
+                isAddingNewDiagnosis=isAddingNewDiagnosis
+                searchByCodeSystem=refineCodeSystem
+                showFacets=showRefineFacets
+                hideAllPopups=isICD10ModalShowing
+                diagnosisRefined="diagnosisRefined"}}
+        {{/if}}
+    {{/detail-pane-body}}
+
+    {{#detail-pane-footer sectionContext=section class="diagnosis-detail--footer"}}
+        <div class="diagnosis-detail--footer">
+            {{#if isRefiningDiagnosis}}
+                {{#if isAllowedToEditDiagnoses}}
+                    <button type="button" class="btn" data-element="back-button" {{action "goBackToDiagnoisDetails"}}>Back</button>
+                {{/if}}
+            {{else}}
+                {{#if isAllowedToEditDiagnoses}}
+                    <button type="button" class="btn" data-element="cancel-diagnosis-button" {{action "cancel"}}>Cancel</button>
+                {{else}}
+                    <button type="button" class="pull-right btn" data-element="cancel-diagnosis-button" {{action "cancel"}}>Cancel</button>
+                {{/if}}
+                {{#if session.canEditChart}}
+                    {{#unless isEditing}}
+                        {{#unless isAddingNewDiagnosis}}
+                            {{#if isAllowedToEditDiagnoses}}
+                                {{#if canDelete}}
+                                    {{#popover-confirm action="deleteDiagnosis" tagName="button" class="btn" title="Delete diagnosis" confirmLabel="Delete" popoverContent=deleteMessage}}Delete{{/popover-confirm}}
+                                {{else}}
+                                    {{#if attachedToAdditionalEncounter}}
+                                        {{#popover-info tagName="button" class="btn" title="Diagnosis attached to an encounter" popoverContent="Consider marking this diagnosis historical by setting a stop date"}}Delete{{/popover-info}}
+                                    {{else}}
+                                        {{#popover-info tagName="button" class="btn" title="Diagnosis associated with a medication" popoverContent="This diagnosis is associated with a medication and can't be deleted."}}Delete{{/popover-info}}
+                                    {{/if}}
+                                {{/if}}
+                            {{/if}}
+                        {{/unless}}
+                    {{/unless}}
+                {{/if}}
+            {{/if}}
+            {{#if session.canEditChart}}
+                {{#unless isRefiningDiagnosis}}
+                    {{#if isAllowedToEditDiagnoses}}
+                        <div class="pull-right" data-element="delete-diagnosis-button">
+                            {{#if isAddingNewDiagnosis}}
+                                {{#if diagnosis}}
+                                    {{#if canAddMultiple}}
+                                        <button type="button" class="btn" data-element="save-and-add-diagnosis-button" {{action "saveAndAdd"}}>Add another</button>
+                                    {{/if}}
+                                    <div class="btn-group dropup">
+                                        <button type="button" class="btn brand-sky" data-element="save-diagnosis-button" {{action "save"}}>Save</button>
+                                        <button class="btn dropdown-toggle split-btn brand-sky" data-toggle="dropdown">
+                                            <i class="icon-caret"></i>
+                                        </button>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li><a {{action "save"}}>Save</a></li>
+                                            <li><a {{action "saveToMyDxList"}}>Add to My Dx list</a></li>
+                                        </ul>
+                                    </div>
+                                {{else}}
+                                    <button type="button" class="btn btn-primary" data-element="save-diagnosis-button" {{action "save"}}>Save</button>
+                                {{/if}}
+                            {{else}}
+                                <div class="btn-group dropup">
+                                    <button type="button" class="btn brand-sky" data-element="save-diagnosis-button" {{action "save"}}>Save</button>
+                                    <button class="btn dropdown-toggle split-btn brand-sky" data-toggle="dropdown">
+                                        <i class="icon-caret"></i>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a {{action "save"}}>Save</a></li>
+                                        <li><a {{action "saveToMyDxList"}}>Add to My Dx list</a></li>
+                                    </ul>
+                                </div>
+                            {{/if}}
+                        </div>
+                    {{/if}}
+                {{/unless}}
+            {{/if}}
+        </div>
+    {{/detail-pane-footer}}
+
+{{/detail-pane}}
+
+{{#content-modal modalStyle=7 isVisible=isICD9ModalShowing as |section|}}
+    {{section.header title="Diagnoses cannot be saved without an ICD-9 code." isCloseByXorOutsideVisible=true}}
+    {{#section.body}}
+    Press the Back button and Cancel to discard your changes.
+    {{/section.body}}
+    {{section.footer buttonRightPrimaryText="OK" buttonRightPrimaryAction=(action "closeICD9Modal")}}
+{{/content-modal}}
+{{#content-modal modalStyle=7 isVisible=isICD10ModalShowing as |section|}}
+    {{section.header title="Diagnoses cannot be saved without an ICD-10 code." isCloseByXorOutsideVisible=true}}
+    {{#section.body}}
+    Press the Back button and Cancel to discard your changes.
+    {{/section.body}}
+    {{section.footer buttonRightPrimaryText="OK" buttonRightPrimaryAction=(action "closeICD10Modal")}}
+{{/content-modal}}

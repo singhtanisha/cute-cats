@@ -1,0 +1,103 @@
+<div class="textfield-wrapper {{if hasError "error"}}">
+    {{#each selectedPatients as |patient|}}
+        <div class="pill {{if isDisabled "disabled"}}">
+        <span class="name">{{patient.firstName}} {{patient.lastName}}</span><span class="remove" {{action "removeSelectedPatient" patient}}>×</span>
+        </div>
+    {{/each}}
+    {{#if showInput}}
+        {{d-text-field classNames="left filtered-search-input" classBinding="hasError:error"
+            placeholder="Search patient name, DOB or SSN" type="text" value=searchTerm data-element="patient-search" disabled=isDisabled isShorter=isShorter}}
+    {{/if}}
+    <button {{action "search"}} class="btn filtered-search-btn" type="button"><span class="glyphicon glyphicon-search"></span></button>
+</div>
+{{#if showHints}}
+<div class="search-hints {{if isShorter "is-shorter"}}">
+    <ul>
+        {{#if searchType.name}}<li><div class="term-label">Name:</div><b>{{valueName}}</b></li>{{/if}}
+        {{#if searchType.date}}<li><div class="term-label">DOB:</div><b>{{valueDate}}</b></li>{{/if}}
+        {{#if searchType.ssn}}<li><div class="term-label">SSN:</div><b>{{valueSSN}}</b></li>{{/if}}
+        {{#if searchType.prn}}<li><div class="term-label">PRN:</div><b>{{valuePRN}}</b></li>{{/if}}
+        {{#if invalidSearchTerm}}<li class="invalid-search-term">Invalid Search Term</li>{{/if}}
+    </ul>
+</div>
+{{/if}}
+
+{{#unless useSchedulerResults}}
+    {{#if showResults}}
+    <div id="search-results">
+        <div class="header">
+            <div class="data">PATIENT/ID</div>
+            <div class="data">DOB/SSN</div>
+            <div class="data">PHONE/CITY</div>
+        </div>
+        <ul>
+        {{#each results as |patient|}}
+            <li onclick={{action "selectPatient" patient}}>
+                <div class="data">{{patient.fullName}}</div>
+                <div class="data">{{format-date-time-utc patient.birthDate}}</div>
+                {{#if patient.homePhone}}
+                    <div class="data">H {{format-phone patient.homePhone}}</div>
+                {{else}}
+                    {{#if patient.mobilePhone}}
+                        <div class="data">M {{format-phone patient.mobilePhone}}</div>
+                    {{else}}
+                        {{#if patient.officePhone}}
+                            <div class="data">O {{format-phone patient.officePhone}}</div>
+                        {{/if}}
+                    {{/if}}
+                {{/if}}
+            </li>
+        {{else}}
+            <h19 class="header19  no-patients-found">No Patients Found</h19>
+        {{/each}}
+        </ul>
+    </div>
+    {{/if}}
+{{/unless}}
+
+{{#if useSchedulerResults}}
+    {{#if showResults}}
+    <div class="scheduler-search-results {{if isShorter "is-shorter"}}">
+        <ul>
+        {{#each results as |patient|}}
+            <li onclick={{action "selectPatient" patient}}>
+                <div class="item-image">{{patient-image hasPatientImage=patient.hasPatientImage patientPracticeGuid=patient.patientPracticeGuid}}</div>
+                <div class="item-data">
+                    <div class="data-name">
+                        <h19 class="full-name header19">{{patient.fullName}}</h19>
+                        <p class="p-666 age">{{patient.age}}</p>
+                    </div>
+                    {{#if patient.patientRecordNumber}}
+                        <div class="data"><span class="light-color">PRN</span> {{patient.patientRecordNumber}}</div>
+                    {{/if}}
+                    <div class="data"><span class="light-color">DOB</span> {{format-date-time-utc patient.birthDate}}</div>
+                    <div class="data">
+                        <span class="light-color">{{patient.genderChar}}</span>
+                        {{#if patient.mobilePhone}}
+                            {{format-phone patient.mobilePhone}}
+                        {{/if}}
+                    </div>
+                    {{#if patient.hasAddress}}
+                        <div class="data data-address clear-fix"><span class="light-color">Address</span>
+                            {{#if patient.streetAddress1}}
+                                {{patient.streetAddress1}} {{patient.streetAddress2}},
+                            {{/if}}
+                            {{patient.city}}, {{patient.state}} {{patient.postalCode}}
+                        </div>
+                    {{/if}}
+                </div>
+            </li>
+        {{else}}
+            <li class="no-border">
+                <h19 class="header19 no-patients-found">No Patients Found</h19>
+            </li>
+        {{/each}}
+        </ul>
+        {{#if showFooter}}
+            <div class="footer-action" {{action "footerActionLink"}}>
+                <h12 class="header12">{{footerText}}</h12>
+            </div>
+        {{/if}}
+    </div>
+    {{/if}}
+{{/if}}

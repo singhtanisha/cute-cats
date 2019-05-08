@@ -1,0 +1,13 @@
+{{#view-spinner isLoading=isLoading contentElement=".vitals-tab" class="vitals-tab flex-grow"}}
+    <div class="control-bar">
+        <a {{action "toggleIsMetric"}} class="btn heading-action pull-left">
+            Show {{#if isMetric}}US customary{{else}}metric{{/if}}
+        </a>
+        {{new-encounter-button navigateToEncounter="navigateToEncounter" newEncounter="newEncounter" patientPracticeGuid=patientController.patientPracticeGuid}}
+    </div>
+    <div class="vitals-tab-content">
+        {{#unless isLoading}}
+            {{growth-charts isMetric=isMetric vitalHistory=vitalHistory patient=patientController printAudit="printAudit"}}
+        {{/unless}}
+    </div>
+{{/view-spinner}}

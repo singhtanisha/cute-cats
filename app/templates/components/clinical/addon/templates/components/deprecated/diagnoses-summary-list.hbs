@@ -1,0 +1,51 @@
+<header>
+    <h3 class="header3a">Diagnoses</h3>
+    {{#if canRecordDiagnoses}}
+        <a {{action "recordDiagnoses"}} class="icon icon-add edit" data-element="add-diagnosis-button"></a>
+    {{/if}}
+    {{#unless isLoading}}
+        <a {{action "print"}} class="icon icon-printer edit" data-element="print-diagnoses-button"></a>
+    {{/unless}}
+    <span class="diagnosis-display-selector-wrapper">
+        <span>Show by </span>
+        {{diagnosis-display-selector displayChanged="displayChanged" isShorter=true}}
+    </span>
+</header>
+<section class="d-complex-list-container">
+    {{#if isLoading}}
+            <p>Loading diagnoses...</p>
+    {{else}}
+        {{#if diagnosesError}}
+            <p class="p-666">Can't load diagnoses. Please <a href="#" {{action "reloadDiagnoses"}}>try again.</a>
+            </p>
+        {{else}}
+            {{#if isEditing}}
+                {{#unless selectedDiagnosisGuid}}
+                    <section class="active">
+                        <div>Record diagnosis</div>
+                    </section>
+                {{/unless}}
+            {{/if}}
+
+            {{#unless activePatientDiagnoses}}
+                {{#if isAllowedToEditDiagnoses}}
+                    {{#d-check-box checked=isNoKnownChecked disabled=isLoadingNoKnown}}
+                        <label class="pf-input {{cbSmaller}}" data-element="no-active-diagnoses-label">Patient has no active diagnoses</label>
+                    {{/d-check-box}}
+                {{else}}
+                    {{#if isNoKnownChecked}}
+                        <p>Patient has no active diagnoses</p>
+                    {{/if}}
+                {{/if}}
+            {{/unless}}
+
+            {{deprecated/diagnoses-summary-list-section title="" activeDiagnoses=allActiveDiagnoses isIcd10Display=true
+                historicalDiagnoses=allHistoricalDiagnoses editDiagnosis="editDiagnosis" diagnosisDescriptionDisplay=diagnosisDescriptionDisplay}}
+        {{/if}}
+    {{/if}}
+</section>
+
+{{#print-preview-content isVisible=isPrintVisible printTitle=printTitle}}
+    {{print-diagnoses class="chart-print-container" patient=patientSummary
+        activeDiagnoses=allActiveDiagnoses historicalDiagnoses=allHistoricalDiagnoses}}
+{{/print-preview-content}}

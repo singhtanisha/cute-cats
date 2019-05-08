@@ -1,0 +1,14 @@
+<div class="navbar navbar-secondary">
+    <ul class="nav">
+      <li class="{{if frequentMedsSelected "active"}}" {{action "setCurrentTab" 'frequent-meds'}} data-element="medications-tab-frequent">Frequent</li>
+      <li class="{{if previousMedsSelected "active"}}" {{action "setCurrentTab" 'previous-meds'}} data-element="medications-tab-previous">Previous</li>
+      <li {{action "recordMedication"}} data-element="medications-tab-record">Record</li>
+    </ul>
+</div>
+
+{{#if previousMedsSelected}}
+    {{previous-medication patientGuid=patientGuid transcriptGuid=transcriptGuid  selectMedication="selectMedication" deselectMedication="removeMedication"
+    removeMedication="removeMedication" saveError="saveError"}}
+{{else}}
+    {{frequent-medications hideFilter=true selectMedication="selectMedication"}}
+{{/if}}

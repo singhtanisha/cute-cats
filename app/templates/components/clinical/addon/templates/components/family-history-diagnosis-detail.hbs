@@ -1,0 +1,67 @@
+{{#detail-pane-v2 class="family-history-detail__pane" as |section|}}
+    {{#section.right-module class="flex-column" as |right-module|}}
+        {{right-module.header
+                bigHeaderText="Diagnosis details"
+                closeDetailPane=(action close)}}
+        {{#right-module.body class="flex-grow box-padding-Alg-v2"}}
+            <label class="label">Relative</label>
+            <div>{{relativeDescription}}</div>
+            <label class="label label--required box-margin-Tmd-v2">Diagnosis</label>
+            {{#if observation.observationGuid}}
+                <div data-element="diagnosis-description">{{diagnosis.description}}</div>
+            {{else}}
+                {{#composable-select
+                    content=searchDiagnoses.last.value
+                    data-element="diagnosis-search"
+                    isLoading=searchDiagnoses.isRunning
+                    optionGroupPath="diagnosisType"
+                    optionLabelPath="description"
+                    selection=diagnosis as |options|}}
+                    {{options.typeahead-single-select
+                        minChars=3
+                        onSearch=(perform searchDiagnoses)
+                        placeholder="Search for diagnosis"
+                        query=diagnosisQuery
+                        shouldSearchOnFocus=true}}
+                    {{#options.dropdown-menu as |menu|}}
+                        {{#if menu.content}}
+                            {{menu.options}}
+                        {{else}}
+                            {{#menu.no-results}}{{noResultsText}}{{/menu.no-results}}
+                        {{/if}}
+                    {{/options.dropdown-menu}}
+                {{/composable-select}}
+            {{/if}}
+            {{#if diagnosis}}
+                <label class="label box-margin-Tmd-v2">Onset date</label>
+                {{#if disabled}}
+                    <div data-element="diagnosis-onset-date">{{onsetDate}}</div>
+                {{else}}
+                    {{date-picker
+                        data-element="diagnosis-onset-date"
+                        maxDate=maxDate
+                        placeholder="MM/DD/YYYY"
+                        value=onsetDate}}
+                {{/if}}
+                {{#if disabled}}
+                    <label class="label box-margin-Tmd-v2">Comments</label>
+                    <div data-element="diagnosis-comments">{{comment}}</div>
+                {{else}}
+                    {{#field-set class="box-margin-Tmd-v2" data-element="diagnosis-comments" as |fieldset|}}
+                        {{fieldset.legend text="Comments"}}
+                        {{fieldset.text-area placeholder="Add a comment" value=comment}}
+                    {{/field-set}}
+                {{/if}}
+            {{/if}}
+        {{/right-module.body}}
+        {{#right-module.footer class="box-padding-LRlg-v2 box-padding-TBmd-v2"}}
+            {{#if showSaveButton}}
+                <button class="pull-right btn--brand" data-element="diagnosis-save" onclick={{perform save}}>Save</button>
+            {{/if}}
+            <button class="btn--default box-margin-Rmd-v2" data-element="diagnosis-cancel" onclick={{action close}}>Cancel</button>
+            {{#if showDeleteButton}}
+                <button class="btn--default" data-element="diagnosis-delete" onclick={{perform delete}}>Delete</button>
+            {{/if}}
+        {{/right-module.footer}}
+    {{/section.right-module}}
+{{/detail-pane-v2}}

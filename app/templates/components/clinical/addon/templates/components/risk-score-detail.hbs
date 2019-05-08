@@ -1,0 +1,66 @@
+{{#detail-pane close="cancel" class="side-fixed col-xs-5 summary-details patient-risk-score-detail" resizables=resizables resizeOnBreakPoint=true topSpacing=50 isToolBoxVisible=false bigHeaderText="Patient risk score" persistedHistory=persistedHistory patientRiskScore=patientRiskScore as |section|}}
+    {{#detail-pane-body sectionContext=section}}
+        <div class="panel-section">
+            <div class="inline-flex-group">
+                <div class="item gutter-sm">
+                    <div class="field-label"><span class="required">Risk score type</span>
+                        {{popover-info
+                            classNames="icon-info"
+                            data-element="risk-score-info"
+                            allowHtmlCode="true"
+                            popoverContent=riskScoreHelpHtml}}
+                    </div>
+                    {{single-select
+                        classNames="risk-type"
+                        prompt="Select risk score type"
+                        content=socialHistoryOptions.riskScoreOptions
+                        data-element="risk-type"
+                        refocusOnError="true"
+                        optionLabelPath="description"
+                        optionValuePath="optionGuid"
+                        value=riskScoreType
+                        sortLabels=false
+                        hasError=errors.riskScoreType
+                        tooltipMsg=errors.riskScoreType
+                        tooltipPlacement="top"
+                        isShorter=true}}
+                </div>
+                <div class="item box-fixed-md">
+                    <div class="field-label required">Risk score</div>
+                    <div>
+                        {{validated-textfield data-element="risk-score" class="risk-score" disabled=disabled
+                        errorMessage=errors.riskScore value=riskScore placeholder="" inputMask="###.###" isErrorHighlightingAutomatic=true}}
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <div class="field-label required">Date assigned</div>
+                    {{d-date-picker isLegacy=false value=dateAssigned placeholder="MM/DD/YYYY" disabled=disabled
+                        autoCorrectYear=true data-element="date-assigned-txt" isShorter=true endDate=dateMax
+                        customErrorMessageAfterEndDate="Cannot select a future date" errorMessage=errors.dateAssigned}}
+                </div>
+            </div>
+        </div>
+    {{/detail-pane-body}}
+    {{#detail-pane-footer sectionContext=section}}
+        <button type="button" class="btn btn-sm" onclick={{action "cancel"}}>Cancel</button>
+        {{#if canDelete}}
+            <button type="button" class="btn btn-sm box-margin-Lxs" data-element="delete-risk-score-button" onclick={{action "showDelete"}}>Delete</button>
+        {{/if}}
+        <div class="pull-right">
+            <button type="button" class="btn btn-sm btn-primary" onclick={{action "save"}} disabled={{socialHistory.saveDisabled}}>Save</button>
+        </div>
+    {{/detail-pane-footer}}
+{{/detail-pane}}
+{{#content-modal modalStyle=7 isVisible=showDeleteConfirm as |section|}}
+    {{section.header title="Delete patient risk score" isCloseByXorOutsideVisible=true}}
+    {{#section.body}}
+        <p>This action is final, and will remove this Patient risk score from this patient's record.</p>
+    {{/section.body}}
+    {{section.footer
+        buttonLeftText="Cancel"
+        buttonRightPrimaryText="Delete"
+        buttonLeftAction=(action "closeDeleteConfirm")
+        buttonRightPrimaryAction=(action "delete")}}
+{{/content-modal}}

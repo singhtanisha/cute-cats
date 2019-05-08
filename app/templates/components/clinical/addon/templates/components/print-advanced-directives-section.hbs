@@ -1,0 +1,21 @@
+{{#print-chart-section chartNote=chartNote patientSummary=patient title=title includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+    <div class="table-content">
+        <div class="table">
+            <div class="row header-row"><div class="col-xs-12"><h2>Advance Directive</h2></div></div>
+            <div class="row header-row">
+                <div class="col-xs-10">Directive</div>
+                <div class="col-xs-2">Recorded</div>
+            </div>
+            {{#each content as |item|}}
+                <div class="row">
+                    <div class="col-xs-10">{{item.comments}}</div>
+                    <div class="col-xs-2">{{format-date-time-utc item.dateOfService}}</div>
+                </div>
+            {{else}}
+                <div class="row">
+                    <div class="col-xs-12">No advance directives recorded for this patient.</div>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+{{/print-chart-section}}

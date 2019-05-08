@@ -1,0 +1,20 @@
+<div>
+    <span class="term">{{content.term}}</span>
+    <span class="refine-status">
+        {{#if content.codeToRefine}}
+            {{#popover-info
+                popoverContent="Refinement required: This term maps to more than one code."
+                classNames="icon-urgent force-refine"
+                tagName="i"
+                triggerOn="hover"
+                placement="left"
+            }}{{/popover-info}}
+        {{/if}}
+        {{#if content.optionalRefine}}<i class="optional-refine icon-urgent"></i>{{/if}}
+    </span>
+</div>
+{{#if showCodes}}
+    <div>
+        <span class="icd10-code">{{#if content.icd10CodesText}}ICD10: {{content.icd10CodesText}}{{/if}}</span>
+    </div>
+{{/if}}

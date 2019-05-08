@@ -1,0 +1,120 @@
+<h4 data-element="worksheet-display-name" class="h4">{{responses.content.worksheet.title}}</h4>
+
+<p data-element="worksheet-description">
+    {{responses.content.worksheet.description}}
+    {{#if responses.content.worksheet.printoutUrl}}
+        <a target="_blank" href="{{unbound responses.content.worksheet.printoutUrl}}">Print Test</a>
+    {{/if}}
+</p>
+
+<div class="inline-flex-group-v2">
+    <div class="item gutter-xs">
+        <label class="field-label box-margin-Tn" data-element="worksheet-status-label">Status</label>
+        {{#composable-select content=statusOptions optionLabelPath="label" optionValuePath="value"
+            value=selectedStatus disabled=disabled
+            onSelect=(action selectWorksheetStatus) as |options|}}
+            {{options.dropdown prompt="Select a status" class="box-padding-Rn" data-element="worksheet-status-selection"}}
+            {{options.dropdown-menu}}
+        {{/composable-select}}
+    </div>
+</div>
+
+<div class="inline-flex-group-v2 {{unless reasonCodes "hidden"}}">
+    <div class="item gutter-xs">
+        <label class="field-label box-margin-Tn" data-element="worksheet-reason-label">Reason</label>
+        {{#composable-select content=reasonCodes selection=reason optionLabelPath="displayName" optionValuePath="id" onSelect=(action selectWorksheetReason) disabled=disabled as |options|}}
+            {{options.dropdown prompt="Select a reason" class="box-padding-Rn" data-element="worksheet-reason-selection"}}
+            {{options.dropdown-menu}}
+        {{/composable-select}}
+    </div>
+</div>
+
+{{sia-worksheet/transcript-event-fields class="box-padding-Bsm-v2" responses=responses setErrors=setErrors isDisabled=disabled}}
+
+{{#unless reasonCodes}}
+    <label class="field-label">Assessment responses</label>
+    <ol data-element="worksheet-questions" class="list list--unstyled migraine-worksheet">
+        {{#each responses.questions as |question index|}}
+            {{#if question.isShowing}}
+                {{#unless question.isSeparator}}
+                    <li data-element="worksheet-question-{{index}}" class="box-padding-Tn box-padding-Bn box-margin-Blg-v2">
+                        <p class="box-margin-Bn">
+                            {{#if question.numbering}}
+                                {{question.numbering}}.
+                            {{/if}}
+                            <span data-element="worksheet-question-label-{{index}}">{{{question.label}}}</span>
+                        </p>
+                        <div class="{{if question.isHorizontalRadioType "box-margin-Txs-v2"}}">
+                            {{#if question.isRadioQuestion}}
+                                {{#if question.isHorizontalRadioType}}
+                                    <div class="inline-flex-group box-margin-Ln">
+                                        {{#each question.options as |option index|}}
+                                            <div class="item gutter-xs box-fixed" data-element="option-{{index}}">
+                                                <div class="clearfix">
+                                                    {{#if disabled}}
+                                                        {{d-radio-button id=option.id name=question.componentGuid value=option.value
+                                                            selectedValue=question.selectedOptionValue disabled=true}}
+                                                    {{else}}
+                                                        {{d-radio-button id=option.id name=question.componentGuid value=option.value
+                                                            selectedValue=question.selectedOptionValue disabled=question.isDisabled
+                                                            radioChecked=(action "responseChecked" question option)}}
+                                                    {{/if}}
+                                                    <label for="{{option.id}}" class="pf-input pf-input--radio-label box-margin-Bn"></label>
+                                                </div>
+                                                <div class="text-center box-margin-Txs-v">
+                                                    {{option.label}}
+                                                    {{#if option.showValue}}
+                                                        <span class="p-666">({{option.displayValue}})</span>
+                                                    {{/if}}
+                                                </div>
+                                            </div>
+                                        {{/each}}
+                                    </div>
+                                {{else}}
+                                    {{#each question.options as |option index|}}
+                                        <div data-element="option-{{index}}">
+                                            {{#if disabled}}
+                                                {{d-radio-button id=option.id name=question.componentGuid value=option.value
+                                                    selectedValue=question.selectedOptionValue disabled=true}}
+                                            {{else}}
+                                                {{d-radio-button id=option.id name=question.componentGuid value=option.value
+                                                    selectedValue=question.selectedOptionValue disabled=question.isDisabled
+                                                    radioChecked=(action "responseChecked" question option)}}
+                                            {{/if}}
+                                            <label for="{{option.id}}" class="pf-input pf-input--radio-label">
+                                                {{option.label}}
+                                                {{#if option.showValue}}
+                                                    <span class="p-666">({{option.displayValue}})</span>
+                                                {{/if}}
+                                            </label>
+                                        </div>
+                                    {{/each}}
+                                {{/if}}
+                            {{/if}}
+                        </div>
+                        {{#if question.secondaryLabel}}
+                            <p class="secondary-label">{{question.secondaryLabel}}</p>
+                        {{/if}}
+                    </li>
+                {{/unless}}
+            {{/if}}
+        {{/each}}
+    </ol>
+    {{#if responses.scoreMethod}}
+        <label class="field-label">Score</label>
+        <h4 data-element="worksheet-score" class="box-margin-Bmd-v2">{{if responses.score responses.score "No score"}}</h4>
+    {{/if}}
+    {{#if responses.content.worksheet.summary}}
+        {{#if responses.displaySummary}}
+            <p data-element="worksheet-summary" class="box-margin-Bmd-v2">{{{responses.content.worksheet.summary}}}</p>
+        {{/if}}
+    {{/if}}
+    {{#if responses.content.worksheet.secondarySummary}}
+        {{#if responses.displaySecondarySummary}}
+            <p data-element="worksheet-secondary-summary" class="box-margin-Bmd-v2">{{{responses.content.worksheet.secondarySummary}}}</p>
+        {{/if}}
+    {{/if}}
+    {{#if responses.content.worksheet.copyright}}
+        <div data-element="worksheet-copyright" class="text-color-placeholder">{{{responses.content.worksheet.copyright}}}</div>
+    {{/if}}
+{{/unless}}

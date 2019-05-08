@@ -1,0 +1,68 @@
+{{#detail-pane-v2 class="family-history-detail__pane" as |section|}}
+    {{#section.right-module class="flex-column " as |right-module|}}
+        {{right-module.header
+                bigHeaderText="Relative details"
+                closeDetailPane=(action close)}}
+        {{#right-module.body class="flex-grow box-padding-Alg-v2"}}
+            <label class="label label--required">Relationship</label>
+            {{#if disabled}}
+                <div data-element="relative-relationship">{{relationshipType.description}}</div>
+            {{else}}
+                {{#composable-select
+                    content=relationshipTypes
+                    data-element="relative-relationship"
+                    isDropdownMenuVisible=isRelationshipDropdownOpen
+                    selection=relationshipType
+                    optionLabelPath="description" as |options|}}
+                    {{options.dropdown prompt="Select relationship..."}}
+                    {{options.dropdown-menu}}
+                {{/composable-select}}
+            {{/if}}
+            {{#if relationshipType}}
+                <label class="label box-margin-Tmd-v2">First name</label>
+                {{#if disabled}}
+                    <div data-element="relative-first-name">{{firstName}}</div>
+                {{else}}
+                    {{text-field data-element="relative-first-name" value=firstName}}
+                {{/if}}
+                <label class="label box-margin-Tmd-v2">Last name</label>
+                {{#if disabled}}
+                    <div data-element="relative-last-name">{{lastName}}</div>
+                {{else}}
+                    {{text-field data-element="relative-last-name" value=lastName}}
+                {{/if}}
+                <label class="label box-margin-Tmd-v2">Birthday</label>
+                {{#if disabled}}
+                    <div data-element="relative-birthdate">{{dateOfBirth}}</div>
+                {{else}}
+                    {{date-picker
+                        data-element="relative-birthdate"
+                        maxDate=maxDate
+                        placeholder="MM/DD/YYYY"
+                        value=dateOfBirth}}
+                {{/if}}
+                {{#check-box checked=isDeceased disabled=disabled data-element="relative-deceased-checkbox" class="ib box-margin-Llg-v2"}}
+                    Deceased
+                {{/check-box}}
+                {{#if disabled}}
+                    <label class="label box-margin-Tmd-v2">Comments</label>
+                    <div data-element="relative-comments">{{comment}}</div>
+                {{else}}
+                    {{#field-set class="box-margin-Tmd-v2" data-element="relative-comments" as |fieldset|}}
+                        {{fieldset.legend text="Comments"}}
+                        {{fieldset.text-area placeholder="Add a comment" value=comment}}
+                    {{/field-set}}
+                {{/if}}
+            {{/if}}
+        {{/right-module.body}}
+        {{#right-module.footer class="box-padding-LRlg-v2 box-padding-TBmd-v2"}}
+            {{#if showSaveButton}}
+                <button class="pull-right btn--brand" data-element="relative-save" onclick={{perform save}}>Save</button>
+            {{/if}}
+            <button class="btn--default box-margin-Rmd-v2" data-element="relative-cancel" onclick={{action close}}>Cancel</button>
+            {{#if showDeleteButton}}
+                <button class="btn--default" data-element="relative-delete" onclick={{perform delete}}>Delete</button>
+            {{/if}}
+        {{/right-module.footer}}
+    {{/section.right-module}}
+{{/detail-pane-v2}}

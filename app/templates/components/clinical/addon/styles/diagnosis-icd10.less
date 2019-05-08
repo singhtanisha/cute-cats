@@ -1,0 +1,199 @@
+.diagnosis-icd10-container {
+    .diagnosis-description-icd10 {
+        position: relative;
+        > a {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+    }
+    .detail-section {
+        margin-top: 16px;
+        .item.disable-hover {
+            pointer-events: none;
+        }
+    }
+
+    .inline-flex-group .item {
+        padding-top: 0px !important;
+        margin-top: 0px;
+    }
+
+    .field-label-row,
+    .summary-details .detail-pane-body-wrapper .field-label {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        line-height: 20px;
+    }
+
+    .summary-details .detail-pane-body-wrapper .field-label:not(label) {
+        display: inline;
+    }
+
+    .field-label-row .item,
+    .patientEducation .item {
+        line-height: 20px;
+    }
+
+    .diagnosis-medications {
+        position: relative;
+
+        .icon-add {
+            color: @sky-dark;
+            padding-top: 2px;
+            position: absolute;
+            font-size: 16px;
+        }
+        .diagnosis-detail-medication-search {
+            width: calc(~'100% - 20px');
+            margin-left: 20px;
+
+            .ember-select-clear-item {
+                float: right;
+            }
+        }
+    }
+
+    div[data-element='diagnosis-attach-to-encounter'] {
+        border: 1px solid @slate-dark;
+        background: @smoke-light;
+        padding: 1px 8px;
+        height: 26px;
+    }
+
+    .icon-clear {
+        color: @slate-dark;
+    }
+
+    .diagnosis-comments-display {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        > li {
+            padding-top: 4px;
+        }
+    }
+
+    .diagnosis-typeahead-icd10 {
+        .dropdown-menu {
+            border-top: none;
+        }
+    }
+}
+
+.force-refine-icd10.icon-urgent {
+    color: @orange;
+    float: right;
+}
+
+.favorite-diagnoses-settings-wrapper .favorite-diagnoses-settings {
+    .diagnosis-list-settings .favorite-dx-list .my-list-icd10 {
+        margin: 0;
+
+        > header {
+            padding-left: 16px;
+        }
+
+        .diagnoses-column-header {
+            text-transform: uppercase;
+            font-size: 11px;
+            > a {
+                font-size: 11px;
+            }
+        }
+        .term-column {
+            width: 280px;
+        }
+        .type-column,
+        .code-column,
+        .expand-column {
+            width: 90px;
+        }
+        .blank-column {
+            width: 37px;
+        }
+        .type-column {
+            text-transform: uppercase;
+        }
+        ul.sortable-dx-list li.diagnosis-list-item {
+            min-height: 20px;
+            padding-left: 16px;
+        }
+    }
+    .inline-add-diagnosis {
+        border-bottom: 1px solid @slate-light;
+        padding: 2px 16px;
+
+        .ember-select {
+            min-width: 350px;
+        }
+        .icon-add {
+            color: @sky-dark;
+            padding-right: 2px;
+            font-size: 16px;
+        }
+    }
+}
+.acuity-display {
+    color: @black;
+    font-weight: normal;
+    padding-left: 4px;
+}
+
+.ember-select-hint[data-element='primary-source-hint'] {
+    padding-top: 24px;
+    padding-bottom: 24px;
+}
+
+.section-group.icd10-section-group {
+    margin: 0;
+    padding: 0;
+}
+
+.pf.outlet .diagnosis-typeahead-icd10 {
+    .dropdown-menu {
+        .nav.nav-tabs {
+            display: block;
+            margin: 0;
+            padding: 0;
+
+            > li {
+                a {
+                    margin: 0;
+                    padding: 2px 8px;
+                }
+            }
+        }
+        ul.ember-select-results {
+            li.ember-select-result-item {
+                border: none;
+
+                .term {
+                    width: auto;
+                }
+            }
+        }
+    }
+}
+.checkbox-multi-select-tether {
+    .dropdown-action-footer {
+        margin-bottom: -2px;
+    }
+}
+.favorite-diagnosis-detail-panel {
+    .detail-pane-body-wrapper {
+        max-width: 400px;
+    }
+    .detail-pane-footer {
+        padding: 8px 0 0 8px;
+    }
+}
+
+.diagnosis-typeahead-icd10 {
+    div.option-label {
+        max-width: 80px;
+        text-overflow: ellipsis;
+        overflow-x: hidden;
+    }
+}

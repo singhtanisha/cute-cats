@@ -1,0 +1,21 @@
+{{#detail-pane-v2 class="side-fixed col-xs-5 type-v2" as |section|}}
+    {{#section.right-module class="fill-space flex-column" as |right-module|}}
+        {{right-module.header
+            bigHeaderText="Read only"
+            smallHeaderText="Screenings/ Interventions/ Assessments"
+            closeDetailPane=(action "closeDetailPane")}}
+        {{#right-module.body class="flex-grow box-padding-Alg-v2"}}
+            {{component siaComponent
+                eventType=eventType isNegated=isNegated permittedStates=permittedStates reasonCodes=reasonCodes responses=responses
+                startDateTimeUtc=startDateTimeUtc endDateTimeUtc=endDateTimeUtc comments=comments selectedStatus=selectedStatus
+                reasonCode=model.reasonCode resultCode=model.resultCode transcriptGuid=transcriptGuid encounterAndNoteType=encounterAndNoteType dateOfService=dateOfService
+                openEncounterClicked=(action "openEncounterClicked")
+            }}
+        {{/right-module.body}}
+        {{#right-module.footer class="box-padding-TBmd-v2 box-padding-LRlg-v2"}}
+            <div class="pull-right">
+                <button class="btn--brand" type="button" data-element= "close-btn" onclick={{action "closeDetailPane"}}>Close</button>
+            </div>
+        {{/right-module.footer}}
+    {{/section.right-module}}
+{{/detail-pane-v2}}

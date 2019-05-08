@@ -1,0 +1,24 @@
+{{#print-chart-section chartNote=chartNote patientSummary=patient title=title chartNotePrintInfo=chartNotePrintInfo
+    includeHeaderAndFooter=includeHeaderAndFooter}}
+    <div class="table-content">
+        <div class="table">
+            <div class="row header-row"><div class="col-xs-12"><h2>Patient risk score</h2></div></div>
+            <div class="row header-row">
+                <div class="col-xs-5">Risk score type</div>
+                <div class="col-xs-5">Risk score</div>
+                <div class="col-xs-2">Date assigned</div>
+            </div>
+            {{#if content}}
+                <div class="row no-stripe">
+                    <div class="col-xs-5" data-element="print-patient-risk-score-description">{{content.description}}</div>
+                    <div class="col-xs-5" data-element="print-patient-risk-score">{{content.riskScore}}</div>
+                    <div class="col-xs-2" data-element="print-patient-risk-score-date">{{format-date-time-utc content.dateAssigned}}</div>
+                </div>
+            {{else}}
+                <div class="row no-stripe">
+                    <div class="col-xs-12">No risk score available for this patient</div>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+{{/print-chart-section}}

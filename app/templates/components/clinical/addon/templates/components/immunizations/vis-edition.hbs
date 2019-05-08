@@ -1,0 +1,21 @@
+<label class="field-label {{if isRequired "required"}}">
+    VIS edition
+    {{#if vaccination.visVersionDate}} ({{format-date-time vaccination.visVersionDate}}){{/if}}
+</label>
+{{#composable-select
+    content=visConcepts
+    disabled=disabled
+    errorMessage=errorMessage
+    optionLabelPath="label" optionValuePath="id"
+    selections=visConceptList
+    onSelectMultiple=(action "select") as |options|}}
+    {{#options.typeahead-multi-select shouldSearchOnFocus=true as |typeahead|}}
+        {{#each typeahead.selections as |selection|}}
+            {{#typeahead.pill content=selection as |pill|}}
+                {{selection.label}}
+            {{/typeahead.pill}}
+        {{/each}}
+        {{typeahead.input}}
+    {{/options.typeahead-multi-select}}
+    {{options.dropdown-menu}}
+{{/composable-select}}

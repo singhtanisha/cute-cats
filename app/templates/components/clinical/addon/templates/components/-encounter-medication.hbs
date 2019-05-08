@@ -1,0 +1,7 @@
+{{#unless item.isEncounterMed}}
+    <p class="p-link" {{action "selectMedication" item}} data-element="encounter-medication-item" data-guid="{{item.medicationGuid}}">{{item.drugName}}</p>
+{{else}}
+    <p class="p-666" {{action "deselectMedication" item}} data-element="encounter-medication-item" data-guid="{{item.medicationGuid}}">{{item.drugName}}
+        <i class="icon icon-checkmark pull-right"></i>
+    </p>
+{{/unless}}

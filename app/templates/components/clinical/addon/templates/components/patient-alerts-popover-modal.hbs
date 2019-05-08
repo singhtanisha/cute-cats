@@ -1,0 +1,78 @@
+{{#if isComponentEnabled}}
+    <a {{action "togglePopoverModal"}} class="patient-alert-icon">
+        {{#if hasUnresolvedAlerts}}
+            <div class="alert-icon-numeric">
+                {{numUnresolvedAlerts}}
+            </div>
+        {{/if}}
+
+        <div class="alert-icon icon-flag" ></div>
+    </a>
+    {{#popover-modal
+        isPopoverVisible=showAlertsPopover
+        targetSelector=".patient-alerts-component"
+        containerSelector=".charts.outlet"
+        height=height
+        minimumArrowPadding=200
+        width="600"}}
+
+        <header class="patient-alerts-header">
+            <div class="row">
+                <div class="col-xs-6 pull-left">
+                    Patient alerts
+                    {{#unless isLoading}}
+                        ({{numUnresolvedAlerts}})
+                    {{else}}
+                        (...)
+                    {{/unless}}
+                </div>
+                <div class="col-xs-6">
+                    <a href="#" class="alert-tool icon-go-away" {{action "togglePopoverModal"}}></a>
+                    {{#link-to 'settings.cds' class="alert-tool icon-wrench"}}{{/link-to}}
+                    <a href="#" class="alert-tool icon-refresh {{if isLoading "disabled"}}" {{action "refreshAlerts"}}></a>
+                    {{#if hasUnresolvedAlerts}}
+                        {{#popover-confirm
+                            action="dismissAllAlerts"
+                            title="Dismiss all alerts"
+                            allowHtmlCode=true
+                            popoverContent="<p>This will record all unacknowledged alerts as dismissed for this patient. This action is final. Some alerts require a response and will reappear.</p>"
+                            confirmLabel="Dismiss all"
+                            cancelLabel="Cancel"
+                            classNames="alert-tool"
+                            placement="left"}}
+                            Dismiss all
+                        {{/popover-confirm}}
+                    {{/if}}
+                </div>
+            </div>
+        </header>
+
+        <div class="patient-alerts-component-status">
+            {{#unless isPatientAlertsAllowedForUser}}
+                Patient Alerts are viewable by providers only.
+            {{/unless}}
+
+            {{#if isPatientAlertsDisabledByProviderPreference}}
+                Accountable Care Organization alerts are currently turned off for all your patients. Go to the {{#link-to 'settings.cds'}}Notification and Alerts settings{{/link-to}} page to enable these alerts.
+            {{/if}}
+        </div>
+
+        <div class="patient-alerts-body">
+            {{! display patient alerts}}
+            {{#unless hasFetchAlertErrors}}
+                {{#each alerts as |alert|}}
+                    {{patient-alert
+                        alert=alert
+                        respond="resolveAlert"}}
+                {{/each}}
+            {{else}}
+                {{! hasFetchAlertErrors = true, print the fetch errors}}
+                <div class="patient-alert-fetch-error patient-alerts-component-status">
+                    Fetching patient alerts failed. Please try again by clicking on the
+                    refresh <i class="icon-refresh"></i> button.
+                </div>
+            {{/unless}}
+        </div>
+
+    {{/popover-modal}}
+{{/if}}

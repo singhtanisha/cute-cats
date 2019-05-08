@@ -1,0 +1,66 @@
+<h4 data-element="worksheet-display-name" class="h4">{{responses.content.worksheet.title}}</h4>
+
+<label class="field-label">Status</label>
+<p data-element="worksheet-status">{{selectedStatus}}</p>
+
+{{#if reasonCodes}}
+    <label class="field-label">Reason</label>
+    <p data-element="worksheet-reason">{{if reasonCode.displayName reasonCode.displayName "No reason recorded."}}</p>
+{{/if}}
+
+<label class="field-label">Result</label>
+<p data-element="worksheet-result">{{if resultCode.displayName resultCode.displayName "No result recorded."}}</p>
+
+<div class="inline-flex-group-v2">
+    <div class="item gutter-xs box-padding-TBn">
+        <label class="field-label">Start date</label>
+        <p data-element="worksheet-start-date">{{if startDateTimeUtc startDateTimeUtc "--"}}</p>
+    </div>
+    <div class="item gutter-xs box-padding-TBn">
+        <label class="field-label">End date</label>
+        <p data-element="worksheet-end-date">{{if endDateTimeUtc endDateTimeUtc "--"}}</p>
+    </div>
+</div>
+
+<label class="field-label">Encounter type</label>
+<p data-element="worksheet-encounter-type">
+    {{encounterAndNoteType}}
+    <a role="link" data-element="worksheet-encounter-link" class="box-margin-Lmd-v2" onclick={{action attrs.openEncounterClicked}}>
+        View encounter
+    </a>
+</p>
+
+<label class="field-label">Date of service</label>
+<p data-element="worksheet-date-of-service">{{format-date-time-utc dateOfService}}</p>
+
+<label class="field-label">Comment</label>
+<p data-element="worksheet-comments">{{if comments comments "No comments recorded."}}</p>
+
+{{#unless reasonCodes}}
+    <label class="field-label">Assessment responses</label>
+    <ul data-element="worksheet-questions" class="list list--unstyled">
+        {{#if responses.isDeclinedChecked}}
+            <li data-element="worksheet-question-0" class="box-padding-Tn box-padding-Bn box-margin-Blg-v2">
+                <h4 data-element="worksheet-question-anwser-0" class="h4">
+                    Patient declined to specify on all questions
+                </h4>
+            </li>
+        {{else}}
+            {{#each responses.scorableQuestions as |question index|}}
+                {{#if question.isShowing}}
+                    <li data-element="worksheet-question-{{index}}" class="box-padding-Tn box-padding-Bn box-margin-Blg-v2">
+                        <p class="box-margin-Bn">
+                            {{question.numbering}}.
+                            <span data-element="worksheet-question-label-{{index}}">{{question.label}}</span>
+                        </p>
+                        <h4 data-element="worksheet-question-anwser-{{index}}" class="h4">
+                            {{question.responseText}} ({{question.value}})
+                        </h4>
+                    </li>
+                {{/if}}
+            {{/each}}
+        {{/if}}
+    </ul>
+    <label class="field-label">Score</label>
+    <h4 data-element="worksheet-score" class="box-margin-Bmd-v2">{{if responses.score responses.score "No score"}}</h4>
+{{/unless}}

@@ -1,0 +1,27 @@
+{{#if items}}
+    {{#if commentType}}
+        <span class="hint-text">{{commentType}}: </span>
+    {{/if}}
+    {{transcript-comment transcriptComment=items.firstObject isCollapsible=isCollapsible oneline=firstCommentOneLine
+        patientPracticeGuid=patientPracticeGuid}}
+    {{#if filteredItems}}
+        {{#unless isExpanded}}
+            <a href="#" {{action "expand"}}>Show comments ({{unbound filteredItems.length}})</a>
+        {{else}}
+            <ul>
+                {{#each filteredItems as |transcriptComment|}}
+                    <li>{{transcript-comment transcriptComment=transcriptComment
+                        isCollapsible=isCollapsible oneline=oneline
+                        patientPracticeGuid=patientPracticeGuid}}</li>
+                {{/each}}
+            </ul>
+            {{#unless hideCollapseLink}}
+                <a href="#" {{action "collapse"}}>Hide comments ({{unbound filteredItems.length}})</a>
+            {{/unless}}
+        {{/unless}}
+    {{/if}}
+{{else}}
+    {{#if emptyPlaceHolder}}
+        {{emptyPlaceHolder}}
+    {{/if}}
+{{/if}}

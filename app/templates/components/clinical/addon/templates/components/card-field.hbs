@@ -1,0 +1,38 @@
+<h4 class="h4">
+    {{title}}
+    {{#if canEdit}}
+        <a onclick={{action create}} class="icon-add icon--md text-color-placeholder box-margin-Lmd-v2" data-element="{{card-data-element}}-field-add-button" role="link"></a>
+    {{/if}}
+</h4>
+{{#if contentArray}}
+    <ul class="list list--default list--hover list--selectable {{if placeholderText "hidden"}}">
+        {{#each contentArray as |item index|}}
+            <li onclick={{action edit item}} data-element="{{card-data-element}}-field-item-{{index}}" class="{{if (is-not-empty-and-equal selectedItem item.id) "is-active"}}" role="link">
+                <a class="box-margin-Rmd-v2 text-wrap">
+                    {{#if item.score}}{{item.score}}{{if item.description " - "}}{{/if}}
+                    {{preserve-linebreak item.description}}
+                </a>
+                <span class="{{unless item.effectiveDate "hidden"}}">
+                    {{format-date-time-local item.effectiveDate}}
+                </span>
+            </li>
+        {{/each}}
+    </ul>
+{{else}}
+    {{#if isEditing}}
+        <ul class="list list--hover list--selectable">
+            <li class="is-active">
+                <p class="box-margin-Bn">{{recordingText}}</p>
+            </li>
+        </ul>
+    {{else}}
+        <p class="text-color-placeholder box-margin-Bxs-v2 {{unless placeholderText "hidden"}}" data-element="{{card-data-element}}-placeholder-text">{{placeholderText}}</p>
+    {{/if}}
+{{/if}}
+{{#if hasMultipleItems}}
+    <div class="box-padding-TBxs-v2">
+        <a onclick={{action "toggleShowAll"}} data-element="{{card-data-element}}-field-show-all-toggle" role="link">
+            {{#if isShowingAll}}Hide past entries{{else}}Show past entries ({{historicalContentCount}}){{/if}}
+        </a>
+    </div>
+{{/if}}

@@ -1,0 +1,52 @@
+<h3 class="header3a">Care Team</h3>
+{{#unless disabled}}
+    <a class="btn btn-add-provider" href="#" {{action "add"}} data-element="care-team-add-button">
+        Add provider
+    </a>
+{{/unless}}
+<div class="field-group">
+    {{#if careTeam.members}}
+        {{#data-table class="care-team-list-table" content=careTeam.members selectedItem=selectedMember as |rowContext|}}
+            {{#data-table-column content=rowContext field="profile.displayName" title="Name/Specialty" isSortable=false as |member|}}
+                {{#if disabled}}
+                    <div class="provider-name">{{member.profile.fullProviderName}}</div>
+                {{else}}
+                    <a class="provider-name" href="#" {{action "edit" member}}>
+                        <div>{{member.profile.fullProviderName}}</div>
+                    </a>
+                {{/if}}
+                <div data-element="provider-type">
+                    {{#if member.profile.isDirectoryContact}}My connections{{else}}In practice{{/if}}
+                </div>
+                <div data-element="provider-specialty">{{member.profile.specialtyName}}</div>
+            {{/data-table-column}}
+            {{#data-table-column content=rowContext field="relatioship" title="Relationship to patient" isSortable=false as |member|}}
+                {{#each member.relationships as |relationship|}}
+                    <div data-element="care-team-member-relationship">{{relationship.display}}</div>
+                {{/each}}
+            {{/data-table-column}}
+            {{#data-table-column content=rowContext field="contact" title="Contact" isSortable=false as |member|}}
+                {{#unless disabled}}
+                    <div class="pull-right">
+                        <a {{action "delete" member}} href="#" class="btn-delete" data-element="care-team-member-delete">
+                            <i class="icon-go-away-small"></i>
+                        </a>
+                    </div>
+                {{/unless}}
+                <div data-element="care-team-member-contact">
+                    {{#if member.profile.officePhone}}
+                        <div>P: {{member.profile.officePhone}}</div>
+                    {{/if}}
+                    {{#if member.profile.fax}}
+                        <div>F: {{member.profile.fax}}</div>
+                    {{/if}}
+                    {{#if member.profile.email}}
+                        <div>{{member.profile.email}}</div>
+                    {{/if}}
+                </div>
+            {{/data-table-column}}
+        {{/data-table}}
+    {{else}}
+        <p class="p-666" data-element="care-team-empty-message">No care team for this patient. Add care team member.</p>
+    {{/if}}
+</div>

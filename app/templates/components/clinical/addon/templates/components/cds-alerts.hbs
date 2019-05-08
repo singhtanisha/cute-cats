@@ -1,0 +1,28 @@
+{{#if items}}
+    <div class="cds-header {{if isLoading "disabled"}}" {{action "toggleExpanded"}}>
+        <span class="cds-collapse-toggle"><a>
+            {{#if isExpanded}}
+                Minimize notifications
+            {{else}}
+                {{items.length}} total notifications
+            {{/if}}
+        </a></span>
+        <span><a {{action "refreshData"}}>Refresh</a> to update clinical decision support (CDS) notifications below.</span>
+    </div>
+
+{{else if cdsEndpointError}}
+    <div class="cds-header {{if isLoading "disabled"}}">
+        <span><a {{action "refreshData"}}>Refresh</a> to update clinical decision support (CDS) notifications below.</span><br />
+        <span>Error running Clinical Decision Support alerts.</span>
+    </div>
+{{/if}}
+
+<div class="cds-alerts">
+    {{#each items as |cdsAlert|}}
+        <div class="ember-accordion-container">
+            <div class="ember-accordion-pane">
+                {{cds-alert cdsAlert=cdsAlert bubbleAction=(action "bubbleAction") cdsAlertDismissed=(action "cdsAlertDismissed") patientPracticeGuid=patientPracticeGuid showActionLinks=showActionLinks}}
+            </div>
+        </div>
+    {{/each}}
+</div>

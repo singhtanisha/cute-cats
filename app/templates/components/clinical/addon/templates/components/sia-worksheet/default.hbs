@@ -1,0 +1,119 @@
+{{#detail-pane bigHeaderText="Record" smallHeaderText="Screenings, interventions, and assessments" close=close resizables=resizables as |section|}}
+
+    {{#detail-pane-body sectionContext=section}}
+        <div class="lead-333">{{responses.worksheet.title}}</div>
+        <p>
+            {{{responses.worksheet.description}}}
+            {{#if responses.worksheet.printoutUrl}}
+                <a target="_blank" href="{{unbound responses.worksheet.printoutUrl}}">Print Test</a>
+            {{/if}}
+        </p>
+        <div class="field-label">Status</div>
+        {{#if disabled}}
+            <div class="title">{{selectedStatus}}</div>
+        {{else}}
+            {{single-select prompt="Select a status" value=selectedStatus content=permittedStates sortLabels=false
+                select=selectStatus}}
+        {{/if}}
+        {{#if reasonCodes}}
+            <div class="field-label">Reason</div>
+            {{#if disabled}}
+                {{text-with-empty-state text=reasonCode.displayName title="reason" class="title"}}
+            {{else}}
+                {{single-select prompt="Select a reason" content=reasonCodes optionLabelPath="displayName" optionValuePath="id"
+                    selection=reason sortLabels=false select=selectReason}}
+            {{/if}}
+        {{else}}
+            <hr>
+            <ol>
+                {{#each responses.questions as |question|}}
+                    {{#if question.isShowing}}
+                        <li class="{{if question.isDisabled "is-disabled"}}">
+                            <p>
+                                {{#if question.numbering}}
+                                    {{question.numbering}}.
+                                {{/if}}
+                                <span data-element="worksheet-question-label">{{{question.label}}}</span>
+                            </p>
+                            <div class="options">
+                                {{#if question.isRadioQuestion}}
+                                    {{#each question.options as |option|}}
+                                        <div class={{if question.isHorizontalRadioType "horizontal-radio"}}>
+                                            {{#if disabled}}
+                                                {{d-radio-button id=option.id name=question.componentGuid value=option.value
+                                                    selectedValue=question.selectedOptionValue disabled=true}}
+                                            {{else}}
+                                                {{d-radio-button id=option.id name=question.componentGuid value=option.value
+                                                    selectedValue=question.selectedOptionValue disabled=question.isDisabled
+                                                    radioChecked=(action "responseChecked" question option)}}
+                                            {{/if}}
+                                            <label for="{{option.id}}" class="pf-input pf-input--radio-label">
+                                                {{#unless question.isHorizontalRadioType}}
+                                                    {{option.label}}
+                                                    {{#if option.showValue}}
+                                                        <span class="p-666">({{option.displayValue}})</span>
+                                                    {{/if}}
+                                                {{/unless}}
+                                            </label>
+                                            {{#if question.isHorizontalRadioType}}
+                                                <div class="radio-value">
+                                                    {{option.label}}
+                                                    {{#if option.showValue}}
+                                                        <span class="p-666">({{option.displayValue}})</span>
+                                                    {{/if}}
+                                                </div>
+                                            {{/if}}
+                                        </div>
+                                    {{/each}}
+                                {{/if}}
+                            </div>
+                            {{#if question.secondaryLabel}}
+                                <p class="secondary-label">{{question.secondaryLabel}}</p>
+                            {{/if}}
+                        </li>
+                    {{/if}}
+                    {{#if question.isSeparator}}
+                        <hr />
+                    {{/if}}
+                {{/each}}
+            </ol>
+            <hr>
+            {{#if responses.scoreMethod}}
+                <div class="score">
+                    <span class="header14">Your total: </span><span class="lead-333">{{responses.score}} points</span>
+                </div>
+            {{/if}}
+            {{#if responses.worksheet.summary}}
+                {{#if responses.displaySummary}}
+                    <p>{{{responses.worksheet.summary}}}</p>
+                {{/if}}
+            {{/if}}
+            {{#if responses.worksheet.secondarySummary}}
+                {{#if responses.displaySecondarySummary}}
+                    <p>{{{responses.worksheet.secondarySummary}}}</p>
+                {{/if}}
+            {{/if}}
+            {{#if responses.worksheet.copyright}}
+                <div class="small-666 copyright">{{{responses.worksheet.copyright}}}</div>
+            {{/if}}
+        {{/if}}
+    {{/detail-pane-body}}
+
+    {{#detail-pane-footer sectionContext=section}}
+        {{#if isEntitledToEditEncounter}}
+            {{#unless disabled}}
+                <button type="button" class="btn" {{action cancel}}>Cancel</button>
+                {{#if responses.responsesGuid}}
+                    <button type="button" class="btn" {{action delete}}>Delete</button>
+                {{/if}}
+            {{/unless}}
+            <div class="pull-right">
+                <button type="button" class="btn btn-primary" {{action save}} disabled={{responses.isIncomplete}}>Save</button>
+            </div>
+        {{else}}
+            <div class="pull-right">
+                <button type="button" class="btn" {{action cancel}}>Cancel</button>
+            </div>
+        {{/if}}
+    {{/detail-pane-footer}}
+{{/detail-pane}}

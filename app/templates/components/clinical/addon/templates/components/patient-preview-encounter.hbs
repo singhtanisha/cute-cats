@@ -1,0 +1,141 @@
+{{#if encounter}}
+    <div class="row col-4">
+        <div class="column">
+            <label class="field-label">Encounter type</label>
+            <span data-element="preview-encounter-type">{{#if encounter.encounterType}}{{encounter.encounterType.eventType.displayName}}{{else}}Not recorded{{/if}}</span>
+        </div>
+        <div class="column">
+            <label class="field-label">Age on DOS</label>
+            <span data-element="preview-encounter-age">{{encounter.ageOnDOS}}</span>
+        </div>
+        <div class="column">
+            <label class="field-label">Seen by</label>
+            <span data-element="preview-encounter-seen-by">{{encounter.seenByProviderName}}</span>
+        </div>
+        <div class="column">
+            <label class="field-label">Seen on</label>
+            <span data-element="preview-encounter-seen-on">{{format-date-time-utc encounter.dateOfServiceUtc format="MMM DD YYYY"}}</span>
+        </div>
+    </div>
+    {{#if encounter.isSigned}}
+        <div class="row col-2">
+            <div class="column">
+                <label class="field-label">Electronically signed by</label>
+                <span data-element="preview-encounter-signed-by">{{encounter.signedByProviderName}}</span>
+            </div>
+            <div class="column">
+                <label class="field-label">Signed on</label>
+                <span data-element="preview-encounter-signed-on">{{format-date-time-local encounter.signedDateTimeUtc format="MM/DD/YYYY hh:mm a" defaultText="n/a"}}</span>
+            </div>
+            {{#if encounter.addenda}}
+                <div class="column">
+                    <label class="field-label">Addenda</label>
+                    <span data-element="preview-encounter-addenda-count">{{encounter.addenda.length}}</span>
+                </div>
+            {{/if}}
+        </div>
+    {{/if}}
+    <div class="row">
+        <label class="field-label">CC</label>
+        <p data-element="preview-encounter-cc">{{#if encounter.chiefComplaint}}{{encounter.chiefComplaint}}{{else}}No chief complaint recorded{{/if}}</p>
+    </div>
+    <div class="row" data-element="preview-encounter-vitals">
+        {{#each vitals as |vital|}}
+            <div class="column" data-vital={{vital.display}}>
+                <label class="field-label">{{vital.display}}</label>
+                {{#if vital.observation}}
+                    {{encounter-vital vital=vital.observation}}
+                {{else}}
+                    -
+                {{/if}}
+            </div>
+        {{/each}}
+        {{#if hasMoreVitals}}
+            <div><a {{action openPreview}} data-element="preview-encounter-more-vitals">More vitals...</a></div>
+        {{/if}}
+    </div>
+    <div class="row" data-element="preview-encounter-subjective">
+        {{#if encounter.isSoapNote}}
+            {{encounter-note-section disabled=true isPreview=true section="subjective" value=encounter.subjective}}
+        {{else}}
+            {{encounter-note-section disabled=true isPreview=true section="subjective" value=encounter.subjective sectionTitle=encounter.noteTypeHeading}}
+        {{/if}}
+    </div>
+    {{#if encounter.isSoapNote}}
+        {{#unless encounter.noAllergies}}
+            <div class="row">
+                <div>Allergies recorded in this encounter:</div>
+                <ul class="read-only-complex-list">
+                    {{#each encounter.allergies as |allergy|}}
+                        <li>
+                            <span>{{allergy.description}}</span>
+                            {{#if allergy.comments}}
+                                <span>Comment: {{allergy.comments}}</span>
+                            {{/if}}
+                        </li>
+                    {{/each}}
+                </ul>
+            </div>
+        {{/unless}}
+        <div class="row" data-element="preview-encounter-objective">
+            {{encounter-note-section disabled=true isPreview=true section="objective" value=encounter.objective}}
+        </div>
+        <div class="row" data-element="preview-encounter-assessment">
+            {{encounter-note-section disabled=true isPreview=true section="assessment" value=encounter.assessment}}
+        </div>
+        {{#unless encounter.noDiagnoses}}
+            <div class="row">
+                <div>Diagnoses recorded in this encounter:</div>
+                <ul class="read-only-complex-list">
+                    {{#each encounter.diagnoses as |dx|}}
+                        <li>
+                            <span>{{dx.description}}</span>
+                            {{#if dx.comments}}
+                                <span>Comment: {{dx.comments}}</span>
+                            {{/if}}
+                        </li>
+                    {{/each}}
+                </ul>
+            </div>
+        {{/unless}}
+        <div class="row" data-element="preview-encounter-plan">
+            {{encounter-note-section disabled=true isPreview=true section="plan" value=encounter.plan}}
+        </div>
+        {{#unless encounter.noMedications}}
+            <div class="row">
+                <div>Medications recorded in this encounter:</div>
+                <ul class="read-only-complex-list">
+                    {{#each encounter.medications as |rx|}}
+                        <li>
+                            <span>{{rx.description}}</span>
+                            {{#if rx.comments}}
+                                <span>Comment: {{rx.comments}}</span>
+                            {{/if}}
+                        </li>
+                    {{/each}}
+                </ul>
+            </div>
+        {{/unless}}
+    {{/if}}
+    {{#if encounter.addenda}}
+        <div class="row" data-element="preview-encounter-addenda">
+            <label class="field-label">Addenda</label>
+            <ul class="read-only-complex-list">
+                {{#each encounter.addenda as |am|}}
+                    <li>
+                        <span>{{am.note}}</span>
+                        <div class="details">
+                            <div>{{format-date-time-local am.lastModifiedDateTimeUtc format="MM/DD/YYYY hh:mm a" defaultText="n/a"}}</div>
+                            {{#if am.providerName}}
+                                <div>{{am.status}} by {{am.provider.providerName}}</div>
+                            {{/if}}
+                            {{#if am.source}}
+                                <div>{{am.source}}</div>
+                            {{/if}}
+                        </div>
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+    {{/if}}
+{{/if}}

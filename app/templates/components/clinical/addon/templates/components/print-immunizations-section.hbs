@@ -1,0 +1,80 @@
+{{#print-chart-section chartNote=chartNote patientSummary=patient  title=title includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+    <div class="table-content">
+        <div class="table">
+            <div class="row header-row"><div class="col-xs-12"><h2>Immunizations</h2></div></div>
+            <div class="row header-row">
+                {{#if showComments}}
+                    <div class="col-xs-2">Date</div>
+                    <div class="col-xs-2">Vaccine</div>
+                    <div class="col-xs-2">Source</div>
+                    <div class="col-xs-1">Lot Number</div>
+                    <div class="col-xs-2">Expires</div>
+                    <div class="col-xs-3">Comment</div>
+                {{else}}
+                    <div class="col-xs-2">Date</div>
+                    <div class="col-xs-3">Vaccine</div>
+                    <div class="col-xs-3">Source</div>
+                    <div class="col-xs-2">Lot Number</div>
+                    <div class="col-xs-2">Expires</div>
+                {{/if}}
+            </div>
+
+            {{#each content as |immunization|}}
+                <div class="row sub-header-row">
+                    <div class="col-xs-12">{{immunization.description}}</div>
+                </div>
+                {{#if showComments}}
+                    {{#each immunization.sortedVaccinations as |vaccination|}}
+                        <div class="row no-stripe">
+                            <div class="col-xs-2">
+                                {{#if vaccination.administeredDate}}
+                                    {{vaccination.administeredDate}}
+                                {{else if vaccination.vaccinationDate}}
+                                    {{vaccination.vaccinationDate}}
+                                {{else}}
+                                    Unknown
+                                {{/if}}
+                            </div>
+                            <div class="col-xs-2">{{vaccination.vaccineName}}</div>
+                            <div class="col-xs-2">{{vaccination.administeredByText}}</div>
+                            <div class="col-xs-1">
+                                {{vaccination.vaccineInventoryLotNumber}}
+                            </div>
+                            <div class="col-xs-2">
+                                {{vaccination.vaccineExpirationDate}}
+                            </div>
+                            <div class="col-xs-3">{{vaccination.comment}}</div>
+                        </div>
+                    {{/each}}
+                {{else}}
+                    {{#each immunization.sortedVaccinations as |vaccination|}}
+                        <div class="row no-stripe">
+                            <div class="col-xs-2">
+                                {{#if vaccination.administeredDate}}
+                                    {{vaccination.administeredDate}}
+                                {{else if vaccination.vaccinationDate}}
+                                    {{vaccination.vaccinationDate}}
+                                {{else}}
+                                    Unknown
+                                {{/if}}
+                            </div>
+                            <div class="col-xs-3">{{vaccination.vaccineName}}</div>
+                            <div class="col-xs-3">{{vaccination.administeredByText}}</div>
+                            <div class="col-xs-2">
+                                {{vaccination.vaccineInventoryLotNumber}}
+                            </div>
+                            <div class="col-xs-2">
+                                {{vaccination.vaccineExpirationDate}}
+                            </div>
+                        </div>
+                    {{/each}}
+                {{/if}}
+            {{else}}
+                <div class="row">
+                    <div class="col-xs-12">No immunizations recorded for this patient.</div>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+
+{{/print-chart-section}}

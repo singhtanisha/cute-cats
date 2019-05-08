@@ -1,0 +1,75 @@
+<div class="practice practice-dashboard clinical-trials-dashboard">
+    {{!-- <div class="header-container clearfix"> --}}
+
+    {{!-- </div> --}}
+
+    <div class="clinical-trials-container">
+        <h2 class="header2">Identify possible treatment options for your patients</h2>
+
+        <div class="lead-333">
+            Practice Fusion has partnered with ePatientFinder to help you identify clinical trials in your area that your patients may qualify for.
+        </div>
+        <h4 class="header4semibold">How does ePatientFinder work?</h4>
+        <div class="row">
+            <div class="col-xs-4">
+                <img src="assets/images/epf_panel1_lg.png" class="img-responsive"/>
+            </div>
+            <div class="col-xs-4">
+                <img src="assets/images/epf_panel2_lg.png" class="img-responsive"/>
+            </div>
+            <div class="col-xs-4">
+                <img src="assets/images/epf_panel3_lg.png" class="img-responsive"/>
+            </div>
+        </div>
+        <div class="lead-333 content-container">
+            Once you have signed up for an account with ePatientFinder and opted into a clinical trial in your area, ePatientFinder will alert you if any of your patients match those trials, and you can schedule pre-trial evaluations, and refer patients to those trials.
+        </div>
+
+        <div class="lead-333 content-container">
+            <b>Notice:</b> Once you opt-in to any trials in your area ePatientFinder will, if you have authorized them to do so, retrieve patient data for any patient seen by you in the last 24 months. If any of your patients match (or may match) a trial, they will be flagged by ePatientFinder as a possible match for you to review.
+        </div>
+
+        <div class="lead-333 content-container">
+            Within 24 hours of a possible match, ePatientFinder will contact the patient on your behalf to gather any additional information about the patient to determine if they are a candidate for the trial. You must choose to opt the patient out of such contact within the 24 hour window if you do not want ePatientFinder to contact them.
+        </div>
+
+        <div class="lead-333 content-container">
+            {{!-- Sign-up --}}
+            <a href="#" class="btn btn-primary" {{action "confirmSignup"}}>Sign up</a>
+            {{#content-modal
+                class="clinical-trials-modal"
+                modalStyle=7
+                isVisible=isRegistrationModalVisible as |section|}}
+                {{section.header title="You are leaving Practice Fusion" isCloseByXorOutsideVisible=true}}
+                {{#section.body}}
+                <p>You are leaving the Practice Fusion website and will be directed to the website of an independent third party. Practice Fusion is not responsible for that website, for the services provided by that independent third party, or for your use of such services. Practice Fusion has not reviewed the website or otherwise approved its content or information. Please review the website’s terms and conditions if you have any questions or concerns.</p>
+
+                {{!-- NOTE: we don't use the footer buttons in the content-modal since we need to call window.open within the same callback --}}
+                <div class="pull-right">
+                    <button type="button" class="btn btn-modal-secondary" {{action "toggleProperty" "isRegistrationModalVisible"}}>Cancel</button>
+                    <button type="button" class="btn btn-modal-primary" {{action "openRegisterUrl"}}>Continue</button>
+                </div>
+
+                {{/section.body}}
+                {{section.footer}}
+            {{/content-modal}}
+
+            {{!-- Learn more --}}
+            <a href="#" class="lead" {{action "confirmLearnMore"}}>Learn more</a>
+            {{#content-modal
+                class="clinical-trials-modal"
+                modalStyle=7
+                isVisible=isLearnMoreModalVisible as |section|}}
+                {{section.header title="You are leaving Practice Fusion" isCloseByXorOutsideVisible=true}}
+                {{#section.body}}
+                <p>You are leaving the Practice Fusion website and will be directed to the website of an independent third party. Practice Fusion is not responsible for that website, for the services provided by that independent third party, or for your use of such services. Practice Fusion has not reviewed the website or otherwise approved its content or information. Please review the website’s terms and conditions if you have any questions or concerns.</p>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-modal-secondary" {{action "toggleProperty" "isLearnMoreModalVisible"}}>Cancel</button>
+                    <button type="button" class="btn btn-modal-primary" {{action "openLearnMoreUrl"}}>Continue</button>
+                </div>
+                {{/section.body}}
+                {{section.footer}}
+            {{/content-modal}}
+        </div>
+    </div>
+</div>

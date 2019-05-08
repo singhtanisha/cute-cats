@@ -1,0 +1,12 @@
+{{#each descriptions as |description|}}
+    {{#if isIcd10Display}}
+        <div class="text-color-link text-wrap" data-element="diagnosis-item-text">
+            {{description}}
+            {{#unless hideAcuity}}
+                <span class="box-padding-Lsm-v2 acuity-display">{{diagnosis.acuityDisplay}}</span>
+            {{/unless}}
+        </div>
+    {{else}}
+        <div class="text-color-link text-wrap" data-element="diagnosis-item-text">{{description}}</div>
+    {{/if}}
+{{/each}}

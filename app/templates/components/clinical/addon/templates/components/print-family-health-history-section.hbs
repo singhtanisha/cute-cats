@@ -1,0 +1,12 @@
+{{#print-chart-section chartNote=chartNote patientSummary=patient title=title includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+    <div class="table-content">
+        <div class="table">
+            <div class="row header-row">
+                <div class="col-xs-12"><h2>Family health history</h2></div>
+            </div>
+            <div class="row no-stripe">
+                <div class="col-xs-12 formatted-text">{{#if content}}{{content}}{{else}}No family health history available for this patient.{{/if}}</div>
+            </div>
+        </div>
+    </div>
+{{/print-chart-section}}

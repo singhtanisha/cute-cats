@@ -1,0 +1,75 @@
+<h4 data-element="worksheet-header">{{responses.worksheet.title}}</h4>
+<div class="inline-flex-group-v2">
+    <div class="item gutter-xs">
+        <label class="field-label box-margin-Tn">Status</label>
+        {{#composable-select content=statusOptions optionLabelPath="label" optionValuePath="value" disabled=disabled
+            value=selectedStatus data-element="select-status"
+            onSelect=(action selectWorksheetStatus) as |options|}}
+            {{options.dropdown prompt="Select a status" class="box-padding-Rn"}}
+            {{options.dropdown-menu}}
+        {{/composable-select}}
+    </div>
+</div>
+<div class="inline-flex-group-v2 {{unless reasonCodes "hidden"}}">
+    <div class="item gutter-xs">
+        <label class="field-label box-margin-Tn">Reason</label>
+        {{#composable-select content=reasonCodes optionLabelPath="displayName" optionValuePath="id" disabled=disabled
+            selection=reason onSelect=(action selectWorksheetReason) data-element="select-reason" as |options|}}
+            {{options.dropdown prompt="Select a reason" class="box-padding-Rn"}}
+            {{options.dropdown-menu}}
+        {{/composable-select}}
+    </div>
+</div>
+{{sia-worksheet/transcript-event-fields class="box-padding-Bsm-v2" responses=responses setErrors=setErrors isDisabled=disabled}}
+{{#unless reasonCodes}}
+    <h4>Complete questionnaire to generate a score.</h4>
+    <ul class="list list--unstyled">
+        {{#each responses.questions as |question index|}}
+            {{#if question.isShowing}}
+                <li data-element="question-{{index}}" class="box-margin-Tn box-padding-TBsm-v2 {{if question.isDisabled "is-disabled"}}">
+                    {{#if question.isCheckboxQuestion}}
+                        <label class="field-label box-margin-Tn">Assessment Responses</label>
+                        {{#check-box disabled=disabled checked=question.response.value class="box-margin-Bmd-v2 box-padding-Bsm-v2"
+                            data-element="decline-checkbox" onChecked=(action "declineChecked" question)}}
+                            {{question.label}}
+                        {{/check-box}}
+                    {{else}}
+                        <p class="box-margin-Bmd-v2">
+                            {{question.numbering}}.
+                            <span data-element="worksheet-question-label">{{question.label}}</span>
+                            <a role="link" data-element="undo-question-{{index}}"
+                                class="box-margin-Lmd-v2 {{unless question.showUndo "hidden"}}" onclick={{action "undo" question}}>
+                                Undo
+                            </a>
+                        </p>
+                        {{#if question.isRadioQuestion}}
+                            {{#each question.options as |option optionIndex|}}
+                                <div>
+                                    {{d-radio-button id=option.id name=question.componentGuid value=option.value data-element=(concat "option-radio-" optionIndex)
+                                    selectedValue=question.selectedOptionValue disabled=(if disabled true question.isDisabled)
+                                    radioChecked=(action "responseChecked" question option)}}
+                                    <label for="{{option.id}}" class="pf-input pf-input--radio-label text-color-default ib" data-element="option-label-{{optionIndex}}">
+                                        {{option.label}}
+                                        <span class="p-666 {{unless option.showValue "hidden"}}">({{option.displayValue}})</span>
+                                    </label>
+                                </div>
+                            {{/each}}
+                        {{/if}}
+                    {{/if}}
+                </li>
+            {{/if}}
+        {{/each}}
+    </ul>
+    <div class="inline-flex-group-v2">
+        <div class="item gutter-xs">
+            <label class="field-label box-margin-Tn">Score</label>
+            <h4 data-element="worksheet-score">
+                {{#if responses.scoreText}}
+                    {{responses.scoreText}}{{#if responses.resultDescription}} - {{responses.resultDescription}}{{/if}}
+                {{else}}
+                    No score
+                {{/if}}
+            </h4>
+        </div>
+    </div>
+{{/unless}}

@@ -1,0 +1,28 @@
+{{#detail-pane close="save" class="side-fixed col-xs-5 summary-details pmh-detail" resizables=resizables resizeOnBreakPoint=true topSpacing=50 isToolBoxVisible=false smallHeaderText="Past medical history" bigHeaderText="Record past medical history" as |section|}}
+    {{#detail-pane-body sectionContext=section}}
+        {{view-spinner isLoading=save.isRunning}}
+        {{#each visibleSections as |section|}}
+            <div data-element="past-medical-history-section-{{section.key}}">
+                <div class="field-label">{{section.title}}</div>
+                {{#unless section.isFreeTextDisabled}}
+                    {{text-area-counter autosize=true value=section.value placeholderText=section.placeholder maxlength="4000" rows="3"}}
+                {{/unless}}
+                {{#if section.structuredInstructions}}
+                    {{#if section.structuredRoute}}
+                        {{#link-to section.structuredRoute patient.patientPracticeGuid}}{{section.structuredInstructions}}{{/link-to}}
+                    {{else}}
+                        {{#if section.structuredAction}}
+                            <a data-element="pmh-action-{{section.key}}" href="#" {{action "pmhAction" section.structuredAction}}>{{section.structuredInstructions}}</a>
+                        {{/if}}
+                    {{/if}}
+                {{/if}}
+            </div>
+        {{/each}}
+    {{/detail-pane-body}}
+    {{#detail-pane-footer sectionContext=section}}
+        <button type="button" class="btn" {{action "revert"}}>Cancel</button>
+        <div class="pull-right">
+            <button type="button" class="btn btn-primary" data-element="pmh-save-btn" {{action "save"}}>Save</button>
+        </div>
+    {{/detail-pane-footer}}
+{{/detail-pane}}

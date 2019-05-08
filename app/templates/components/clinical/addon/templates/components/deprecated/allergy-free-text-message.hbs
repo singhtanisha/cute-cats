@@ -1,0 +1,48 @@
+{{#if isFreeTextAllergiesMessageVisible}}
+    <div class="free-text-allergies-section">
+        <div class="inline-flex-group box-margin-Bxs">
+            <div class="item gutter-xs box-fixed">
+                <i class="icon-urgent"></i>
+            </div>
+            <div class="item gutter-xs box-fixed">
+                <p class="p-semibold">
+                    You have previously recorded allergies in a free-text note
+                </p>
+                <span>
+                    To receive interaction alerts, record the note in a structured format here.
+
+                    {{#if isRecordVisible}}
+                        <a {{action "createAllergy"}}>Record</a>
+                    {{/if}}
+                </span>
+            </div>
+            {{#if canShowLater}}
+                <div class="item gutter-xs show-later">
+                    <a data-element="free-text-allergies-show-later" {{action "showFreeTextAllergiesLater"}}>Show later</a>
+                </div>
+            {{/if}}
+        </div>
+        <ul class="list">
+            <li>
+                <span data-element="free-text-allergies-value">{{freeTextAllergies}}</span>
+                <span class="text-color-warning">(free-text note)</span>
+                {{#unless session.isStaff}}
+                    {{#if isAllowedToEditAllegies}}
+                        {{#popover-confirm
+                            action="deleteFreeTextAllergy"
+                            title="Delete free-text note regarding allergy"
+                            popoverContent="This will delete this allergy note permanently from patient's chart. It is recommended that you record these free-text allergies using the structured allergy section below prior to deleting. This action is final."
+                            confirmLabel="Delete"
+                            cancelLabel="Cancel"
+                            confirmType="info popover-confirm-delete-free-text-allergy"
+                            classNames=""
+                            data-element="free-text-allergies-delete"
+                            placement="bottom"}}
+                            Delete
+                        {{/popover-confirm}}
+                    {{/if}}
+                {{/unless}}
+            </li>
+        </ul>
+    </div>
+{{/if}}

@@ -1,0 +1,66 @@
+{{data-tunnel name="goals-section-refresh" onDataReceived=(action "refreshGoals")}}
+
+{{#composable-card as |card|}}
+    {{#card.header as |header|}}
+        {{#header.title data-element="goals-section-header"}}
+            Goals
+            {{#if isAllowedToEditSummary}}
+                <a onclick={{action "add"}} class="icon icon-add icon--md box-margin-Lmd-v2" data-element="add-goal-button" role="link"></a>
+            {{/if}}
+            {{print-dropdown data-element="print-goals" options=printOptions print=(action "print") useIcons=true}}
+        {{/header.title}}
+    {{/card.header}}
+    {{#card.content}}
+        {{#if isLoading}}
+            Loading patient goals...
+        {{else}}
+            {{#if goals}}
+                {{#if activeGoals.length}}
+                    <ul class="list list--default {{if isAllowedToEditSummary "list--hover list--selectable"}}">
+                        {{#each activeGoals as |goal index|}}
+                            <li onclick={{if isAllowedToEditSummary (action "edit" goal)}} data-element="active-goal-{{index}}">
+                                <a class="text-wrap" data-element="goal-description">{{preserve-linebreak goal.description}}</a>
+                                <div data-element="goal-effective-date">since {{goal.effectiveDate}}</div>
+                            </li>
+                        {{/each}}
+                    </ul>
+                {{else}}
+                    <p class="box-margin-Bn text-color-placeholder">No active patient goals</p>
+                {{/if}}
+                {{#if inactiveGoals.length}}
+                    {{#if showInactiveGoals}}
+                        <div class="box-margin-Txs-v2">
+                            <h4 class="h4" data-element="inactive-goals-header">Inactive</h4>
+                            <ul class="list {{if isAllowedToEditSummary "list--hover list--selectable"}}">
+                                {{#each inactiveGoals as |goal index|}}
+                                    <li onclick={{if isAllowedToEditSummary (action "edit" goal)}} data-element="inactive-goal-{{index}}">
+                                        <a class="text-wrap" data-element="goal-description">{{preserve-linebreak goal.description}}</a>
+                                        <div data-element="goal-effective-date">since {{goal.effectiveDate}}</div>
+                                    </li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    {{/if}}
+                    <div class="box-margin-Txs-v2">
+                        <a onclick={{action "toggleShowInactiveLink" }} class="show-hide-toggle" role="link">
+                            {{#if showInactiveGoals}}
+                                Hide inactive
+                            {{else}}
+                                Show inactive ({{inactiveGoals.length}})
+                            {{/if}}
+                        </a>
+                    </div>
+                {{/if}}
+            {{else if errorText}}
+                <p class="box-margin-Bn text-color-placeholder">{{errorText}}</p>
+            {{else}}
+                <p class="box-margin-Bn text-color-placeholder" data-element="no-goals-placeholder">No patient goals recorded</p>
+            {{/if}}
+        {{/if}}
+    {{/card.content}}
+{{/composable-card}}
+
+{{#print-preview-content isVisible=isPrintVisible printTitle=printTitle}}
+    {{print-goals patient=patient class="chart-print-container" activeGoals=activeGoals inactiveGoals=inactiveGoals includeHeaderAndFooter=includeHeaderAndFooter
+        showActiveGoals=printActive showInactiveGoals=printInactive}}
+{{/print-preview-content}}

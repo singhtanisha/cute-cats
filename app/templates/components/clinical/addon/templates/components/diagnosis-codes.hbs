@@ -1,0 +1,28 @@
+<div class="slc-header">
+    <div class="slc-header-inner row">
+        <div class="type">TYPE</div>
+        <div class="code">CODE</div>
+        <div class="description">DESCRIPTION</div>
+    </div>
+</div>
+{{#each icd10Codes as |diagnosis|}}
+    <div class="code-row clearfix">
+        <div class="type" data-element="table-icd10-label">ICD-10</div>
+        <div class="code" data-element="table-icd10-code" title="{{diagnosis.code}}">{{diagnosis.code}}</div>
+        <div class="description" data-element="table-icd10-description">{{diagnosis.description}}</div>
+    </div>
+{{/each}}
+{{#each diagnosis.icd9Codes as |diagnosis|}}
+    <div class="code-row clearfix">
+        <div class="type" data-element="table-icd9-label">ICD-9</div>
+        <div class="code" data-element="table-icd9-code" title="{{diagnosis.code}}">{{diagnosis.code}}</div>
+        <div class="description" data-element="table-icd9-description">{{diagnosis.description}}</div>
+    </div>
+{{/each}}
+{{#each diagnosis.snomedCodes as |diagnosis|}}
+    <div class="code-row clearfix">
+        <div class="type" data-element="table-snomed-label">SNOMED CT</div>
+        <div class="code" data-element="table-snomed-code" title="{{diagnosis.code}}">{{diagnosis.code}}</div>
+        <div class="description" data-element="table-snomed-description">{{diagnosis.description}}</div>
+    </div>
+{{/each}}

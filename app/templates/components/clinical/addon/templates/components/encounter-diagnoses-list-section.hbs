@@ -1,0 +1,105 @@
+{{#unless isIcd10Display}}
+    <div>
+        <h3 class="header3b">{{title}}</h3>
+    </div>
+{{/unless}}
+<div class="section">
+    <div class="d-complex-list-container encounter-diagnoses-list--items">
+        {{#if sortedChronicActiveDiagnoses}}
+            <div class="box-margin-Txs-v2">
+                <h4 class="h4">Chronic</h4>
+                <ul class="list list--hover">
+                    {{#each sortedChronicActiveDiagnoses as |diagnosis index|}}
+                        {{encounter-diagnoses-list-item
+                            tagName="li"
+                            data-element=(concat "chronic-dx-" index)
+                            diagnosis=diagnosis
+                            showDiagnosisComment=showDiagnosisComment
+                            showEncounterComment=showEncounterComment
+                            showMedication=showMedication
+                            editDiagnosis="editDiagnosis"
+                            isIcd10Display=isIcd10Display
+                            diagnosisDescriptionDisplay=diagnosisDescriptionDisplay
+                        }}
+                    {{/each}}
+                </ul>
+            </div>
+        {{/if}}
+        {{#if sortedAcuteActiveDiagnoses}}
+            <div class="box-margin-Txs-v2">
+                <h4 class="h4">Acute</h4>
+                <ul class="list list--hover">
+                    {{#each sortedAcuteActiveDiagnoses as |diagnosis index|}}
+                        {{encounter-diagnoses-list-item
+                            tagName="li"
+                            data-element=(concat "acute-dx-" index)
+                            diagnosis=diagnosis
+                            showDiagnosisComment=showDiagnosisComment
+                            showEncounterComment=showEncounterComment
+                            showMedication=showMedication
+                            editDiagnosis="editDiagnosis"
+                            isIcd10Display=isIcd10Display
+                            diagnosisDescriptionDisplay=diagnosisDescriptionDisplay
+                        }}
+                    {{/each}}
+                </ul>
+            </div>
+        {{/if}}
+        {{#if sortedUnspecifiedActiveDiagnoses}}
+            <div class="box-margin-Txs-v2">
+                <h4 class="h4">Undefined</h4>
+                <ul class="list list--hover">
+                    {{#each sortedUnspecifiedActiveDiagnoses as |diagnosis index|}}
+                        {{encounter-diagnoses-list-item
+                            tagName="li"
+                            data-element=(concat "undefined-dx-" index)
+                            diagnosis=diagnosis
+                            showDiagnosisComment=showDiagnosisComment
+                            showEncounterComment=showEncounterComment
+                            showMedication=showMedication
+                            editDiagnosis="editDiagnosis"
+                            isIcd10Display=isIcd10Display
+                            diagnosisDescriptionDisplay=diagnosisDescriptionDisplay
+                        }}
+                    {{/each}}
+                </ul>
+            </div>
+        {{/if}}
+        {{#unless activeDiagnoses}}
+            <span class="p-666">No active <span class="lowercase">{{title}}</span> diagnoses.</span>
+        {{/unless}}
+    </div>
+
+    {{#if historicalDiagnosesVisible}}
+        <div class="d-complex-list-container encounter-diagnoses-list--items">
+            <div class="box-margin-Txs-v2">
+                <h4 class="h4">Historical</h4>
+                <ul class="list list--hover">
+                    {{#each historicalDiagnoses as |diagnosis|}}
+                        {{encounter-diagnoses-list-item
+                            diagnosis=diagnosis
+                            showDiagnosisComment=showDiagnosisComment
+                            showEncounterComment=showEncounterComment
+                            showMedication=showMedication
+                            editDiagnosis="editDiagnosis"
+                            isIcd10Display=isIcd10Display
+                            diagnosisDescriptionDisplay=diagnosisDescriptionDisplay
+                        }}
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+    {{/if}}
+
+    {{#if historicalDiagnoses}}
+        <div class="show-hide-toggle box-margin-Llg box-margin-Txs-v2">
+            <a href="#" {{action 'toggleProperty' 'historicalDiagnosesVisible'}}>
+                {{#if historicalDiagnosesVisible}}
+                    Hide historical
+                {{else}}
+                    Show historical ({{historicalDiagnoses.length}})
+                {{/if}}
+            </a>
+        </div>
+    {{/if}}
+</div>

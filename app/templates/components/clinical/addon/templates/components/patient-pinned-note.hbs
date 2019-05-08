@@ -1,0 +1,62 @@
+{{#if pinnedNote}}
+    <div class="active-patient-alert"></div>
+{{/if}}
+<div class="icon-pushpin" {{action "toggleProperty" "isPopoverVisible"}}></div>
+
+{{#content-popover
+    bodyEventName="mousedown touchstart"
+    isPopoverVisible=isPopoverVisible
+    target=popoverTarget
+    popoverClass=popoverConfirmClass
+    placement=popoverPlacement}}
+        <header>
+            <a class="icon-go-away pull-right box-padding-Tsm-v2" data-dismiss="modal" aria-hidden="true" {{action "toggleProperty" "isPopoverVisible"}} data-element="close-pinned-note"></a>
+            <div class="title"><i class="icon icon-info box-padding-Rmd-v2"></i> {{patientName}} - Pinned note</div>
+        </header>
+        {{#if pinnedNote}}
+            <div class="popover-content box-padding-LRlg-v2 box-padding-Tlg-v2 box-padding-Bn">
+                <div data-element="patient-pinned-note-text">{{{pinnedNote}}}</div>
+                <div data-element="pinned-note-last-modified-by" class="field-label box-padding-TBsm-v2">
+                    <label class="field-label long-provider-name">Edited by {{lastEditedByProviderName}}</label>
+                    <span class="pull-right">
+                        <label class="field-label">{{lastEditedByDateTime}}</label>
+                    </span>
+                </div>
+            </div>
+            <footer class="box-padding-Alg-v2 {{if containsScrollableContent "footer-divider"}} {{unless isEntitledToEdit "text-right"}}">
+                {{#if isEntitledToEdit}}
+                    <button type="button" class="btn btn-sm" {{action "toggleDeleteModal" true}} data-element="btn-delete">Delete</button>
+                {{/if}}
+                <button type="button" class="btn btn-sm btn-primary confirm-btn {{if isEntitledToEdit "pull-right"}}" {{action "toggleProperty" "isPopoverVisible"}} data-element="btn-cancel">Close</button>
+                {{#if isEntitledToEdit}}
+                    <button type="button" class="btn btn-sm box-margin-Rsm-v2 pull-right" {{action "edit"}} data-element="btn-edit">Edit</button>
+                {{/if}}
+            </footer>
+        {{else}}
+            <div class="empty-pinned-note box-padding-Alg-v2">
+                <div class="p-semibold">No pinned note for this patient</div>
+                <div data-element="empty-pinned-note-text">
+                    Alert your staff and providers with a pinned note when scheduling this patient or viewing the chart.
+                    <a class="learn-more" target="_blank" href={{config.patientPinnedNoteLearnMoreLink}}>Learn more</a>
+                </div>
+            </div>
+            {{#if isEntitledToEdit}}
+                <span class="pull-right box-padding-Rlg-v2 box-padding-Blg-v2">
+                    <button type="button" class="btn btn-sm btn-primary" {{action "edit"}} data-element="btn-pin-note">Pin note</button>
+                </span>
+            {{/if}}
+        {{/if}}
+{{/content-popover}}
+
+{{#content-modal
+    includeBackdrop=true
+    isCloseByXorOutsideVisible=false
+    isDraggable=true
+    isVisible=isDeleteModalVisable
+    modalStyle=7 as |section|}}
+    {{section.header title="Delete pinned note" notifyCloseByX=(action "toggleDeleteModal" false)}}
+    <div data-element="delete-popover-body" class="box-padding-LRlg-v2 box-padding-Tlg-v2">All text for this note will be erased and cannot be recovered.</div>
+    {{section.footer
+        buttonLeftText="Cancel" buttonLeftAction=(action "toggleDeleteModal" false)
+        buttonRightPrimaryText="Delete note" buttonRightPrimaryAction=(action "delete")}}
+{{/content-modal}}

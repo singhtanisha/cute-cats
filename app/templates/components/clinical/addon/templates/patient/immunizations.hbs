@@ -1,0 +1,125 @@
+<div class="patient-immunizations immunizations-bidirectional">
+    <div class="flex-column">
+        <div class="actions-bar flex-no-shrink">
+            <div class="pull-left">
+                <div class="inline-flex-group-v2">
+                    <div class="item gutter-xs box-fixed">
+                        {{#split-button as |split-button|}}
+                            {{split-button.option text="Print EHR immunizations" onClick=(action "print") isEnabled=true isPrimary=true}}
+                            {{split-button.option text="Print with comments" onClick=(action "print" true) isEnabled=true}}
+                            {{#if isPrintRegistryRecordEnabled}}
+                                {{split-button.option text="Print registry record" onClick=(action "printRegistryRecord") isEnabled=isConnectedToRegistry}}
+                            {{/if}}
+                        {{/split-button}}
+                    </div>
+                    <div class="item gutter-xs box-fixed">
+                        <button type="button" class="btn--default" onclick={{action "downloadImmunizationRecord"}} data-element="btn-download">
+                            Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="pull-right">
+                <div class="inline-flex-group-v2">
+                    {{#if isConnectedToRegistry}}
+                        <div class="item gutter-xs box-fixed box-margin-Txs">
+                            {{#if lastTransmissionDate}}
+                                <small>Last transmitted on {{format-date-time-local lastTransmissionDate "MM/DD/YYYY"}}</small>
+                            {{/if}}
+                        </div>
+                        {{#if isAllowedToEditImmunizations}}
+                            <div class="item gutter-xs box-fixed">
+                                {{#popover-info tagName="div" triggerOn="hover"
+                                    popoverContent=transmitPopOverText
+                                    containerSelector=".pf.outlet"}}
+                                    <div>
+                                        <button type="button" class="btn--default" onclick={{action "transmitToStateRegistry"}} data-element="btn-transmit">
+                                            Transmit to registry
+                                        </button>
+                                    </div>
+                                {{/popover-info}}
+                            </div>
+                        {{/if}}
+                    {{/if}}
+                    {{#if isConnectedToRegistry}}
+                        <div class="item gutter-xs box-fixed">
+                            <button type="button" class="btn--default" onclick={{action "searchInRegistry"}} data-element="btn-search-registry">
+                                Search in registry
+                            </button>
+                        </div>
+                    {{else if isAllowedToEditImmunizations}}
+                        <div class="item gutter-xs box-fixed">
+                            <button type="button" class="btn--default" onclick={{action "connectToRegistry"}} data-element="btn-connect-registry">
+                                Connect to registry
+                            </button>
+                        </div>
+                    {{/if}}
+                    {{#if isAllowedToEditImmunizations}}
+                        <div class="item gutter-xs box-fixed">
+                            <button type="button" class="btn--default" onclick={{action "addVaccination"}} data-element="btn-add-vaccine">
+                                Add vaccine
+                            </button>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+        {{#split-panel as |panels|}}
+            {{#panels.panel panelContentClass="flex-column scrollable-panel"}}
+                {{#each-in transmissionErrors as |date errors|}}
+                    {{component "immunizations/transmission-errors"
+                        date=date errors=errors}}
+                {{/each-in}}
+                {{cds-alerts cdsAlerts=cdsAlerts refresh="refreshCdsAlerts" bubbleAction="cdsAction" classNames="flex-no-shrink"}}
+                <h3 class="box-padding-LRlg-v2 box-margin-TBmd-v2">Patient Immunization Record</h3>
+                {{component "immunizations/add-immunization"
+                    close=(action "closeDetails")
+                    delete=(action "deleteVaccination")
+                    facilities=facilities
+                    isAddingImmunization=isAddingImmunization
+                    isAllowedToEditImmunizations=isAllowedToEditImmunizations
+                    isElectronicTransmission=isElectronicTransmission
+                    isSearching=isRegistrySearchVisible
+                    isVisible=isDetailsVisible
+                    patient=patientController.patient
+                    preloadKeyword=preloadKeyword
+                    providers=practiceProviders
+                    refresh=(action "refreshImmunizations")
+                    updatePatientAdContextCvxCodes=(action "updatePatientAdContextCvxCodes")
+                    vaccination=selectedVaccination
+                }}
+                {{component "immunizations/list-immunizations"
+                    immunizationList=immunizationList
+                    showSpinner=immunizationListLoading
+                    hasNoImmunizations=hasNoImmunizations
+                    patient=patientController.patient
+                    providers=practiceProviders
+                    viewDetails=(action "viewImmunizationDetails")
+                }}
+            {{/panels.panel}}
+            {{#panels.panel canClose=true isVisible=isRegistrySearchVisible}}
+                {{component "immunizations/registry-search"
+                    patient=patientController.patient
+                    registryConnections=registryConnections
+                    registries=immunizationRegistries
+                    printRegistryRecord=printRegistryRecord
+                    toggleIsRegistryPrintingEnabled=(action "toggleIsRegistryPrintingEnabled")
+                }}
+            {{/panels.panel}}
+        {{/split-panel}}
+    </div>
+    {{component "immunizations/print-immunizations"
+        content=immunizationList
+        isVisible=isPrintPreviewVisible
+        patient=patientController.patient
+        isAllowedToEditImmunizations=isAllowedToEditImmunizations
+        showComments=printWithComments
+    }}
+    {{component "immunizations/download-immunizations"
+        content=immunizationList
+        isDownloading=isDownloadVisible
+        selectedRegistry=selectedImmunizationRegistry
+        patient=patientController.patient
+        registries=immunizationRegistries
+    }}
+</div>

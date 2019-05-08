@@ -1,0 +1,27 @@
+<div id="patient-search-result">
+    <div class="detail-inner">
+        <div class="slc-row" {{action "selectPatient" searchResult}}>
+            <div class="slc-row-icon slc-row-icon-override">{{!--
+                // Image database has not been implemented, keeping code commented for future references
+                <img src="{{config-value "addPatientURL"}}/{{unbound "id"}}/patientImage?authCookie={{session-value "authCookie"}} onerror="this.onerror=null;this.src='{{config-value "defaultAvatarURL"}}';"/>
+         --}}</div>
+            <div class="row" data-element="patient--search-result-row">
+                <div class="col-xs-3">
+                    <div class="name-of-patient"><span class="header12"  data-element="full-name">{{searchResult.fullName}}</span></div><!--
+                 --><div class="header7"><p class="p-666" data-element="patient-record-number">{{searchResult.patientRecordNumber}}</p></div>
+                </div><!--
+            --><div class="col-xs-3">
+                    <div class="header7"><p data-element="birth-date">{{format-date-time-utc searchResult.birthDate format="MMM DD YYYY"}}</p></div>
+                    <div class="header7"><p data-element="social-sec-number">{{searchResult.socialSecurityNumber}}</p></div>
+                </div><!--
+            --><div class="col-xs-4">
+                    <div class="header7"><p data-element="home-phone-number">{{searchResult.homePhoneFormatted}}</p></div>
+                    <div class="header7"><p data-element="city-and-state">{{searchResult.city}}{{#if searchResult.city}}{{#if searchResult.state}}, {{/if}}{{/if}}{{searchResult.state}}</p></div>
+                </div><!--
+            --><div class="col-xs-2">
+                    {{format-date-time-utc searchResult.mostRecentVisitDate format="MMM DD, YYYY"}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

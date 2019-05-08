@@ -1,0 +1,116 @@
+{{#if result}}
+    <div class="row">
+        <div class="col-xs-4">
+            <label class="field-label" data-element="preview-result-lab-description">{{result.labDescription}}</label>
+            <div data-element="preview-result-lab">{{result.labDisplayName}}</div>
+            <div data-element="preview-result-medical-director">{{result.medicalDirector}}</div>
+        </div>
+        <div class="col-xs-4" data-element="preview-result-accession-number">
+            <label class="field-label">Accession Number</label>
+            <div>{{result.labAccessionNumber}}</div>
+        </div>
+        <div class="col-xs-4" data-element="preview-result-provider">
+            <label class="field-label">Requesting Provider</label>
+            <div>{{result.requestingProviderName}}</div>
+        </div>
+    </div>
+    {{#if result.isSigned}}
+        <div class="row">
+            <div class="col-xs-12 signers clearfix">
+                <label class="field-label">SIGNED</label>
+                {{#if isSignersExpanded}}
+                    {{#each result.signers as |signer index|}}
+                        <div data-element="preview-result-signer-{{index}}">
+                            {{signer.signedBy}} {{signer.signedOn}}
+                        </div>
+                    {{/each}}
+                    <a {{action "toggleMoreLessSigners" bubbles=false}}>less</a>
+                {{else}}
+                    <div data-element="preview-result-signer">
+                        {{firstSigner.signedBy}} {{firstSigner.signedOn}}
+                    </div>
+                    {{#if result.hasMultipleSigners}}
+                        <a {{action "toggleMoreLessSigners" bubbles=false}}>more</a>
+                    {{/if}}
+                {{/if}}
+            </div>
+        </div>
+    {{/if}}
+    {{#if result.comment}}
+        <div class="row">
+            <div class="col-xs-12">
+                <label class="field-label">COMMENT</label>
+                <div data-element="preview-result-comment">{{result.comment}}</div>
+            </div>
+        </div>
+    {{/if}}
+    <div class="row" data-element="preview-result-tests">
+        <div class="col-xs-12">
+            <label class="field-label">{{result.serviceDescription}} and Results</label>
+            <ul class="list list-hover list-icon">
+                {{#each resultItemsWrapper as |item index|}}
+                    <li {{action "toggleExpansion" item bubbles=false}}
+                        class="icon-exand-collapse {{if item.isExpanded "icon-pf-color-40" "icon-pf-color-02"}} {{if item.isExpanded "is-expanded"}}"
+                        data-element="preview-result-test-{{index}}">
+                        <p>
+                            {{#if item.isAbnormal}}
+                                <i class="icon icon-disk" data-element="abnormal-icon"></i>
+                            {{/if}}
+                            {{item.testName}}
+                        </p>
+
+                        {{#if item.isExpanded}}
+                            <div class="observations">
+                                <div class="slc-header clearfix no-icon">
+                                    <div class="slc-header-inner row">
+                                        <div class="col-xs-3">OBSERVATION</div>
+                                        <div class="{{if result.isDiagnostic "col-xs-2" "col-xs-5"}}">RESULT</div>
+                                        {{#if result.isDiagnostic}}<div class="col-xs-3">REFERENCE / UoM</div>{{/if}}
+                                        <div class="col-xs-4">
+                                            {{#if result.isDiagnostic}}
+                                                RESULTED DATE/TIME
+                                            {{else}}
+                                                PERFORMED DATE/TIME
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{#each item.observations as |observation index|}}
+                                    <div class="slc-row clearfix {{unless result.isDiagnostic "imaging"}}">
+                                        <div class="col-xs-3" data-element="preview-obs-{{index}}">
+                                            <p>{{observation.value}}</p>
+                                        </div>
+                                        <div class="{{if result.isDiagnostic "col-xs-2" "col-xs-5"}}"
+                                            data-element="preview-obs-result-{{index}}">
+                                            <p class="p-semibold">
+                                                {{#if observation.isAbnormal}}
+                                                    <i class="icon icon-disk" data-element="abnormal-icon"></i>
+                                                {{/if}}
+                                                {{!-- SEC-1204 html is escaped in computed property --}}
+                                                {{{observation.observationValue}}}
+                                            </p>
+                                        </div>
+                                        {{#if result.isDiagnostic}}
+                                            <div class="col-xs-3" data-element="preview-obs-range-{{index}}">
+                                                <p>
+                                                    {{#if observation.abnormalFlag}}
+                                                        <span class="abnormal">{{observation.abnormalFlag}}</span>
+                                                    {{/if}}
+                                                    {{observation.referencesRange}}
+                                                </p>
+                                            </div>
+                                        {{/if}}
+                                        <div class="col-xs-4" data-element="preview-obs-date-{{index}}">
+                                            <p>{{format-date-time-ignore-offset observation.observationDateTimeOffset}}</p>
+                                        </div>
+                                    </div>
+                                {{/each}}
+                            </div>
+                        {{/if}}
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+{{/if}}

@@ -1,0 +1,67 @@
+.support-info-container {
+    background-color: #efefef;
+    height: 100%;
+
+    .main-header {
+        background-color: @sky;
+        height: 55px;
+        padding: 3px;
+        position: relative;
+
+        h5 {
+            display: inline-block;
+            padding-right: 15px;
+        }
+
+        span {
+            color: @white;
+        }
+
+        p.sub-header {
+            color: @white;
+            display: inline;
+        }
+
+        .actions-dropdown {
+            position: absolute;
+            top: 20px;
+            right: 10px;
+        }
+    }
+
+    .support-info {
+        height: calc(~'100% - 54px');
+        background-color: @white;
+        overflow: hidden;
+        overflow-y: auto;
+        margin-left: 12px;
+
+        .container {
+            margin-bottom: 20px;
+
+            &.limit-width > div,
+            &.limit-width > p {
+                max-width: 650px;
+            }
+
+            .options-box {
+                padding: 30px;
+                background-color: @ice-light;
+                margin-top: 15px;
+            }
+        }
+
+        .right-border {
+            border-right: 1px solid @slate-light;
+        }
+    }
+
+    .orange {
+        background-color: @orange;
+        padding: 10px 14px;
+        height: auto;
+        color: @white;
+        border: none;
+        margin-top: 10px;
+    }
+}

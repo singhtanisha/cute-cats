@@ -1,0 +1,131 @@
+{{#detail-pane close="cancel" class="side-fixed col-xs-5 summary-details social-history-detail" resizables=resizables resizeOnBreakPoint=true topSpacing=50 isToolBoxVisible=false bigHeaderText="Social history" persistedHistory=persistedHistory socialHistory=socialHistory as |section|}}
+    {{#detail-pane-body sectionContext=section}}
+        <div class="panel-header p-semibold">Select section to record patient's social history</div>
+        <div class="panel-section">
+            {{#content-expander expandableContentSelector=".gender-identity-panel" isExpanded=isGenderIdentityExpanded}}
+                <div>Gender identity</div>
+                <div class="social-history-recorded-status">
+                    {{#if persistedHistory.genderIdentity.optionGuid}}
+                        {{persistedHistory.genderIdentity.description}}
+                    {{else}}
+                        Not recorded
+                    {{/if}}
+                </div>
+            {{/content-expander}}
+            {{#if canDeleteGenderIdentity}}
+                <div class="pull-right social-history-delete">
+                    <a class="link-text" onclick={{action "showDelete" "genderIdentity"}} data-element="gender-identity-delete">Delete</a>
+                </div>
+            {{/if}}
+            <div class="expandable-content gender-identity-panel">
+                <div>
+                    {{#each socialHistoryOptions.genderIdentityOptions as |option|}}
+                        {{#if isAllowedToEditSocialHistory}}
+                            {{d-radio-button id=option.optionElement name="gender-identity-option" value=option.optionGuid
+                                selectedValue=selectedGenderIdentity}}
+                            <label for="{{option.optionElement}}" class="pf-input pf-input--radio-label p is-shorter">
+                                {{option.description}}
+                            </label>
+                        {{else}}
+                            {{d-radio-button id=option.optionElement name="gender-identity-option" value=option.optionGuid
+                                selectedValue=selectedGenderIdentity disabled=true}}
+                            <label for="{{option.optionElement}}" class="pf-input pf-input--radio-label p is-shorter">
+                                {{option.description}}
+                            </label>
+                        {{/if}}
+                    {{/each}}
+                </div>
+                <div>
+                    <div class="field-label">Notes</div>
+                    <div>
+                        {{#if isAllowedToEditSocialHistory}}
+                            {{d-text-field data-element="gender-identity-notes" value=socialHistory.genderIdentity.notes size=255 disabled=isNoGenderIdentity}}
+                        {{else}}
+                            {{d-text-field data-element="gender-identity-notes" value=socialHistory.genderIdentity.notes size=255 disabled=true}}
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-section">
+            {{#content-expander expandableContentSelector=".sexual-orientation-panel" isExpanded=isSexualOrientationExpanded}}
+                <div>Sexual orientation</div>
+                <div class="social-history-recorded-status">
+                    {{#if persistedHistory.sexualOrientation.optionGuid}}
+                        {{persistedHistory.sexualOrientation.description}}
+                    {{else}}
+                        Not recorded
+                    {{/if}}
+                </div>
+            {{/content-expander}}
+            {{#if canDeleteSexualOrientation}}
+                <div class="pull-right social-history-delete">
+                    <a class="link-text" onclick={{action "showDelete" "sexualOrientation"}} data-element="sexual-orientation-delete">Delete</a>
+                </div>
+            {{/if}}
+            <div class="expandable-content sexual-orientation-panel" >
+                <div>
+                    {{#each socialHistoryOptions.sexualOrientationOptions as |option|}}
+                        {{#if isAllowedToEditSocialHistory}}
+                            {{d-radio-button id=option.optionElement name="sexual-orientation-option" value=option.optionGuid
+                                selectedValue=selectedSexualOrientation}}
+                            <label for="{{option.optionElement}}" class="pf-input pf-input--radio-label p is-shorter">
+                                {{option.description}}
+                            </label>
+                        {{else}}
+                            {{d-radio-button id=option.optionElement name="sexual-orientation-option" value=option.optionGuid
+                                selectedValue=selectedSexualOrientation disabled=true}}
+                            <label for="{{option.optionElement}}" class="pf-input pf-input--radio-label p is-shorter">
+                                {{option.description}}
+                            </label>
+                        {{/if}}
+                    {{/each}}
+                </div>
+                <div>
+                    <div class="field-label">Notes</div>
+                    <div>
+                        {{#if isAllowedToEditSocialHistory}}
+                            {{d-text-field data-element="sexual-orientation-notes" value=socialHistory.sexualOrientation.notes size=255 disabled=isNoSexualOrientation}}
+                        {{else}}
+                            {{d-text-field data-element="sexual-orientation-notes" value=socialHistory.sexualOrientation.notes size=255 disabled=true}}
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/detail-pane-body}}
+    {{#detail-pane-footer sectionContext=section}}
+        {{#if isAllowedToEditSocialHistory}}
+            <button type="button" class="btn" {{action "cancel"}}>Cancel</button>
+            <div class="pull-right">
+                <button type="button" class="btn btn-primary" onclick={{action "save"}} disabled={{socialHistory.saveDisabled}}>Save</button>
+            </div>
+        {{else}}
+            <div class="pull-right">
+                <button type="button" class="btn" {{action "cancel"}}>Cancel</button>
+            </div>
+        {{/if}}
+    {{/detail-pane-footer}}
+{{/detail-pane}}
+{{#content-modal modalStyle=7 isVisible=showDeleteGenderIdentityConfirm as |section|}}
+    {{section.header title="Delete gender identity" isCloseByXorOutsideVisible=true}}
+    {{#section.body}}
+        <p>This will remove this gender identity record from this patient's record.</p>
+    {{/section.body}}
+    {{section.footer
+        buttonLeftText="Cancel"
+        buttonRightPrimaryText="Delete"
+        buttonLeftAction=(action "hideDeleteModals")
+        buttonRightPrimaryAction=(action "deleteGenderIdentity")}}
+{{/content-modal}}
+{{#content-modal modalStyle=7 isVisible=showDeleteSexualOrientationConfirm as |section|}}
+    {{section.header title="Delete sexual orientation" isCloseByXorOutsideVisible=true}}
+    {{#section.body}}
+        <p>This will remove this sexual orientation record from this patient's record.</p>
+    {{/section.body}}
+    {{section.footer
+        buttonLeftText="Cancel"
+        buttonRightPrimaryText="Delete"
+        buttonLeftAction=(action "hideDeleteModals")
+        buttonRightPrimaryAction=(action "deleteSexualOrientation")}}
+{{/content-modal}}

@@ -1,0 +1,26 @@
+{{#if order}}
+    {{order-history history=order.history status=order.currentStatus}}
+
+    <div class="row col-3">
+        <div class="column wrap" data-element="preview-order-lab">
+            <label class="field-label">{{unbound order.labDescription}}</label>
+            {{order.labDisplayName}}
+        </div>
+        <div class="column wrap" data-element="preview-order-number">
+            <label class="field-label">ORDER NUMBER</label>
+            {{order.orderNumber}}
+        </div>
+        <div class="column wrap" data-element="preview-order-provider">
+            <label class="field-label">REQUESTING PROVIDER</label>
+            {{order.requestingProviderName}}
+        </div>
+    </div>
+    <div class="row" data-element="preview-order-tests">
+        <label class="field-label">{{unbound order.serviceDescription}} ORDERED</label>
+        <ul class="d-complex-list-container">
+            {{#each order.tests as |test index|}}
+                <li class="item" data-element="preview-order-test-{{index}}">{{unbound test}}</li>
+            {{/each}}
+        </ul>
+    </div>
+{{/if}}

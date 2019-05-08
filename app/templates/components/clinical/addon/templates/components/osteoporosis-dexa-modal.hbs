@@ -1,0 +1,19 @@
+{{#content-modal
+    modalStyle=0
+    modalSize="fixed480w"
+    isVisible=isVisible
+    class="osteoporosis-dexa-modal" as |section|}}
+    {{section.header title="Osteoporosis Screening" isCloseByXorOutsideVisible=true}}
+    {{#section.body}}
+    <div class="box-padding-LRmd box-padding-TBmd">
+        <p>The USPSTF recommends screening for osteoporosis in women aged 65 to 85. Consider ordering DXA or document results.</p>
+    </div>
+    <div class="text-center">
+        {{#if isOrderVisible}}
+            <p><a class="btn-sm" data-element="imaging-order-btn" onclick={{action "goToAddImagingOrder"}}>Order DXA</a></p>
+        {{/if}}
+        <p><a class="btn-sm" data-element="imaging-result-btn" onclick={{action "goToAddImagingResult"}}>Enter DXA result</a></p>
+    </div>
+    {{/section.body}}
+    {{section.footer buttonRightPrimaryText="Close" buttonRightPrimaryAction=(action "closeOsteoporosisModal")}}
+{{/content-modal}}

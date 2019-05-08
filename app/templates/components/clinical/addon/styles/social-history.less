@@ -1,0 +1,130 @@
+.smoking-detail,
+.social-history-detail,
+.patient-risk-score-detail {
+    .right-module {
+        height: 100%;
+    }
+    .detail-pane-body-wrapper {
+        height: calc(~'100% - 80px');
+        padding: 0;
+
+        .panel-section {
+            padding: 4px 15px 6px 15px;
+        }
+        .panel-header {
+            padding: 15px;
+            border-bottom: 5px solid @slate-light;
+        }
+
+        .ember-text-field {
+            height: 26px;
+            margin-bottom: 2px;
+        }
+        .field-label {
+            margin-top: 5px;
+            margin-bottom: 2px;
+        }
+        .field-title {
+            margin-bottom: 5px;
+        }
+        .risk-type {
+            width: 100%;
+            .dropdown-menu {
+                width: 100%;
+            }
+        }
+        .inline-flex-group .item {
+            padding-bottom: 0;
+        }
+    }
+}
+.social-history-detail {
+    .detail-pane-body-wrapper {
+        .panel-section {
+            border-bottom: 5px solid @slate-light;
+
+            .content-expander {
+                .icon-exand-collapse {
+                    color: @sky-dark;
+                }
+
+                .item > div {
+                    display: inline-block;
+
+                    &.social-history-recorded-status {
+                        font-size: 11px;
+                        color: @charcoal-light;
+                        padding-left: 15px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        max-width: 60%;
+                        white-space: nowrap;
+                        vertical-align: middle;
+                        padding-bottom: 2px;
+                    }
+                }
+            }
+
+            .social-history-question {
+                margin-top: 4px;
+                margin-bottom: 10px;
+            }
+        }
+        .social-history-delete {
+            margin-top: -24px;
+        }
+    }
+}
+
+.gender-identity-container,
+.smoking-status-container,
+.sexual-orientation-container {
+    > div {
+        &.social-history-group {
+            padding-left: 15px;
+        }
+        margin-top: -5px;
+        margin-bottom: -5px;
+
+        .item {
+            word-wrap: break-word;
+            font-weight: 400;
+        }
+        .item::before {
+            margin-left: -20px;
+        }
+    }
+}
+
+.patient-risk-score-detail {
+    .detail-pane-body-wrapper {
+        .inline-flex-group  {
+            .item {
+                margin-bottom: -3px;
+
+                &.box-fixed-md {
+                    width: 95px;
+                    padding-left: 0;
+                    padding-right: 6px;
+                }
+
+                .field-label {
+                    margin-top: 5px;
+                }
+            }
+        }
+        .panel-section {
+            padding: 0 10px 0 15px;
+
+            div {
+                .field-label {
+                    margin-top: 5px;
+                    height: 18px;
+                }
+            }
+            input[type="text"].error {
+                background-position: calc(95%);
+            }
+        }
+    }
+}

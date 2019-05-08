@@ -1,0 +1,53 @@
+{{patient-header patient=patient addPhoto="addPhoto" patientMissingMessage=patientMissingMessage patientMissingMessageDetail=patientMissingMessageDetail openPhrEnrollment="openPhrEnrollment"}}
+
+{{partial "navigation"}}
+
+{{add-patient-photo
+  photoUrl=patient.imageUrl
+  isVisible=showPhotoUpload
+  patientGuid=patient.guid
+}}
+
+{{#if showAccessHistory}}
+    {{patient-access-history isVisible=showAccessHistory patient=patient patientPracticeGuid=patientPracticeGuid}}
+{{/if}}
+
+{{#if showRecentActivity}}
+    {{recent-patient-activity isVisible=showRecentActivity patientName=fullName patientPracticeGuid=patientPracticeGuid }}
+{{/if}}
+
+{{copy-modal description="Copy the link below to access this patient directly in the future" isVisible=showPatientLinkCopyModal style="small" text=patientLink title="Copy a link to this patient"}}
+
+{{print-chart-modal isVisible=isPrintChartVisible patientController=this printAudit="printAudit"}}
+
+{{#if isCreateClinicalDocumentVisible}}
+    {{create-patient-clinical-document-modal isVisible=isCreateClinicalDocumentVisible patientPracticeGuid=patientPracticeGuid patientName=fullName dob=patient.birthDate gender=gender create="displayPendingClinicalSummaryModal"}}
+{{/if}}
+
+{{#content-modal
+    classNames="type-v2 clinical-document-ready-modal"
+    modalStyle=8
+    isVisible=isClinicalDocumentPendingModalVisible as |section|}}
+    {{section.header title="Clinical document is being created" isCloseByXorOutsideVisible=true}}
+    {{#section.body}}
+        <h3 class="box-margin-Bmd-v2">Go to Timeline to access the document</h3>
+        <p class="box-margin-Bn">The clinical document will be ready shortly in Timeline</p>
+
+    {{/section.body}}
+    {{section.footer buttonRightPrimaryText="Go to timeline" buttonRightPrimaryAction=(action "goToClinicalSummaryTimeline")}}
+{{/content-modal}}
+
+{{#if shouldShowDeletedEncounterWarning}}
+    {{#content-modal modalStyle=7 isVisible=shouldShowDeletedEncounterWarning as |section|}}
+        {{section.header title="Encounter deleted" isCloseByXorOutsideVisible=true}}
+        {{#section.body}}
+        <p>The encounter you were working in has been deleted. You can access a previous encounter or start a new one from the timeline.</p>
+
+        {{/section.body}}
+        {{section.footer buttonRightPrimaryText="Go to timeline" buttonRightPrimaryAction=(action "transitionToEncounterTimeline")}}
+    {{/content-modal}}
+{{/if}}
+
+{{#if shouldShowEditPinnedNoteModal}}
+    {{edit-pinned-note-modal patient=patient isVisible=shouldShowEditPinnedNoteModal location=pinnedNoteModalLocation}}
+{{/if}}

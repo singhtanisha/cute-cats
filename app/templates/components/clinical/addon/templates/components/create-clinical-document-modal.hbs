@@ -1,0 +1,33 @@
+{{#content-modal
+    modalStyle=0
+    isVisible=isVisible
+    isDraggable=false
+    includeBackdrop=true
+    modalSize="fixed700w" as |section|}}
+    {{section.header title=title isCloseByXorOutsideVisible=true}}
+    {{#section.body}}
+        <div class="field-label">Document type</div>
+        {{#each documentTypes as |documentType|}}
+            {{d-radio-button id=documentType.code name="ccda-document-types" value=documentType.code selectedValue=selectedType}}
+            <label for={{documentType.code}} class="pf-input pf-input--radio-label is-shorter">{{documentType.name}}</label>
+        {{/each}}
+        <div class="ccda-sections-header">
+            <span class="field-label">Sections to include</span>
+            <a {{action "selectAll" true}} data-element="create-ccda-select-all">Select all</a>|<a {{action "selectAll" false}} data-element="create-ccda-select-none">Select none</a>
+        </div>
+        <div class="ccda-sections">
+            {{#each optionalSections as |section|}}
+                {{#d-check-box disabled=isSelectionDisabled checked=section.isChecked value=section.id name=section.id smaller=true data-element=section.id}}
+                    {{section.name}}
+                {{/d-check-box}}
+            {{/each}}
+        </div>
+        <p>The patient's records will be exported into a continuity of care document which can be used to share the patient's chart with other providers. The export process can take a few minutes to complete. Once it is complete you can download the generated export file from the patient's timeline under "Exported patient records".</p>
+    {{/section.body}}
+    {{#section.footer}}
+        <div class="pull-right">
+            <a class="btn btn-sm" {{action "cancel"}} data-element="create-ccda-cancel">Cancel</a>
+            <a class="btn btn-sm btn-primary" {{action "create"}} data-element="create-ccda-create">Create</a>
+        </div>
+    {{/section.footer}}
+{{/content-modal}}

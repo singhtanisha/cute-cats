@@ -1,0 +1,35 @@
+{{#if showSpinner}}
+    <div class="is-loading"></div>
+{{else if didFailToLoad}}
+    <div class="p-666 did-fail-to-load" data-element="failed-to-load-my-dx-list">
+        There was a problem loading your favorite diagnosis. <a data-element="retry-loading-my-dx-list" {{action "retryLoadingData"}}>Retry?</a>
+    </div>
+{{else if diagnoses}}
+    <div class="favorite-diagnosis-toolbox-text">Select from your customized Dx list. Add or edit from My Dx List Settings link at the bottom.</div>
+    <header>
+        {{#if isShowingCodes}}<div class="code-column" data-element="my-dx-list-code-column">{{displayCodeSystemLabel}}</div>{{/if}}
+        <div class="description-column" data-element="my-dx-list-description-column">DESCRIPTION</div>
+        <a data-element="my-dx-list-show-hide-toggle-codes" {{action "toggleShowCodes"}}>{{#if isShowingCodes}}Hide{{else}}Show{{/if}} codes</a>
+    </header>
+    <section class="results-list">
+        {{#each diagnoses as |diagnosis|}}
+            <p class="p-link favorite-diagnoses--item" {{action "selectDiagnosis" diagnosis}}>
+                {{#each diagnosis.displayDiagnosisCodes as |dxCode|}}
+                    <div class="diagnosis-codes-row">
+                        {{#if isShowingCodes}}<div class="code-column" data-element="my-dx-list-row-item-code">{{dxCode.code}}</div>{{/if}}
+                        <div class="description-column" data-element="my-dx-list-row-item-description">{{dxCode.description}}</div>
+                    </div>
+                {{/each}}
+            </p>
+        {{/each}}
+    </section>
+    <div class="my-dx-link" data-element="my-dx-list-settings-link">{{#link-to "settings.favoriteDiagnoses"}}<span class="icon-edit"></span> My Dx List Settings{{/link-to}}</div>
+{{else}}
+    <div class="empty-set">
+        <h14 class="header14" data-element="my-dx-list-empty-text">No items in your custom Dx list</h14>
+        <div class="p-666" data-element="my-dx-list-empty-instructions">Create a custom Dx list to speed up your workflow by having a place to select diagnoses that you use most often.</div>
+        <div class="p-666">Customize your list in
+            <span data-element="my-dx-list-empty-link-to-settings"> {{#link-to "settings.favoriteDiagnoses"}}Settings{{/link-to}} </span>
+        </div>
+    </div>
+{{/if}}

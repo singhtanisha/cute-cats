@@ -1,0 +1,21 @@
+{{#print-chart-section patientSummary=patient  title=title}}
+    <div class="table-content">
+        <div class="row header-row"><div class="col-xs-12"><h2>Access History</h2></div></div>
+        <div class="row header-row">
+            <div class="col-xs-2">Date</div>
+            <div class="col-xs-5">Accessed by provider</div>
+            <div class="col-xs-5">From practice</div>
+        </div>
+        {{#each content as |item|}}
+            <div class="row even-stripe">
+                <div class="col-xs-2">{{datetime-formatted datetime=item.date}}</div>
+                <div class="col-xs-5 ellipses">{{item.providerName}}</div>
+                <div class="col-xs-5 ellipses">{{item.practiceName}}</div>
+            </div>
+        {{else}}
+            <div class="row even-stripe">
+                <div class="col-xs-12">No access history available for this patient</div>
+            </div>
+        {{/each}}
+    </div>
+{{/print-chart-section}}

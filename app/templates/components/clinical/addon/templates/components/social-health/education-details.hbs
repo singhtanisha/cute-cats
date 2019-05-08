@@ -1,0 +1,7 @@
+<label class="field-label">Highest education level completed</label>
+{{#composable-select content=demographicOptions.educationOptions disabled=isNotAllowedToEdit
+    value=(readonly content.optionGuid) onSelect=attrs.onSelectOption data-element="select-education"
+    optionLabelPath="description" optionValuePath="optionGuid" as |options|}}
+    {{options.dropdown prompt="Select grade or level of school" class="box-padding-Rn"}}
+    {{options.dropdown-menu}}
+{{/composable-select}}

@@ -1,0 +1,26 @@
+{{#if loadDiagnosesFailed}}
+    <p class="p-666">Can't load diagnoses. Please
+        <a href="#" {{action "loadDiagnoses"}}>try again.</a>
+    </p>
+{{else if diagnoses}}
+    <header><a {{action "addAllDiagnoses"}} data-element="add-all-active-dx">Add all active</a></header>
+    <div class="previous-diagnoses-results-list">
+        <h6 class="header6b">Active</h6>
+        {{#each diagnoses.active as |diagnosis|}}
+            {{previous-diagnosis diagnosis=diagnosis transcriptGuid=transcriptGuid
+                diagnosisSelected="diagnosisSelected" diagnosisDeselected="diagnosisDeselected"}}
+        {{else}}
+            <p class="p-666">No active diagnoses</p>
+        {{/each}}
+
+        <h6 class="header6b">Historical</h6>
+        {{#each diagnoses.historical as |diagnosis|}}
+            {{previous-diagnosis diagnosis=diagnosis transcriptGuid=transcriptGuid
+                diagnosisSelected="diagnosisSelected" diagnosisDeselected="diagnosisDeselected"}}
+        {{else}}
+            <p class="p-666">No historical diagnoses</p>
+        {{/each}}
+    </div>
+{{else}}
+    <p class="p-666">There are no diagnoses.</p>
+{{/if}}

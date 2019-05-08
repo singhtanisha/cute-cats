@@ -1,0 +1,95 @@
+{{#content-modal
+    modalStyle=0
+    isVisible=isVisible
+    isDraggable=false
+    includeBackdrop=true
+    modalSize="responsive912w"
+    isLoading=isLoading as |section|}}
+    {{section.header title=title isCloseByXorOutsideVisible=true}}
+    {{#section.body}}
+    <div class="left-panel ccda-preview-modal-content">
+        <h4 class="header4semibold"><span class="visible-print-inline">{{title}} - </span>{{patientName}}</h4>
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="row">
+                    <div class="col-xs-7 upper p-semibold">Race</div>
+                    <div class="col-xs-5">{{ccda.patientDemographics.race}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7 upper p-semibold">Ethnicity</div>
+                    <div class="col-xs-5">{{ccda.patientDemographics.ethnicity}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7 upper p-semibold">Preferred language</div>
+                    <div class="col-xs-5">{{preferredLanguage}}</div>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="row">
+                    <div class="col-xs-6 upper p-semibold">Care team</div>
+                    <div class="col-xs-6">
+                        {{#each careTeamNames as |name|}}
+                            <div>{{name}}</div>
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 upper p-semibold">Care team phone</div>
+                    <div class="col-xs-6">{{careTeamPhone}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 upper p-semibold">Care team address</div>
+                    <div class="col-xs-6">
+                        {{#if careTeamAddress}}
+                            {{#each careTeamAddress.addressLines as |line|}}
+                                <div>{{line}}</div>
+                            {{/each}}
+                            <div>{{careTeamAddress.city}} {{careTeamAddress.state}}</div>
+                            <div>{{careTeamAddress.postalCode}}</div>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{#each ccda.components as |component|}}
+            <div class="box-margin-Tsm" data-element="{{component.dataElement}}">
+                <div class="upper p-semibold">{{component.title}}</div>
+                {{!-- SEC-1204 html comes from our ccd transform in service --}}
+                {{{component.html}}}
+            </div>
+        {{/each}}
+    </div>
+    <div class="right-panel">
+        <h4>Table of contents</h4>
+        {{#each ccda.components as |component|}}
+            <a {{action "goToSection" component.dataElement}}>{{component.title}}</a>
+        {{/each}}
+    </div>
+    {{/section.body}}
+    {{#section.footer}}
+        <div class="pull-right">
+            {{#if isLoading}}
+                <a class="btn btn-sm" disabled=true>Download</a>
+                <a class="btn btn-sm" disabled=true>Print</a>
+            {{else}}
+                {{#unless shouldHideDownloadButton}}
+                    <div class="btn-group btn-ccd-download">
+                        <button class="btn btn-sm dropdown-shorter" {{action "download" false}}>Download XML</button>
+                        <a class="btn dropdown-toggle split-btn dropdown-shorter" data-toggle="dropdown">
+                            <i class="icon-caret"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-shorter">
+                            <li>
+                                <a {{action "download" false}}>Download XML</a>
+                            </li>
+                            <li>
+                                <a {{action "download" true}}>Download HTML</a>
+                            </li>
+                        </ul>
+                    </div>
+                {{/unless}}
+                <a class="btn btn-sm" {{action "print"}}>Print</a>
+            {{/if}}
+        </div>
+    {{/section.footer}}
+{{/content-modal}}

@@ -1,0 +1,43 @@
+{{data-tunnel name="summary-encounter-list" onDataReceived=(perform loadEncountersTask)}}
+
+{{#composable-card as |card|}}
+    {{#card.header as |header|}}
+        {{#header.title}}
+            Encounters
+        {{/header.title}}
+    {{/card.header}}
+    {{#card.content}}
+        {{#unless isLoading}}
+            {{#if error}}
+                Could not load encounters for this patient. Try again later.
+            {{else}}
+                {{#if visibleEncounters}}
+                    <ul class="list list--hover">
+                        {{#each visibleEncounters as |encounter index|}}
+                            <li onclick={{action "openEncounter" encounter}} data-element="encounter-item-{{index}}">
+                                <span class="text-color-link">{{format-date-time-utc encounter.dateOfService}}</span>
+                                <span>{{encounter.encounterAndNoteType}}</span>
+                                {{#if encounter.signed}}
+                                    <i class="icon-lock icon-color-focus box-margin-Lmd-v2"></i>
+                                {{/if}}
+                                <div class="chief-complaint">
+                                    <span>CC:</span>
+                                    {{#if encounter.chiefComplaint}}
+                                        <span>{{encounter.chiefComplaint}}</span>
+                                    {{else}}
+                                        <span>No chief complaint recorded</span>
+                                    {{/if}}
+                                </div>
+                            </li>
+                        {{/each}}
+                    </ul>
+                {{else}}
+                    <p class="text-color-placeholder box-margin-Bn">No encounters for this patient</p>
+                {{/if}}
+                {{#if hasMoreEncounters}}
+                    {{#link-to "timeline.events" patientPracticeGuid "encounter"}}View all encounters in timeline ({{encounters.length}}){{/link-to}}
+                {{/if}}
+            {{/if}}
+        {{/unless}}
+    {{/card.content}}
+{{/composable-card}}

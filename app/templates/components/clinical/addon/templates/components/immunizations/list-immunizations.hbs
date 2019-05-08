@@ -1,0 +1,76 @@
+{{#data-table-v2
+    content=immunizationList
+    selectedItem=selectedImmunization
+    classNames="non-zebra-striped is-hoverable"
+    classNameBindings="hasNoImmunizations:flex-no-shrink:with-immunizations"
+    data-element="table-vaccinations"
+    select=(action attrs.viewDetails)
+    as |table|
+}}
+    {{#table.header as |header|}}
+        {{header.column field="vaccineName" title="Vaccine Group"}}
+        {{header.column field="vaccinationDateValue" title="Date Administered"}}
+        {{header.column field="vaccinationAgeValue" title="Age"}}
+        {{header.column field="source.sourceType" title="Status"}}
+    {{/table.header}}
+    {{#each table.content as |immunizationGroup immunizationGroupIndex|}}
+        {{#table.body data-element=(concat "immunization-group-" immunizationGroupIndex) as |body|}}
+                <tr class="table-group-header">
+                    <td colspan="4">{{immunizationGroup.name}}</td>
+                </tr>
+                {{#each immunizationGroup.vaccinations as |vaccination index|}}
+                    {{#body.row content=vaccination data-element=(concat "vaccine-" index) as |row|}}
+                        {{#row.cell field="vaccineName" as |vaccination|}}
+                            <div class="pull-left vaccine-name">
+                                <a data-element="vaccine-name" class={{if vaccination.source.isRefused "is-refused"}}>
+                                    {{vaccination.vaccineName}}
+                                </a>
+                            </div>
+                            {{#unless vaccination.hasAllRegistryFields}}
+                                {{#composable-popover data-element="info-popover" classNames="pull-left box-margin-Lxs" as |options|}}
+                                    {{options.popover-target tagName="a" classNames="icon-info" data-element="info-popover-target"}}
+                                    {{#options.popover}}
+                                        <div class="popover-content">
+                                            This vaccine record is missing information for electronic submission to the immunization registry.
+                                        </div>
+                                    {{/options.popover}}
+                                {{/composable-popover}}
+                            {{/unless}}
+                        {{/row.cell}}
+                        {{#row.cell field="vaccinationDateValue" as |vaccination|}}
+                            <div data-element="vaccination-date" class={{if vaccination.source.isRefused "is-refused"}}>
+                                {{format-date-time vaccination.vaccinationDate format="MM/DD/YY"}}
+                            </div>
+                        {{/row.cell}}
+                        {{#row.cell field="vaccinationAgeValue" as |vaccination|}}
+                            <div data-element="vaccination-date" class={{if vaccination.source.isRefused "is-refused"}}>
+                                {{age-on-date patient.birthDate vaccination.vaccinationDate "-"}}
+                            </div>
+                        {{/row.cell}}
+                        {{#row.cell field="source.sourceType" as |vaccination|}}
+                            <p data-element="vaccination-source-type" class="{{if vaccination.source.isRefused "is-refused"}}">
+                                {{vaccination.source.sourceType}}
+                            </p>
+                            {{#if vaccination.source.isAdministered}}
+                                <p data-element="vaccination-source-description" class="text-color-placeholder">
+                                    By: {{vaccination.administeredByProviderName}}
+                                </p>
+                            {{else if vaccination.source.isHistorical}}
+                                <p data-element="vaccination-source-description" class="text-color-placeholder ">
+                                    {{vaccination.source.vaccinationSourceName}}
+                                </p>
+                            {{else if vaccination.source.isRefused}}
+                                <p data-element="vaccination-source-description" class="is-refused text-color-placeholder">
+                                    {{vaccination.rejectionReason.rejectionReasonName}}
+                                </p>
+                            {{/if}}
+                        {{/row.cell}}
+                    {{/body.row}}
+                {{/each}}
+        {{/table.body}}
+    {{/each}}
+{{/data-table-v2}}
+
+{{#if hasNoImmunizations}}
+    <h14 class="header14">No immunizations recorded</h14>
+{{/if}}

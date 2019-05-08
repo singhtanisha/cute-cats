@@ -1,0 +1,67 @@
+{{#detail-pane
+    close="save"
+    resizables=resizables resizeOnBreakPoint=true
+    smallHeaderText="Care Team" bigHeaderText=bigHeaderText as |section|}}
+
+    {{#detail-pane-body sectionContext=section}}
+        {{#if isAddingNew}}
+            <div class="row">
+                <div class="col-xs-12">
+                    {{single-select
+                        class="provider-select"
+                        content=selectOptions
+                        placeholder="Search providers"
+                        selectType="typeahead"
+                        optionLabelPath="profile.fullProviderName"
+                        select="profileSelected"
+                        optionGroupPath="groupKey"
+                        optionGroupLabelPath="group"
+                        openOnFocus=true
+                        addCustomItemTemplateText="Add new provider to connections"
+                        addItem="createContact"
+                        data-element="care-team-search"}}
+                </div>
+            </div>
+        {{/if}}
+
+        {{#if contact}}
+            {{care-team-contact-form contact=contact disabled=contact.isProviderProfile}}
+            <div class="row">
+                <div class="col-xs-12">
+                    <label class="field-label is-required">Relationship to patient</label>
+                    {{#d-check-box smaller=true checked=isPreferred disabled=cantBePreferred data-element="care-team-relationship-preferred"}}Preferred provider in practice{{/d-check-box}}
+                    {{#d-check-box smaller=true checked=isBackup disabled=cantBeBackup data-element="care-team-relationship-backup"}}Backup provider in practice{{/d-check-box}}
+                </div>
+            </div>
+
+            <hr>
+            <div class="row">
+                <div class="col-xs-12">
+                    {{#d-check-box smaller=true checked=isPrimary data-element="care-team-relationship-pcp"}}Primary care provider (PCP){{/d-check-box}}
+                    {{#d-check-box smaller=true checked=isReferring data-element="care-team-relationship-referring"}}Referring provider{{/d-check-box}}
+                    {{#d-check-box smaller=true class="care-team-detail--other-provider" checked=isOther data-element="care-team-relationship-other"}}Other provider{{/d-check-box}}
+                    {{d-text-field placeholderText="Enter relationship" isShorted=true maxlength="254" value=otherDescription disabled=cantEditOtherDescription data-element="care-team-relationship-other-text"}}
+                </div>
+            </div>
+        {{/if}}
+    {{/detail-pane-body}}
+
+    {{#detail-pane-footer sectionContext=section class="diagnosis-detail--footer"}}
+        <div class="right-module-row clearfix">
+            <button type="button" class="pull-right btn btn-primary" {{action "save"}} data-element="care-team-save">Save</button>
+            <button type="button" class="btn" {{action "cancel"}} data-element="care-team-cancel">Cancel</button>
+        </div>
+    {{/detail-pane-footer}}
+{{/detail-pane}}
+
+{{#content-modal modalStyle=7 isVisible=isConfirmingProviderChange as |section|}}
+    {{section.header title=confirmChangeTitle isCloseByXorOutsideVisible=true}}
+    {{#section.body}}
+    <p>{{confirmChangeDescription}}</p>
+    {{/section.body}}
+    {{section.footer
+        buttonRightSecondaryText="Cancel"
+        buttonRightPrimaryText="Update"
+        buttonRightSecondaryAction=(action "cancel")
+        buttonRightPrimaryAction=(action "confirmProviderChange")}}
+{{/content-modal}}

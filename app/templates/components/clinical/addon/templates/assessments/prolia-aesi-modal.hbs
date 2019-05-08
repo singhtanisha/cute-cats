@@ -1,0 +1,70 @@
+<div data-element="prolia-aesi-modal" class="type-v2">
+    <h4 class="box-margin-TBlg-v2">Prolia Safety Reporting - Record Adverse Events <a href={{config.proliaLearnMoreUrl}} title="Learn more" alt="Learn more" target="_blank" class="box-margin-Lsm-v2">Learn more</a></h4>
+    <section class="prolia-history-section">
+        {{single-select
+            content=model.proliaMedicationHistory.options
+            data-element="prolia-assessment-modal-history"
+            isShorter=true
+            optionLabelPath="label"
+            optionValuePath="value"
+            prompt="Select patient's Prolia history..."
+            select="propertyChanged"
+            selection=model.proliaMedicationHistory.selection
+            optionGroupPath="group"
+            sortLabels=false
+            tooltipMsg=validationErrors.proliaMedicationHistory
+            hasError=validationErrors.proliaMedicationHistory
+            class="assessment-history-select"}}
+    </section>
+    {{#if model.proliaMedicationHistory.selection}}
+        {{#if model.proliaMedicationHistory.selection.showAdverseEffects}}
+            <p class="adverse-events-heading">Have any adverse events occurred while on Prolia?</p>
+            <section class="adverse-options box-padding-Llg-v2">
+                {{eventing-radio-button id="noAdverse" name="prolia-any-aesi" value=false selectedValue=model.proliaAnyAesi.isSelected onChecked="propertyChanged" checkedValue="proliaAnyAesi"}}
+                <label for="noAdverse" class="pf-input pf-input--radio-label is-shorter box-margin-Bmd-v2">Patient <strong>has not</strong> experienced any of the adverse events listed below</label>
+                {{popover-info
+                    allowHtmlCode=false
+                    classNames="icon icon-info box-margin-Lxs icon-assessment-info"
+                    popoverContent="If you want to report other adverse events contact Amgen at 800-772-6436"}}
+
+                {{eventing-radio-button id="adverse" name="prolia-any-aesi" value=true selectedValue=model.proliaAnyAesi.isSelected onChecked="propertyChanged" checkedValue="proliaAnyAesi"}}
+                <label for="adverse" class="pf-input pf-input--radio-label is-shorter">Patient <strong>has</strong> experienced at least one or more the following (check all that apply)</label>
+                {{#if validationErrors.proliaAnyAesi}}
+                    {{popover-info
+                        allowHtmlCode=false
+                        classNames="icon icon-urgent error box-margin-Lxs"
+                        popoverClass="error-popover validation-adverse-events"
+                        popoverContent=validationErrors.proliaAnyAesi
+                        isPopoverVisible=true}}
+                {{/if}}
+            </section>
+            <section class="indent indent-more">
+                {{#d-check-box classNames="prolia-with-description" checked=model.proliaAesiHypocalcemia.isSelected onChecked="propertyChanged" checkedValue="proliaAesiHypocalcemia"}}
+                    <div class="p-semibold">Hypocalcemia</div>
+                {{/d-check-box}}
+                <p class="disease-description box-margin-Tn box-margin-Bmd-v2">Hypocalcemia was the primary reason for ER visit or hospitalization</p>
+                {{#d-check-box classNames="prolia-with-description" checked=model.proliaAesiOsteonecrosisOfTheJaw.isSelected onChecked="propertyChanged" checkedValue="proliaAesiOsteonecrosisOfTheJaw"}}
+                    <div class="p-semibold">Osteonecrosis of the jaw</div>
+                {{/d-check-box}}
+                <p class="disease-description box-margin-Tn box-margin-Bmd-v2">Exposed jaw bone did not heal in 8 weeks and there was no history of jaw radiation</p>
+                {{#d-check-box classNames="prolia-with-description" checked=model.proliaAesiAtypicalFemoralFractures.isSelected onChecked="propertyChanged" checkedValue="proliaAesiAtypicalFemoralFractures"}}
+                    <div class="p-semibold">Atypical femoral fractures</div>
+                {{/d-check-box}}
+                <p class="disease-description box-margin-Tn box-margin-Bmd-v2">Low trauma femur fracture occurring between the lesser trochanter and epicondyles</p>
+                {{#d-check-box classNames="prolia-with-description" checked=model.proliaAesiSeriousInfections.isSelected onChecked="propertyChanged" checkedValue="proliaAesiSeriousInfections"}}
+                    <div class="p-semibold">Serious infections</div>
+                {{/d-check-box}}
+                <p class="disease-description box-margin-Tn box-margin-Bmd-v2">Infection required IV antibiotics or was primary reason for ER visit or hospitalization</p>
+                {{#d-check-box classNames="prolia-with-description" checked=model.proliaAesiDermatologicReactions.isSelected onChecked="propertyChanged" checkedValue="proliaAesiDermatologicReactions"}}
+                    <div class="p-semibold">Serious dermatologic reactions</div>
+                {{/d-check-box}}
+                <p class="disease-description box-margin-TBn">Skin condition was the primary reason for ER visit or hospitalization</p>
+            </section>
+        {{else}}
+            <section>
+                <div class="field-label">Prolia Safety Assessment</div>
+                <div data-element="prolia-assessment-card-status">{{model.proliaMedicationHistory.selection.statusText}}</div>
+            </section>
+        {{/if}}
+    {{/if}}
+</div>

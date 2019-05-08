@@ -1,0 +1,46 @@
+{{#if isFreeTextAllergiesMessageVisible}}
+    <div class="allergy-free-text-message bg-color-warning box-padding-LRlg-v2 box-margin-Bxs-v2">
+        <ul class="list list--icon">
+            <li class="icon-urgent icon-color-warning icon--sm">
+                <div class="inline-flex-group-v2">
+                    <div class="item gutter-xs box-padding-TBn">
+                        <h4 class="h4 box-margin-Bn">You have previously recorded allergies in a free-text note</h4>
+                        <p class="box-margin-Bn">
+                            To receive interaction alerts, record the note in a structured format here.
+                            {{#if isRecordVisible}}
+                                <a class="{{unless isRecordVisible "hidden"}}" onclick={{action "createAllergy"}}>Record</a>
+                            {{/if}}
+                        </p>
+                    </div>
+                    <div class="item gutter-xs box-fixed box-padding-TBn {{unless canShowLater "hidden"}}">
+                        <a data-element="free-text-allergies-show-later" onclick={{action "showFreeTextAllergiesLater"}}>Show later</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul class="list list--default">
+            <li>
+                <p data-element="free-text-allergies-value" class="box-margin-Bn">
+                    {{freeTextAllergies}}
+                    <span class="text-color-warning">(free-text note)</span>
+                    {{#unless session.isStaff}}
+                        {{#if isAllowedToEditAllegies}}
+                            {{#popover-confirm
+                                action="deleteFreeTextAllergy"
+                                title="Delete free-text note regarding allergy"
+                                popoverContent="This will delete this allergy note permanently from patient's chart. It is recommended that you record these free-text allergies using the structured allergy section below prior to deleting. This action is final."
+                                confirmLabel="Delete"
+                                cancelLabel="Cancel"
+                                confirmType="info popover-confirm-delete-free-text-allergy"
+                                classNames=""
+                                data-element="free-text-allergies-delete"
+                                placement="bottom"}}
+                                Delete
+                            {{/popover-confirm}}
+                        {{/if}}
+                    {{/unless}}
+                </p>
+            </li>
+        </ul>
+    </div>
+{{/if}}

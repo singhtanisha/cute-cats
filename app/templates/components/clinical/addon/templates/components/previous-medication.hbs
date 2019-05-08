@@ -1,0 +1,20 @@
+<header>
+    {{#if medications}}
+        <a {{action "addAllMedications"}} data-element="add-all-active-meds">Add all active</a>
+    {{/if}}
+</header>
+<div class="previous-medications-results-list flex-grow">
+    <h6 class="header6b">ACTIVE MEDICATIONS FOR PATIENT</h6>
+    {{#each activeMedications as |item|}}
+        {{partial 'components/encounter-medication'}}
+    {{else}}
+        <p class="p-666">No active medications</p>
+    {{/each}}
+
+    <h6 class="header6b">HISTORICAL MEDICATIONS FOR PATIENT</h6>
+    {{#each historicalMedications as |item|}}
+        {{partial 'components/encounter-medication'}}
+    {{else}}
+        <p class="p-666">No historical medications</p>
+    {{/each}}
+</div>

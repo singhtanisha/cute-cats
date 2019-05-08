@@ -1,0 +1,71 @@
+{{data-tunnel name="diagnoses-summary-list" onDataReceived=(action "refresh")}}
+{{#composable-card as |card|}}
+    {{#card.header as |header|}}
+        {{#header.title}}
+            Diagnoses
+            {{#if canRecordDiagnoses}}
+                <a onclick={{action "recordDiagnosisOnSummary"}} class="icon icon--md icon-add box-margin-Lmd-v2" data-element="add-diagnosis-button"></a>
+            {{/if}}
+            {{#unless isLoading}}
+                <a onclick={{action "print"}} class="icon icon--md icon-printer box-margin-Lmd-v2" data-element="print-diagnoses-button"></a>
+            {{/unless}}
+        {{/header.title}}
+        {{#header.utilities}}
+            <i onclick={{action "toggleIsExpanded"}} class="icon icon-ellipsis box-margin-Lmd-v2" data-element="diagnoses-ellipsis"></i>
+            <span class="diagnosis-display-selector-wrapper">
+                <span>Show by </span>
+                {{diagnosis-display-selector-v2 displayChanged=(action "displayChanged")}}
+            </span>
+        {{/header.utilities}}
+    {{/card.header}}
+    {{#card.content as |content|}}
+        {{#if isLoading}}
+            <p>Loading diagnoses...</p>
+        {{else}}
+            {{#if diagnosesError}}
+                <p class="text-color-placeholder">Can't load diagnoses. Please <a onclick={{action "reloadDiagnoses"}}>try again.</a>
+                </p>
+            {{else}}
+                {{#if isExpanded}}
+                    <div class="body-diagnosis-display-selector-wrapper">
+                        <span>Show by </span>
+                        {{diagnosis-display-selector-v2 displayChanged=(action "displayChanged")}}
+                    </div>
+                {{/if}}
+                {{#if isEditing}}
+                    {{#unless selectedDiagnosisGuid}}
+                        <section class="active">
+                            <div>Record diagnosis</div>
+                        </section>
+                    {{/unless}}
+                {{/if}}
+
+                {{#unless activePatientDiagnoses}}
+                    {{#if isAllowedToEditDiagnoses}}
+                        {{#check-box checked=isNoKnownChecked disabled=isLoadingNoKnown}}
+                            <label class="pf-input {{cbSmaller}}" data-element="no-active-diagnoses-label">Patient has no active diagnoses</label>
+                        {{/check-box}}
+                    {{else}}
+                        {{#if isNoKnownChecked}}
+                            <p>Patient has no active diagnoses</p>
+                        {{/if}}
+                    {{/if}}
+                {{/unless}}
+
+                {{diagnoses-summary-list-section title="" isIcd10Display=true
+                    allActiveDiagnoses=allActiveDiagnoses
+                    sortedChronicActiveDiagnoses=sortedChronicActiveDiagnoses
+                    sortedAcuteActiveDiagnoses=sortedAcuteActiveDiagnoses
+                    sortedUnspecifiedActiveDiagnoses=sortedUnspecifiedActiveDiagnoses
+                    historicalDiagnoses=allHistoricalDiagnoses
+                    selectedDiagnosisGuid=selectedDiagnosisGuid
+                    editDiagnosis=(action "editDiagnosis")
+                    diagnosisDescriptionDisplay=diagnosisDescriptionDisplay}}
+            {{/if}}
+        {{/if}}
+    {{/card.content}}
+{{/composable-card}}
+{{#print-preview-content isVisible=isPrintVisible printTitle=printTitle}}
+    {{print-diagnoses class="chart-print-container" patient=patientSummary
+        activeDiagnoses=allActiveDiagnoses historicalDiagnoses=allHistoricalDiagnoses}}
+{{/print-preview-content}}

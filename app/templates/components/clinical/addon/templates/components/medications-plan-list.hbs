@@ -1,0 +1,43 @@
+<div class="field-label">Medications attached to this encounter</div>
+{{#unless encounterMedications.inEncounter}}
+    <div class="item">No attached medications</div>
+{{else}}
+    <div id="medication-list-container">
+        {{#each sortedMedications as |item|}}
+            <div class="medication-list-item" data-guid="{{item.medicationGuid}}">
+                <div class="close-box-small" {{action "removeMedication" item}}></div>
+                <div class="medication-display">
+                    <a {{action "editMedication" item}}>{{item.fullGenericName}}</a>
+                    {{#if item.duplicates}}
+                        <span class="duplicate-medication-text">(Duplicate)</span>
+                    {{/if}}
+                    {{#if item.startDateTime}}
+                        <span class="hint-text">Start:</span>
+                        {{datetime-formatted datetime=item.startDateTime}}
+                    {{/if}}
+                    {{#if item.stopDateTime}}
+                        <span class="hint-text">Stop:</span>
+                        {{datetime-formatted datetime=item.stopDateTime}}
+                    {{/if}}
+                    {{#if item.sig.patientDescription}}
+                        <span class="hint-text">Sig:</span>
+                        <span>{{item.sig.patientDescription}}</span>
+                    {{/if}}
+
+                    {{#if item.medicationComment.comment}}
+                        <span class="hint-text">Comment:</span>
+                        {{transcript-comment transcriptComment=item.medicationComment}}
+                    {{/if}}
+                    {{#if item.encounterCommentsWithComment}}
+                        <span class="hint-text">Encounter Comments:</span>
+                        {{transcript-comments items=item.encounterCommentsWithComment}}
+                    {{/if}}
+
+                    {{#if item.prescriptions}}
+                        {{prescriptions-list items=item.prescriptions}}
+                    {{/if}}
+                </div>
+            </div>
+        {{/each}}
+    </div>
+{{/unless}}

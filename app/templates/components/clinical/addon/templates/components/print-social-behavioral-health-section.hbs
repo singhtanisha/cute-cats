@@ -1,0 +1,181 @@
+{{#print-chart-section chartNote=chartNote patientSummary=patient title=title chartNotePrintInfo=chartNotePrintInfo
+    includeHeaderAndFooter=includeHeaderAndFooter}}
+    <div class="table-content print-behavioral-health-section">
+        <div class="table">
+            <div class="row header-row"><div class="col-xs-12"><h2>Social history</h2></div></div>
+
+            <div class="row header-row">
+                <div class="col-xs-10">Tobacco use</div>
+                <div class="col-xs-2">Recorded</div>
+            </div>
+            {{#if tobaccoUse}}
+                <div class="row no-stripe">
+                    <div class="col-xs-12 box-padding-Bn">Current tobacco use</div>
+                    <div class="col-xs-10 box-padding-Tn">
+                        <h4 class="h4">{{tobaccoUse.content.firstObject.description}}</h4>
+                    </div>
+                    <div class="col-xs-2 box-padding-Tn">{{format-date-time-utc tobaccoUse.content.firstObject.effectiveDate}}</div>
+                    {{#if tobaccoUsePastEntries}}<div class="col-xs-12 box-padding-Bn">Past entries</div>{{/if}}
+                    {{#each tobaccoUsePastEntries as |item|}}
+                        <div class="col-xs-10 box-padding-Tn">
+                            <h4 class="h4">{{item.description}}</h4>
+                        </div>
+                        <div class="col-xs-2 box-padding-Tn">{{format-date-time-utc item.effectiveDate}}</div>
+                    {{/each}}
+                </div>
+            {{else}}
+                <div class="row no-stripe">
+                    <div class="col-xs-10">No tobacco use history available for this patient</div>
+                </div>
+            {{/if}}
+
+            <div class="row header-row">
+                <div class="col-xs-10">Alcohol use</div>
+                <div class="col-xs-2">Recorded</div>
+            </div>
+            {{#if alcoholUseWorksheet}}
+                {{print-worksheet worksheet=alcoholUseWorksheet}}
+            {{else}}
+                <div class="row no-stripe">
+                    <div class="col-xs-10">No alcohol use history available for this patient</div>
+                </div>
+            {{/if}}
+
+            <div class="row header-row">
+                <div class="col-xs-12">Social history (free-text)</div>
+            </div>
+            <div class="row no-stripe">
+                <div class="col-xs-12 box-padding-Tn">
+                    {{#if socialHealth.socialHistory.description}}
+                        {{socialHealth.socialHistory.description}}
+                    {{else}}
+                        No social history (free-text) recorded for this patient
+                    {{/if}}
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-xs-10">Financial resources</div>
+                <div class="col-xs-2">Recorded</div>
+            </div>
+            <div class="row no-stripe">
+                <div class="col-xs-10 box-padding-Tn">
+                    {{#if socialHealth.financialResourceStatus.description}}
+                        <div>Describe your difficulty paying for the very basics like food, housing, medical care, and heating</div>
+                        <h4 class="h4">{{socialHealth.financialResourceStatus.description}}</h4>
+                    {{else}}
+                        No financial resources recorded for this patient
+                    {{/if}}
+                </div>
+                <div class="col-xs-2 box-padding-Tn">{{format-date-time-utc socialHealth.financialResourceStatus.effectiveDate}}</div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-xs-10">Education</div>
+                <div class="col-xs-2">Recorded</div>
+            </div>
+            <div class="row no-stripe">
+                <div class="col-xs-10 box-padding-Tn">
+                    {{#if socialHealth.education.description}}
+                        <div>Highest education level completed</div>
+                        <h4 class="h4">{{socialHealth.education.description}}</h4>
+                    {{else}}
+                        No education recorded for this patient
+                    {{/if}}
+                </div>
+                <div class="col-xs-2 box-padding-Tn">{{format-date-time-utc socialHealth.education.effectiveDate}}</div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-xs-10">Physical activity</div>
+                <div class="col-xs-2">Recorded</div>
+            </div>
+            {{#if physicalActivityWorksheet}}
+                {{print-worksheet worksheet=physicalActivityWorksheet}}
+            {{else}}
+                <div class="row no-stripe">
+                    <div class="col-xs-10">No physical activity available for this patient</div>
+                </div>
+            {{/if}}
+
+            <div class="row header-row">
+                <div class="col-xs-10">Nutrition history</div>
+                <div class="col-xs-2">Recorded</div>
+            </div>
+            {{#if nutritionHistory.content.description}}
+                <div class="row no-stripe">
+                    <div class="col-xs-10">{{nutritionHistory.content.description}}</div>
+                    <div class="col-xs-2"></div>
+                </div>
+            {{else}}
+                <div class="row no-stripe">
+                    <div class="col-xs-10">No nutrition history available for this patient</div>
+                    <div class="col-xs-2"></div>
+                </div>
+            {{/if}}
+
+            <div class="row header-row">
+                <div class="col-xs-10">Stress</div>
+                <div class="col-xs-2">Recorded</div>
+            </div>
+            {{#if stressWorksheet}}
+                {{print-worksheet worksheet=stressWorksheet}}
+            {{else}}
+                <div class="row no-stripe">
+                    <div class="col-xs-10">No stress available for this patient</div>
+                    <div class="col-xs-2"></div>
+                </div>
+            {{/if}}
+
+            <div class="row header-row">
+                <div class="col-xs-10">Social isolation and connection</div>
+                <div class="col-xs-2">Recorded</div>
+            </div>
+            {{#if socialIsolationWorksheet}}
+                {{print-worksheet worksheet=socialIsolationWorksheet}}
+            {{else}}
+                <div class="row no-stripe">
+                    <div class="col-xs-10">No social isolation and connection available for this patient</div>
+                </div>
+            {{/if}}
+
+            <div class="row header-row">
+                <div class="col-xs-10">Exposure to violence</div>
+                <div class="col-xs-2">Recorded</div>
+            </div>
+            {{#if exposureToViolenceWorksheet}}
+                {{print-worksheet worksheet=exposureToViolenceWorksheet}}
+            {{else}}
+                <div class="row no-stripe">
+                    <div class="col-xs-12">No exposure to violence history available for this patient</div>
+                </div>
+            {{/if}}
+
+            <div class="row header-row">
+                <div class="col-xs-12">Gender identity</div>
+            </div>
+            <div class="row no-stripe">
+                <div class="col-xs-12 box-padding-Tn">
+                    {{#if socialHealth.genderIdentity.description}}
+                        {{socialHealth.genderIdentity.description}}
+                    {{else}}
+                        No gender identity recorded for this patient
+                    {{/if}}
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-xs-12">Sexual orientation</div>
+            </div>
+            <div class="row no-stripe">
+                <div class="col-xs-12 box-padding-Tn">
+                    {{#if socialHealth.sexualOrientation.description}}
+                        {{socialHealth.sexualOrientation.description}}
+                    {{else}}
+                        No sexual orientation recorded for this patient
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+{{/print-chart-section}}

@@ -1,0 +1,7 @@
+{{diagnosis-description diagnosis=diagnosis hideAcuity=true diagnosisDescriptionDisplay=diagnosisDescriptionDisplay isIcd10Display=isIcd10Display}}
+{{#if diagnosis.startDate}}
+    <div><span class="box-margin-Rsm-v2">Start:</span>{{datetime-formatted datetime=diagnosis.startDate data-element="diagnosis-item-start-date"}}</div>
+{{/if}}
+{{#if diagnosis.stopDate}}
+    <div><span class="box-margin-Rsm-v2">Stop:</span>{{datetime-formatted datetime=diagnosis.stopDate data-element="diagnosis-item-stop-date"}}</div>
+{{/if}}

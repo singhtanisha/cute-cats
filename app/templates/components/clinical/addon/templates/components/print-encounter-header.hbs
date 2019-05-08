@@ -1,0 +1,25 @@
+<div>ENCOUNTER</div>
+<h2>{{encounterType.eventType.displayName}}</h2>
+<div class="row">
+    <div class="col-xs-5 uppercase semibold">Note type</div>
+    <div class="col-xs-7">{{noteTypeHeading}}</div>
+</div>
+<div class="row">
+    <div class="col-xs-5 uppercase semibold">Seen by</div>
+    <div class="col-xs-7" data-element="print-header-seen-by-provider">{{seenByProviderName}}</div>
+</div>
+<div class="row">
+    <div class="col-xs-5 uppercase semibold">Date</div>
+    <div class="col-xs-7">{{format-date-time-utc chartNote.dateOfServiceUtc}}</div>
+</div>
+<div class="row">
+    <div class="col-xs-5 uppercase semibold">Age at DOS</div>
+    <div class="col-xs-7">{{ageOnDOS}}</div>
+</div>
+<div class="row">
+    {{#if chartNote.signedDateTimeUtc}}
+        <div class="col-xs-12" data-element="print-header-signed-by-provider">Electronically signed by {{signedByProviderName}} at {{format-date-time-local chartNote.signedDateTimeUtc format="MM/DD/YYYY hh:mm a" defaultText="n/a"}}</div>
+    {{else}}
+        <div class="col-xs-12">Not signed</div>
+    {{/if}}
+</div>

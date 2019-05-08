@@ -1,0 +1,50 @@
+{{#if isSigned}}
+    {{#if chartNoteDiagnoses}}
+        <div class="read-only-header">
+            <p>Diagnoses attached to this encounter:</p>
+        </div>
+        <ul class="list read-only-list">
+            {{#each chartNoteDiagnoses as |diagnosis|}}
+                <li>
+                    <span>{{diagnosis.description}}</span>
+                    {{#if diagnosis.comments}}
+                        <span class="spaced-item">Comment: {{diagnosis.comments}}</span>
+                    {{/if}}
+                </li>
+            {{/each}}
+        </ul>
+    {{/if}}
+{{else}}
+    {{!-- TODO: consider drying the error structure
+        {{#with-error-handling isLoading=isLoading loadFailed=loadDiagnosesFailed retry="retryAction"}}
+            The actual content
+        {{/with-error-handling}}
+     --}}
+    {{#if isLoading}}
+        <p class="p-666 auto-saving-section--content">Loading diagnoses...</p>
+    {{else}}
+        {{#if loadDiagnosesFailed}}
+            <p class="p-666 auto-saving-section--content">Can't load diagnoses. Please
+                <a href="#" {{action "loadDiagnoses"}}>try again.</a>
+            </p>
+        {{else}}
+            {{#if encounterDiagnoses}}
+                <div class="read-only-header">
+                    <p>Diagnoses attached to this encounter:</p>
+                </div>
+                <ul class="list read-only-list">
+                    {{#each encounterDiagnoses as |diagnosisWrapper|}}
+                        <li>
+                            {{diagnosis-description diagnosis=diagnosisWrapper.diagnosis diagnosisDescriptionDisplay=diagnosisDescriptionDisplay}}
+                            {{#if diagnosisWrapper.diagnosis.isAcute}}
+                                <span>Acute</span>
+                            {{/if}}
+                            {{transcript-comments class="diagnoses-assessment-list-read-only--comments" items=diagnosisWrapper.diagnosis.encounterCommentsWithComment isCollapsible=false
+                                commentType="Encounter Comments" patientPracticeGuid=diagnosisWrapper.diagnosis.patientPracticeGuid isExpanded=isExpanded hideCollapseLink=hideCollapseLink oneline=oneline firstCommentOneLine=firstCommentOneLine}}
+                        </li>
+                    {{/each}}
+                </ul>
+            {{/if}}
+        {{/if}}
+    {{/if}}
+{{/if}}

@@ -1,0 +1,34 @@
+{{#each document.paragraphs as |documentParagraph|}}
+    <b>{{documentParagraph.title}}</b>
+    {{#each documentParagraph.description as |description|}}
+        <p>
+            {{#each description.paragraphs as |paragraph|}}
+                {{#if paragraph.isReference}}
+                    <sup>
+                        {{#if paragraph.citeUrl}}
+                            <a href={{paragraph.citeUrl}} target="_blank">[{{paragraph.value}}]</a>
+                        {{else}}
+                            <a {{action "scrollToCitations"}}>[{{paragraph.value}}]</a>
+                        {{/if}}
+                    </sup>
+                {{else}}
+                    {{paragraph.value}}
+                {{/if}}
+            {{/each}}
+        </p>
+    {{/each}}
+{{/each}}
+
+<p>Interaction Developer: Wolters Kluwer Health, Inc.</p>
+
+<ul class="citations">
+    {{#each document.citations as |citation|}}
+        <li>
+            {{#if citation.citeUrl}}
+                <a href={{citation.citeUrl}} target='_blank'>[{{citation.refId}}] {{citation.citation}}</a>
+            {{else}}
+                [{{citation.refId}}] {{citation.citation}}
+            {{/if}}
+        </li>
+    {{/each}}
+</ul>

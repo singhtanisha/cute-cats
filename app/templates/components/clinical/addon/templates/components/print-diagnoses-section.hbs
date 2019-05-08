@@ -1,0 +1,72 @@
+{{#if isIcd10}}
+    <div class="row header-row">
+        <div class="col-xs-6"><h2>{{title}} Diagnoses</h2></div>
+        <div class="col-xs-2 box-padding-Tmd-v2">Acuity</div>
+        <div class="col-xs-2 box-padding-Tmd-v2">Start</div>
+        <div class="col-xs-2 box-padding-Tmd-v2">Stop</div>
+    </div>
+{{else}}
+    <div class="row header-row">
+        <div class="col-xs-8">{{title}} Diagnoses</div>
+        <div class="col-xs-2">Start</div>
+        <div class="col-xs-2">Stop</div>
+    </div>
+{{/if}}
+
+{{#each content as |diagnosis|}}
+    <div class="row no-stripe no-borders">
+        {{#if isIcd10}}
+            <div class="col-xs-6">
+                {{diagnosis-description diagnosis=diagnosis isIcd10Display=true hideAcuity=true}}
+            </div>
+            <div class="col-xs-2" data-element="print-diagnosis-acuity-display">{{diagnosis.acuityDisplay}}</div>
+            <div class="col-xs-2" data-element="print-diagnosis-start-date">{{format-date-time-utc diagnosis.startDate}}</div>
+            <div class="col-xs-2" data-element="print-diagnosis-stop-date">{{format-date-time-utc diagnosis.stopDate}}</div>
+        {{else}}
+            <div class="col-xs-8">
+                {{diagnosis-description diagnosis=diagnosis}}
+            </div>
+            <div class="col-xs-2" data-element="print-diagnosis-start-date">{{format-date-time-utc diagnosis.startDate}}</div>
+            <div class="col-xs-2" data-element="print-diagnosis-stop-date">{{format-date-time-utc diagnosis.stopDate}}</div>
+        {{/if}}
+    </div>
+    <div class="row sub-paragraph">
+        <div class="col-xs-12">
+            {{#if showDiagnosisComment}}
+                {{#if diagnosis.diagnosisComment.comment}}
+                    {{transcript-comment transcriptComment=diagnosis.diagnosisComment isCollapsible=false
+                    commentType="Comment" patientPracticeGuid=diagnosis.patientPracticeGuid oneline=false}}
+                {{/if}}
+            {{/if}}
+            {{#if showEncounterComment}}
+                {{#if diagnosis.encounterCommentsWithComment}}
+                    {{transcript-comments items=diagnosis.encounterCommentsWithComment isCollapsible=false
+                    commentType="Encounter comment" patientPracticeGuid=diagnosis.patientPracticeGuid
+                    isExpanded=true hideCollapseLink=true oneline=false firstCommentOneLine=false}}
+                {{/if}}
+            {{/if}}
+            {{#if showMedication}}
+                {{#each diagnosis.medications as |medication|}}
+                    <br/>
+                    <span class="hint-text13">Medication</span>
+                    <span data-element="print-diagnosis-medication-name">{{medication.tradeName}}</span>
+                    {{#if medication.startDateTime}}
+                        <span class="hint-text13">Start:</span>
+                        {{datetime-formatted datetime=medication.startDateTime data-element="print-diagnosis-medication-start-date"}}
+                    {{/if}}
+                    {{#if medication.stopDateTime}}
+                        <span class="hint-text13">Stop:</span>
+                        {{datetime-formatted datetime=medication.stopDateTime data-element="print-diagnosis-medication-stop-date"}}
+                    {{/if}}
+                {{/each}}
+            {{/if}}
+        </div>
+    </div>
+
+{{else}}
+    <div class="row no-stripe">
+        <div class="col-xs-12">
+            No  <span class="lowercase">{{title}}</span> diagnoses
+        </div>
+    </div>
+{{/each}}

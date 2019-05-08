@@ -1,0 +1,36 @@
+{{data-tunnel name="social-history" onDataReceived=(action "updateSocialHistory")}}
+{{#composable-card as |card|}}
+    {{#card.header as |header|}}
+        {{#header.title}}
+            Social history
+            <a class="icon-printer icon--md text-color-placeholder box-margin-Lmd-v2 {{if isLoading "hidden"}}" onclick={{action "print"}} data-element="print-social-history-button"></a>
+        {{/header.title}}
+    {{/card.header}}
+    {{#card.content}}
+        {{card-field title="Smoking status" content=sortedSmokingStatuses
+            data-element="smoking-status-section" card-data-element="social-health"
+            canHaveMultipleRecord=true selectedItem=selectedItem
+            isAllowedToEdit=isAllowedToEditSocialHistory isError=error
+            create=(action "createSmokingStatus") edit=(action "editSmokingStatus")
+            isEditing=isEditingSmokingStatus isLoading=loadSmokingStatus.isRunning class="box-margin-Bxs-v2"}}
+        {{card-field title="Gender identity" content=genderIdentity fieldValuePath="optionGuid"
+            data-element="gender-identity-section" card-data-element="social-health"
+            isAllowedToEdit=isAllowedToEditSocialHistory isError=error selectedItem=selectedItem
+            create=(action "editSocialHistory" "identity") edit=(action "editSocialHistory" "identity")
+            isEditing=isEditingSocialHistory isLoading=loadSocialHistory.isRunning class="box-margin-Bxs-v2"}}
+        {{card-field title="Sexual orientation" content=sexualOrientation fieldValuePath="optionGuid"
+            data-element="sexual-orientation-section" card-data-element="social-health"
+            isAllowedToEdit=isAllowedToEditSocialHistory isError=error selectedItem=selectedItem
+            create=(action "editSocialHistory" "orientation") edit=(action "editSocialHistory" "orientation")
+            isEditing=isEditingSocialHistory
+            isLoading=loadSocialHistory.isRunning classNameBindings="socialHistoryFreeText:box-margin-Bxs-v2"}}
+        {{card-field title="Social history (free text)" content=socialHistoryFreeText
+            data-element="social-history-section" card-data-element="social-health" selectedItem=selectedItem
+            isAllowedToEdit=isAllowedToEditSocialHistory fieldValuePath="description"
+            create=(action "editFreeText") edit=(action "editFreeText") isEditing=isEditingSocialHistoryFreeText}}
+    {{/card.content}}
+{{/composable-card}}
+
+{{#print-preview-content printTitle=printTitle isVisible=isPrintPreviewVisible}}
+    {{print-social-history-section content=socialHistoryInfo patient=patient class="sh-print chart-print-container"}}
+{{/print-preview-content}}

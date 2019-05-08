@@ -1,0 +1,21 @@
+{{#print-chart-section patientSummary=patient includeHeaderAndFooter=includeHeaderAndFooter}}
+    <div class="table-content">
+        <div class="table">
+            <div class="row header-row"><div class="col-xs-12"><h2>Screenings/ Interventions/ Assessments</h2></div></div>
+
+            {{#each printSummarySIAs as |item|}}
+                <div class="row header-row">
+                    <div data-element="print-sia-name" class="col-12">{{item.displayName}}</div>
+                </div>
+                <div class="row no-stripe">
+                    <div data-element="print-sia-start-date" class="col-12 formatted-text">Start date: {{item.startDate}}</div>
+                    <div data-element="print-sia-status" class="col-12 formatted-text">Status: {{item.status}}</div>
+                </div>
+            {{else}}
+                <div class="row no-stripe">
+                    <div class="col-xs-12">No active screening/interventions/assessments recorded.</div>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+{{/print-chart-section}}

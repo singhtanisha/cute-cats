@@ -1,0 +1,18 @@
+{{#if patientInfo.emailAddress}}
+    <div class="patient-ribbon-email" title={{patientInfo.emailAddress}}>{{patientInfo.emailAddress}}</div>
+{{else}}
+    <button class="btn-sm btn-primary popover-email-target" {{action 'toggleEmailPopover'}}><i class="icon-add"></i> Add email</button>
+{{/if}}
+{{#popover-modal isPopoverVisible=isPopoverVisible targetSelector=".popover-email-target" height="135" width="250"}}
+    <div class="user-email">
+        <label class="field-label">Patient Email</label>
+        {{validated-textfield placeholderText="example@email.com" value=patientEmailAddress classNameBindings="errorClass" errorMessage=errorMessage}}
+        <div  {{action "onCheckboxSelect"}}>
+            {{#d-check-box smaller=true checked=patientInfo.isUserOfEmail}}
+                Patient has no email address
+            {{/d-check-box}}
+        </div>
+        <button class="btn" type="button" {{action 'toggleEmailPopover'}}>Cancel</button>
+        <button class="btn btn-primary" type="button" {{action 'onSavePatient'}}>Save</button>
+    </div>
+{{/popover-modal}}

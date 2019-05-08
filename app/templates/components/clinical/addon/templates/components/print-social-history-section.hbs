@@ -1,0 +1,52 @@
+{{#print-chart-section chartNote=chartNote patientSummary=patient title=title chartNotePrintInfo=chartNotePrintInfo
+    includeHeaderAndFooter=includeHeaderAndFooter}}
+    <div class="table-content print-smoking-status-section">
+        <div class="table">
+            <div class="row header-row"><div class="col-xs-12"><h2>Smoking History</h2></div></div>
+            {{#each content.smokingStatuses as |item|}}
+                <div class="row no-stripe">
+                    <div class="col-xs-12" data-element="print-smoking-history-description">{{item.description}}</div>
+                    <div class="col-xs-12">Effective date: <span data-element="print-smoking-history-effective-date">{{format-date-time-utc item.effectiveDate}}</span></div>
+                </div>
+            {{else}}
+                <div class="row no-stripe">
+                    <div class="col-xs-12">No smoking history available for this patient</div>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+    <div class="table-content print-gender-identity-section">
+        <div class="table">
+            <div class="row header-row"><div class="col-xs-12"><h2>Gender identity</h2></div></div>
+            {{#if content.genderIdentity}}
+                <div class="row no-stripe">
+                    <div class="col-xs-12" data-element="print-gender-identity-description">{{content.genderIdentity.description}}</div>
+                    {{#if content.genderIdentity.notes}}
+                        <div class="col-xs-12" data-element="print-gender-identity-notes">Notes: {{content.genderIdentity.notes}}</div>
+                    {{/if}}
+                </div>
+            {{else}}
+                <div class="row no-stripe">
+                    <div class="col-xs-12">No gender identity available for this patient</div>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+    <div class="table-content print-sexual-orientation-section">
+        <div class="table">
+            <div class="row header-row"><div class="col-xs-12"><h2>Sexual orientation</h2></div></div>
+            {{#if content.sexualOrientation}}
+                <div class="row no-stripe">
+                    <div class="col-xs-12" data-element="print-sexual-orientation-description">{{content.sexualOrientation.description}}</div>
+                    {{#if content.sexualOrientation.notes}}
+                        <div class="col-xs-12" data-element="print-sexual-orientation-notes">Notes: {{content.sexualOrientation.notes}}</div>
+                    {{/if}}
+                </div>
+            {{else}}
+                <div class="row no-stripe">
+                    <div class="col-xs-12">No sexual orientation available for this patient</div>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+{{/print-chart-section}}

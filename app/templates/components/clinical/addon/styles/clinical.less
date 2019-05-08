@@ -1,0 +1,1856 @@
+.noKnowCheckBox {
+    padding-left: 15px;
+}
+
+.severitySevere {
+    color: @pf-color-19;
+}
+
+.severityModerate {
+    color: @pf-color-18;
+}
+
+.severityMild {
+    color: #fdd00e;
+}
+
+.severityUnknown {
+    color: @pf-color-20;
+}
+
+.interaction-alerts {
+    h4 {
+        margin-bottom: 0;
+    }
+}
+
+.family-history-detail {
+    width: 41.6667%;
+}
+
+.family-history-detail__pane {
+    &, .well.right-module {
+        height: 100%;
+    }
+}
+
+.family-history__container {
+    overflow: hidden;
+}
+
+.family-history__list {
+    overflow: auto;
+}
+
+#clinical-summary,
+.clinical-summary {
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+
+    .print-icon-button {
+        padding-bottom: 33px;
+        padding-left: 0px;
+
+        a, .icon-caret {
+            color: @slate-dark;
+        }
+
+        &:hover {
+            a, .icon-caret {
+                color: @sky;
+            }
+        }
+    }
+    .print-menu-group {
+        vertical-align: top;
+    }
+
+    .patient-health-concerns-list .print-menu-group .dropdown-menu {
+        right: 0;
+        left: inherit;
+    }
+}
+
+.summary-details {
+    .detail-pane-body-wrapper {
+        .field-label {
+            margin-top: 10px;
+            margin-bottom: 5px;
+
+            &.required::after {
+                content: " *";
+                color: @pf-color-16;
+            }
+        }
+    }
+}
+
+.patient-summary {
+    position: relative;
+    .side-fixed {
+        position: absolute;
+        top: 39px;
+        height: calc(~"100% - 40px");
+        right: 0;
+        padding: 0;
+        z-index: 999;
+
+        .right-module-bottom {
+            padding: 10px 15px;
+        }
+    }
+    .detail-pane-body-wrapper {
+        textarea {
+            padding: 4px 8px;
+            min-height: 30px;
+            height: 60px;
+            overflow-x: hidden;
+        }
+    }
+    .diagnosis-display-selector-wrapper {
+        display: inline-block;
+        margin-left: 10px;
+        white-space: nowrap;
+
+        .ember-select-choice span {
+            margin-right: 17px;
+            color: @sky-dark;
+        }
+        .ember-select-choice {
+            padding-left: 5px;
+        }
+    }
+
+    .display-diagnosis-selector {
+        width: 72px;
+        display: inline-block;
+
+        .ember-select-choice {
+            display: inline-block;
+            margin-bottom: 1px;
+        }
+    }
+}
+
+@media screen and (max-width: 1079px), screen and (max-width: 1250px) and (min-width: 1200px) {
+    .patient-summary .diagnosis-display-selector-wrapper {
+        margin-top: 15px;
+        margin-left: 15px;
+    }
+    .charts.outlet .summary-panel .diagnoses-summary-list section > div:first-of-type h3.header3b {
+        margin-top: 0;
+    }
+}
+.settings.outlet {
+    overflow-y: auto;
+}
+
+.clinical {
+    .right-module .form-horizontal .control-label {
+        float: left;
+        width: 80px;
+        padding-top: 5px;
+        text-align: right;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .smoking-date {
+        margin-left: 10px;
+    }
+
+    .d-complex-list-container {
+        background-color: transparent;
+        padding: 0;
+        font-weight: normal;
+        box-shadow: none;
+    }
+
+    .d-complex-list-container .item {
+        border: 0;
+        color: @charcoal-dark;
+    }
+
+    .d-complex-list-container .selected-item {
+        color: @charcoal-dark;
+        padding: 2px 4px 2px 10px;
+        border: 0;
+        font-weight: 300;
+        font-size: 13px;
+        padding-top: 4px;
+    }
+
+    /* this might be a duplicate */
+    .left {
+        float: left;
+    }
+
+    .right {
+        float: right;
+    }
+
+    .form-horizontal .form-group {
+        margin-bottom: 20px;
+        position: relative;
+
+        .controls {
+            padding-top: 6px;
+        }
+    }
+
+    .summary-panel {
+        padding-left: 0;
+        min-height: 100%;
+        border-left: 1px solid #aaa;
+        &:first-child {
+            border-left: none;
+        }
+
+        .messages {
+            .icon-add {
+                font-size: 18px;
+                margin-left: 10px;
+                cursor: pointer;
+            }
+            .d-complex-list-container {
+                .item {
+                    word-wrap: break-word;
+                    font-weight: 400;
+                }
+                .item::before {
+                    margin-left: -20px;
+                }
+
+                .item.active, .item:active {
+                    background-color: @pf-color-30;
+                    color: @pf-color-14;
+                }
+
+                .link-text {
+                    color: @pf-color-40;
+                }
+            }
+            .forwarded-messages-content {
+                display: none;
+            }
+            .newest-message {
+                width: 100%;
+                max-height: 18px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+        .medications, .diagnoses-summary-list {
+            .header3b {
+                margin: 15px 0 15px -15px;
+            }
+        }
+    }
+}
+
+// Needs super specific style to beat the other super specific style
+.encounter-container .side-fixed > div.right-module-search-results .diagnoses-flyout .p-link {
+    white-space: normal;
+    max-height: none;
+}
+
+.diagnoses-flyout,
+.medications-flyout {
+
+    input[type="text"].no-borders {
+        border: none;
+        box-shadow: none;
+    }
+
+    overflow-y: auto;
+    height: 100%;
+}
+
+// For the alerts for a group of meds with dupes (e.g. for medications-summary-lsit or medications-grid)
+.duplicate-medications-alert {
+    .box-spacing(margin, B, md-v2);
+    cursor: pointer;
+    i.icon-urgent {
+        color: @orange;
+    }
+}
+.encounter-container .duplicate-medications-alert {
+    // Only in the encounter we need add left padding.
+    display: inline-block;
+    margin-left: 15px;
+}
+
+// beging: duplicate-medications-erx-modal styles
+.duplicate-medications-erx-modal {
+    .duplicates-list {
+        overflow-y: auto;
+        max-height: 200px;
+    }
+    .list > li {
+        padding-right: 0px;
+    }
+}
+// Needs to beat specificity from Tyrion
+.duplicate-medications-erx-modal.carbon-content-modal-component .modal.content-modal.content-modal-style-7 footer {
+    border-top: 1px solid #d6d6d6;
+}
+// Has to override rule from the encounter
+.encounter-container .side-fixed .duplicate-medications-erx-modal footer {
+    position: static;
+}
+// Has to override rule from the encounter
+.encounter-container .side-fixed .duplicate-medications-erx-modal header h4 {
+    color: @charcoal-dark;
+}
+// end duplicate-medications-erx-modal styles
+
+.duplicate-medication-text {
+    font-weight: 400;
+    color: @orange;
+}
+
+// For the alerts for a single med (e.g. for medication-detail)
+.duplicate-medication-alert {
+    background-color: @smoke;
+    margin: -10px -15px 15px;
+    padding: 10px 15px;
+
+    .list > li {
+        padding-right: 0px;
+        // Overrides weird .list style that has a white border
+        border: 1px solid @smoke;
+        color: @charcoal-dark;
+    }
+
+    i.icon-urgent {
+        color: @orange;
+    }
+
+    .inline-flex-group .item {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+}
+
+.duplicate-medications-alert-popover {
+    width: 224px;
+}
+
+#medication-list-container {
+    height: calc(~"100% - 25px");
+    overflow-y: auto;
+
+    .medication-list-item {
+        background-color: #f8f8f8;
+        padding: 10px 10px 10px 26px;
+        margin-bottom: 2px;
+
+        &.with-reorder-controls {
+            padding-left: 0;
+            .medication-display {
+                display: inline-block;
+                width: calc(~"100% - 50px");
+            }
+        }
+
+        .medication-display a {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            display: block;
+        }
+
+        .close-box-small {
+            padding: 7px;
+            margin-top: -7px;
+            margin-right: -7px;
+        }
+
+        .reorder-controls {
+            display: inline-block;
+            width: 26px;
+            vertical-align: top;
+            margin-top: -4px;
+            a {
+                display: block;
+                text-align: center;
+                padding: 4px 0;
+            }
+        }
+    }
+}
+
+#dAddMed {
+    .right-module {
+        .form-group .form-control {
+            border-radius: 0px;
+        }
+
+        .form-group input[type="text"] {
+            box-shadow: none;
+            border: 1px solid #cccccc;
+        }
+
+        .sig-text {
+            margin-top: 10px;
+            textarea {
+                display: block;
+                border: solid 1px #aaaaaa;
+                box-shadow: rgba(170, 170, 170, 0.8) 5px 5px 5px -5px inset;
+                resize: none;
+                width: 100%;
+                height: 100%;
+            }
+            .error textarea {
+                box-shadow: rgba(0, 0, 0, 0.075) 0px 1px 1px inset;
+                border-color: red;
+            }
+        }
+
+        .rx-units {
+            display: block;
+        }
+    }
+}
+.charts.outlet .summary-panel .devices  {
+    section {
+        padding-top:10px;
+    }
+}
+
+.summary-details .device-detail .detail-pane-body-wrapper {
+    height: calc(~"100% - 78px"); // accounts for smaller buttons
+    .field-label {
+        margin-bottom: 2px;
+        &.device-notes {
+            margin-top: 10px;
+        }
+    }
+}
+
+.device-detail {
+    height: 100%;
+
+    .search-field .search-field-container input:focus,
+    textarea:focus {
+        outline: 0;
+        border: 1px solid @sky;
+    }
+
+    .field-label {
+        color: @charcoal-light;
+        margin-bottom: 2px;
+        &.udi-field-label {
+            margin-bottom: 0px;
+
+            .icon-info {
+                padding-left: 2px;
+                color: @slate-dark;
+            }
+        }
+    }
+    .inline-flex-group {
+        .field-label {
+            margin-top: 0;
+        }
+
+        .form-control, .ember-text-field {
+            height: 26px;
+        }
+
+        .udi-id-display {
+            display: inline-block;
+            word-wrap: break-word;
+            overflow-x: hidden;
+            max-width: 100%;
+            margin-top: -5px;
+        }
+        .close-box {
+            font-size: 11px;
+            color: @sky-dark;
+            padding-top: 4px;
+        }
+        .udi-clear-icon {
+            margin-top: -5px;
+            padding-left:0;
+        }
+        .icon-clear {
+            font-size: 13px;
+            color: @slate-dark;
+        }
+
+        .search-field {
+            padding: 0;
+            margin-top: -5px;
+
+            &:not(.is-empty) input {
+                padding-right: 4px;
+            }
+
+            .search-field-container {
+                width: 100%;
+                border-right-width: 1px;
+
+                input {
+                    width: 100%;
+                }
+            }
+        }
+
+        .box-fixed-md.box-fixed-100 {
+            width: 100px;
+        }
+    }
+
+    .device-detail-info {
+        background: @smoke-light;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+
+        header > a {
+            margin-left: 10px;
+        }
+        .inline-flex-group {
+            margin-bottom: -5px;
+            padding-top: 5px;
+        }
+    }
+}
+.fetched-udi-info {
+    margin-bottom: 5px;
+    > div {
+        font-weight: bold;
+        word-break: break-all;
+    }
+}
+
+#medPane {
+
+    word-wrap: break-word;
+    height: 100%;
+    .medication-detail {
+        height: 100%;
+
+        .error.rx-units {
+            .ember-select-search .ember-text-field {
+                border: 1px solid @error-color;
+                color: @error-color;
+                background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJlcnJvciIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MTIgNTEyIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cGF0aCBmaWxsPSJyZ2IoMjMwLDMwLDI1KSIgZD0iTTI1NiwwQzExNS4yLDAsMCwxMTUuMiwwLDI1NnMxMTUuMiwyNTYsMjU2LDI1NnMyNTYtMTE1LjIsMjU2LTI1NlMzOTYuOCwwLDI1NiwweiBNMjExLjIsMzkzLjZjMC0xMi44LDMuMi0yMi40LDkuNi0yOC44YzYuNC02LjQsMTYtOS42LDI4LjgtOS42YzEyLjgsMCwyMi40LDMuMiwyOC44LDkuNnM5LjYsMTYsOS42LDI4LjhzLTMuMiwyMi40LTkuNiwyOC44cy0xNiw5LjYtMjguOCw5LjZzLTIyLjQtMy4yLTI4LjgtOS42QzIxNC40LDQxNiwyMTEuMiw0MDYuNCwyMTEuMiwzOTMuNnogTTI3OC40LDMxNi44SDIyNEwyMTEuMiw5NkgyODhMMjc4LjQsMzE2Ljh6Ii8+PC9zdmc+') @white;
+                background-size: 16px;
+                background-repeat: no-repeat;
+                background-position: calc(100% - 1px);
+            }
+        }
+    }
+
+    .right-module-toolbox {
+        z-index: 44;
+    }
+
+    .right-module {
+        z-index: 45;
+    }
+
+    input[type="text"].no-borders {
+        border: none;
+        box-shadow: none;
+    }
+
+    #medPane-content {
+        .header14 {
+            color: @pf-color-00;
+        }
+
+        .sigAssociatedDiagnosis {
+            .item .long-word {
+                max-width: calc(~"100% - 44px");
+                display: inline-block;
+            }
+        }
+
+        .stop-date {
+            .field-label {
+                margin-bottom: 0;
+            }
+            .k-datepicker, .btn {
+                margin-top: 5px;
+            }
+        }
+
+        .panel-container {
+            background-color: @slate-light;
+            .box-spacing(padding;TB; xs);
+            margin: 15px -15px 0;
+
+            .panel {
+                .icon-go-away-small {
+                    cursor: pointer;
+                    padding: 4px 7px;
+                    margin: -4px -7px;
+                }
+
+                .ember-select {
+                    width: 100%;
+                }
+
+                .icon-checkmark {
+                    color: @green;
+                }
+            }
+        }
+
+        .new-medication-assessment-card.panel {
+            .box-spacing(padding, TB, sm);
+        }
+    }
+
+    @media only screen and (max-width: 890px) {
+        .right-module-bottom {
+            .btn {
+                font-size: 14px;
+                padding: 2px 11px;
+            }
+        }
+    }
+
+}
+
+.allergies {
+    .allergies-list-section {
+        ul  {
+            margin-left: 15px;
+        }
+        &.drug, &.food, &.environmental {
+            ul {
+                padding: 15px 0 5px;
+            }
+        }
+        li {
+            > span {
+                margin-right: 10px;
+
+                &:last-of-type {
+                    margin-right: 0;
+                }
+                &:not(.link-text) {
+                    color: @black;
+                }
+            }
+        }
+
+        .show-hide-toggle {
+            margin-left: 25px;
+        }
+    }
+
+    .lowercase {
+        text-transform: lowercase;
+    }
+
+    .comments-dropdown {
+        display: inline-block;
+        vertical-align: baseline;
+
+        .dropdown-menu .li {
+            width: 188px;
+        }
+    }
+
+    .heading {
+        margin-bottom: 0;
+    }
+
+    .free-text-allergies-section {
+        padding: 15px 15px 0 15px;
+    }
+}
+
+.allergies, .allergy-details, .patient-health-concerns-list {
+    .arrow-up {
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        display: inline-block;
+
+        &.red {
+            border-bottom: 9px solid @pf-color-38;
+        }
+        &.orange {
+            border-bottom: 9px solid @pf-color-37;
+        }
+        &.yellow {
+            border-bottom: 9px solid @pf-color-36;
+        }
+    }
+
+    .severity {
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .free-text-allergies-section {
+        .icon-urgent {
+            color: @orange;
+        }
+
+        .p-semibold {
+            margin: 0;
+        }
+
+        .list > li {
+            border: none;
+            padding: 3px 20px;
+
+            &:before {
+                left: 0px;
+            }
+        }
+    }
+}
+
+.oneline {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.medications, .encounter-diagnoses-list, .diagnoses-summary-list, .allergies, .patient-health-concerns-list {
+    .heading {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .d-checkbox-dropdown-grouping {
+        padding-top: 2px;
+
+        ul.dropdown-menu {
+            width: 190px !important;
+        }
+
+        a {
+            font-size: 16px;
+            font-weight: 300;
+        }
+    }
+}
+
+.medications,
+.encounter-diagnoses-list,
+.diagnoses-summary-list,
+.allergies,
+.summary-details,
+.encounter-list,
+.devices,
+.appointments-list {
+    .hint-text {
+        color: @pf-color-20;
+    }
+    .d-complex-list-container {
+        .disable-hover {
+            pointer-events: none;
+            .link-text {
+                color: @charcoal-dark;
+            }
+        }
+        .item {
+            word-wrap: break-word;
+            font-weight: 400;
+        }
+        .item::before {
+            margin-left: -20px;
+        }
+
+        .item.active, .item:active {
+            background-color: @pf-color-30;
+            color: @pf-color-14;
+        }
+
+        .link-text {
+            color: @pf-color-40;
+        }
+    }
+}
+
+.encounter-diagnoses-list {
+    .show-hide-toggle {
+        margin-left: 40px;
+    }
+}
+
+.medications {
+    .show-hide-toggle {
+        margin-left: 15px;
+    }
+}
+
+// Using elements to make this unnecessarilly specific so it takes precedence over the one defined in Tyrion
+p.frequent-diagnoses--item,
+p.favorite-diagnoses--item,
+p.frequent-medications--item {
+    max-height: inherit; // By default it was 80px in Tyrion
+}
+
+.encounter-list {
+    .chief-complaint {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+    a {
+        margin: 5px 0 0 25px;
+        display: block;
+    }
+}
+
+.summary-devices-list-inactive-toggle {
+    text-decoration: none;
+}
+
+
+.encounter-date {
+    .form-control {
+        display: inline-block;
+        margin-right: 10px;
+    }
+}
+
+.detail-pane--scrollable-content {
+    > div:not(.right-module-toolbox), .well.right-module {
+        height: 100%;
+    }
+    .detail-pane-body-wrapper {
+        height: calc(~"100% - 83px"); // leaves room for the footer buttons and their padding
+    }
+}
+
+.goal-detail {
+    height: 100%;
+    .detail-pane--scrollable-content();
+    .error textarea {
+        border: 1px solid #e61e19;
+        box-shadow: inset 5px 5px 5px -5px rgba(230, 31, 25, 0.75);
+    }
+    textarea {
+        min-height: 73px !important;
+        max-height: 256px;
+    }
+    .inline-flex-group .item {
+        padding-top: 8px !important;
+        padding-bottom: 0px !important;
+    }
+    .active-checkbox {
+        .pf-input,
+        label {
+            margin-bottom: 0px;
+        }
+    }
+}
+
+.goals-section {
+    line-height: 20px;
+    .print-icon-button {
+        margin-top: -2px;
+    }
+    .list {
+        margin-left: -5px;
+        li {
+            padding: 2px 0 2px 22px;
+        }
+    }
+}
+
+.allergy-details {
+    .detail-pane--scrollable-content();
+    .onset-section {
+        .ember-button-group {
+            margin-bottom: 10px;
+        }
+        .k-datepicker {
+            display: inline-block;
+        }
+        > span, > button {
+            margin-right: 5px;
+        }
+        > button:last-child {
+            margin-right: 0;
+        }
+    }
+    &.disabled {
+        .ember-select-search-choice-close, .switch-shorter, .switch-left, .switch-right, .group-option {
+            pointer-events: none;
+            cursor: default;
+        }
+    }
+    .make-group-shorter {
+        height: inherit;
+        display: inline-block;
+    }
+    .error .make-group-shorter {
+        border: 1px solid @pf-color-38;
+    }
+
+    .title {
+        font-size: 15px;
+    }
+
+    .no-custom-results {
+        .ember-select-add-item {
+            color: @slate-light;
+
+            &:hover {
+                color: @slate-light;
+                cursor: default;
+            }
+        }
+    }
+
+    .allergen-search {
+        display: block;
+        margin-top: 5px;
+        .ember-select-search {
+            padding: 0;
+            input {
+                width: 91%;
+            }
+            &.inactive-search-icon input {
+                width: 100%;
+                box-shadow: inset 0 1px 2px 0 rgba(170,170,170,0.3);
+                transition-duration: 334ms;
+                transition-timing-function: cubic-bezier(.4,0,.2,1);
+                transition-delay: 0s;
+                &[type="text"]:focus {
+                    border-color: @sky-dark;
+                    box-shadow: inset 0 1px 2px 0 rgba(0,114,198,0.3);
+                }
+            }
+        }
+
+        .dropdown-menu {
+            width: 100%;
+        }
+    }
+
+    .free-text-allergies-section {
+        background-color: @smoke;
+        margin: -10px -15px 15px -15px;
+        padding: 10px 15px 15px 15px;
+
+        .show-later {
+            flex: 0 1 auto;
+        }
+    }
+}
+
+.diagnosis-facets {
+    padding: 0 15px 15px 15px;
+    overflow-y: auto;
+    max-height: 398px;
+}
+
+.show-facets-btn {
+    position: relative;
+}
+
+.diagnosis-facets-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.diagnosis-facets-popover.popover {
+    display: block;
+    height: 400px;
+    width: 250px;
+}
+
+.encounter-container .side-fixed.diagnosis-detail .right-module {
+    // Overrides overflow: auto that breaks the facets popover-modal
+    overflow: visible;
+}
+
+.diagnosis-detail .right-module-top {
+    // Overrides tyrion default, so we can show the popover-modal. Instead of relying on hidden, we set the height
+    overflow: visible;
+    min-height: 32px;
+    max-height: 32px;
+    .header15 {
+        overflow: visible; // another tyrion override.
+    }
+    .detail-pane-header-help {
+        display: inline;
+        position: absolute;
+        right: 40px;
+    }
+}
+
+.diagnosis-detail .add-diagnosis-label.add-diagnosis-label.add-diagnosis-label {
+    // Using multiple classes to beat over-specific rules from Tyrion
+    margin-top: 0px; // overrides
+}
+
+.diagnosis-detail-form-refine-label:before, .diagnosis-assessment-list-refine-label:before {
+    color: @orange;
+}
+
+.diagnosis-assessment-list-refine-label {
+    // increases the icon's touch target from 13x18 to 26x26
+    padding: 7px 4px;
+    margin: -7px -4px;
+}
+
+.diagnosis-detail, .medication-detail, .device-detail {
+    .detail-pane--scrollable-content();
+    .diagnosis-typeahead {
+        width: 100%;
+    }
+    .rx-units input {
+        width: 100%;
+    }
+    .search-item.form-group > div {
+        width: 100%;
+    }
+    .ember-select-search > input {
+        width: 100%;
+    }
+
+    .ember-select-search {
+        padding: 0;
+        input {
+            width: calc(~"100% - 26px"); // makes room for the button
+        }
+    }
+
+    .dropdown-menu {
+        width: 100%;
+        margin-top: 0px;
+    }
+}
+
+.diagnosis-detail-medication-search {
+    width: 100%;
+    // Add super specific style to beath specificity from rule above
+    .ember-select-search input {
+        width: 100%;
+    }
+}
+
+.diagnosis-detail-header {
+    width: 100%;
+    word-wrap: break-word;
+    display: inline-block;
+    color: @pf-color-00;
+}
+
+// I have to use an ID to make it more specific than the rule we're trying to override
+.encounter-container .d-complex-list-container.read-only-list .item.read-only-item .medications-plan-list-read-only--comments .hint-text {
+    margin-left: 0px;
+}
+
+.pmh-detail, .smoking-detail, .ad-detail, .attach-documents, .encounter-addendum, .erx-order, .referral-detail {
+    .detail-pane--scrollable-content();
+}
+
+.pmh-detail {
+    textarea {
+        max-height: 300px;
+    }
+}
+
+.ad-detail .k-datepicker {
+    margin-bottom: 15px;
+}
+
+.ad-detail .k-datepicker.form-control.is-shorter {
+    height: 26px; // Makes sure isShorter takes precedence over some of the overrides that set heigh: inherit
+}
+
+.medication-detail .results-list {
+    height: calc(~"100% - 30px");
+}
+
+.diagnosis-detail .results-list {
+    height: 100%;
+}
+
+.favorite-diagnoses-toolbox {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .is-loading {
+        height: 150px;
+    }
+
+    .did-fail-to-load,
+    .empty-set {
+        padding-top: 50px;
+        text-align: center;
+
+        > div {
+            .box-spacing(margin; A; md);
+        }
+    }
+
+    .favorite-diagnosis-toolbox-text {
+        flex: 0 0 auto;
+        padding: @box-md-v2;
+    }
+
+    header {
+        flex: 0 0 auto;
+        display: -webkit-flex;
+        display: flex;
+        padding: @box-sm-v2 @box-md-v2;
+        background-color: @slate-light;
+        line-height: normal;
+
+        .description-column {
+            flex: 1 0 auto;
+        }
+    }
+
+    section.results-list {
+        flex: 1 1 auto;
+        height: auto;
+
+        .description-column {
+            flex: 1 0;
+        }
+    }
+
+    .my-dx-link {
+        border-top: 1px solid @slate-light;
+        padding: 5px;
+        text-align: right;
+        flex: 0 0 auto;
+    }
+
+    .diagnosis-codes-row {
+        display: flex;
+    }
+    .code-column {
+        width: 80px;
+        margin-right: 5px;
+        flex: 0 0 auto;
+    }
+}
+
+.toolBox {
+    height: 100%;
+}
+
+.right-module-search-results {
+    height: calc(~"100% - 30px");
+
+    .navbar .nav {
+        margin: 0;
+
+        li {
+            cursor: pointer;
+        }
+    }
+
+    .header6b {
+        display: block;
+        margin: 0 0 1px;
+        background-color: @pf-color-22;
+        color: @pf-color-06;
+    }
+}
+
+.favorite-diagnoses-toolbox,
+.frequent-diagnoses {
+    height: calc(~"100% - 30px");
+}
+
+.diagnoses-flyout .favorite-diagnoses-toolbox {
+    height: calc(~"100% - 26px");
+}
+
+.download-immunization-registry-spacer {
+    margin-top: 10px;
+}
+
+.encounter-container {
+    .heading-action-margin-override, .heading-action-margin-override:focus, .heading-action-margin-override:active {
+        margin-top: 14px;
+    }
+    .event-details, .worksheet-details {
+        .right-module {
+            overflow: hidden;
+        }
+    }
+    .follow-up-plan-select {
+        margin-bottom: 7px;
+    }
+    .follow-up-checkbox {
+        margin-bottom: 12px;
+    }
+}
+
+// TODO: Move to tyrion after Arnold merges the select branch.
+.k-autocomplete,
+.k-combobox,
+.k-datepicker,
+.k-timepicker,
+.k-datetimepicker,
+.k-colorpicker,
+.k-numerictextbox,
+.k-dropdown,
+.k-selectbox,
+.k-textbox,
+.k-toolbar .k-split-button {
+    width: 100%;
+}
+
+.event-details {
+    .detail-pane--scrollable-content();
+    h15 {
+        max-width: calc(~"100% - 20px");
+        display: inline-block;
+    }
+
+    h15, .list li a {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .field-label {
+        margin-bottom: 5px;
+    }
+    .ember-select {
+        width: 100%;
+    }
+    .ember-select, .k-datetimepicker, textarea, .title {
+        margin-bottom: 15px;
+    }
+    .k-datetimepicker {
+        height: 32px;
+    }
+    .ember-select-search {
+        padding: 0;
+    }
+    .dropdown-menu {
+        max-width: 100%;
+    }
+    input[type="text"].filtered-search-input {
+        width: calc(~"100% - 32px");
+    }
+
+    .icon-go-away {
+        font-size: 16px;
+        padding: 5px 2px;
+        margin: -7px -2px 0 2px;
+    }
+    .list li {
+        padding-right: 0;
+        a {
+            display: block;
+        }
+    }
+    .sia-start-date-picker {
+        .tooltip {
+            width: 230px;
+        }
+        .tooltip-inner {
+            word-break: break-word;
+            white-space: normal;
+        }
+    }
+}
+
+.event-details, #dFinalizeEvents {
+    .list li:before {
+        border-color: @pf-color-40;
+        background: @pf-color-40;
+    }
+}
+
+.worksheet-details {
+    .detail-pane--scrollable-content();
+
+    .lead-333, .score {
+        margin-bottom: 10px;
+    }
+    .copyright {
+        margin-top: 10px;
+    }
+
+    hr {
+        margin: 10px 0;
+    }
+
+    ol {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+
+        label {
+            color: inherit;
+        }
+
+        .options {
+            margin-top: 10px;
+        }
+
+        li:not(:first-of-type) {
+            margin-top: 20px;
+        }
+
+        li {
+            .options {
+                > div {
+                    margin-left: 20px;
+                    &.days-selector, &.field-label {
+                        margin-left: 0;
+                    }
+                }
+
+                .horizontal-radio {
+                    margin-left: 5px;
+                    display: inline-block;
+                    label {
+                        &.pf-input--radio-label {
+                            display: inline-block;
+                        }
+                    }
+
+                    .radio-value {
+                        margin-top: 17px;
+                        width: 21px;
+                        text-align: center;
+                    }
+                }
+            }
+
+            &.is-disabled {
+                p {
+                    color: @slate-dark;
+                }
+                .options {
+                    label {
+                        &.pf-input.pf-input--radio-label {
+                            cursor: not-allowed;
+                        }
+                    }
+                }
+            }
+        }
+
+        &.migraine-worksheet {
+            li:not(:first-of-type) {
+                margin-top: 10px
+            }
+
+            .item {
+                .pf-input--radio-label {
+                    height: 21px;
+                    padding-left: 21px;
+
+                    &::before {
+                        padding: 0;
+                        top: 0;
+                    }
+                }
+
+                .pf-input--radio:checked + label:before {
+                    padding-left: 3px;
+                    padding-top: 3px;
+                }
+            }
+        }
+    }
+
+    .field-label {
+        margin-top: 10px;
+    }
+
+    .days-selector {
+        width: 125px;
+        .dropdown-menu {
+            min-width: 125px;
+            max-height: 120px;
+            overflow-y: scroll;
+            li {
+                &:first-child {
+                    margin-top: 0;
+                }
+                margin-top: 3px;
+                a {
+                    padding: 0 0 0 15px;
+                 }
+            }
+
+
+        }
+
+        .dropdown-toggle {
+            padding-right: 10px;
+        }
+
+        .error {
+            input {
+                background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJlcnJvciIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MTIgNTEyIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cGF0aCBmaWxsPSJyZ2IoMjMwLDMwLDI1KSIgZD0iTTI1NiwwQzExNS4yLDAsMCwxMTUuMiwwLDI1NnMxMTUuMiwyNTYsMjU2LDI1NnMyNTYtMTE1LjIsMjU2LTI1NlMzOTYuOCwwLDI1NiwweiBNMjExLjIsMzkzLjZjMC0xMi44LDMuMi0yMi40LDkuNi0yOC44YzYuNC02LjQsMTYtOS42LDI4LjgtOS42YzEyLjgsMCwyMi40LDMuMiwyOC44LDkuNnM5LjYsMTYsOS42LDI4LjhzLTMuMiwyMi40LTkuNiwyOC44cy0xNiw5LjYtMjguOCw5LjZzLTIyLjQtMy4yLTI4LjgtOS42QzIxNC40LDQxNiwyMTEuMiw0MDYuNCwyMTEuMiwzOTMuNnogTTI3OC40LDMxNi44SDIyNEwyMTEuMiw5NkgyODhMMjc4LjQsMzE2Ljh6Ii8+PC9zdmc+');
+                background-repeat: no-repeat;
+                background-position: calc(~'100% - 5px');
+                background-size: 16px 16px;
+                background-color: @white;
+                box-shadow: inset 5px 5px 5px -5px rgba(230,31,25,.75);
+                padding-right: 24px;
+            }
+        }
+    }
+
+    &.migraine-worksheet-details {
+        .field-label {
+            margin-top: 0;
+        }
+        .ember-select {
+            display: block;
+            width: 50%;
+        }
+        hr {
+            color: @slate-light;
+            margin: 10px -15px;
+        }
+    }
+}
+
+.diagnosis-refine {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .slc-header {
+        padding-left: 0;
+    }
+
+    .detail-inner {
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .slc-row {
+        padding: 5px 10px;
+
+        min-height: inherit;
+
+        > div {
+            margin-top: 0;
+        }
+    }
+
+    .diagnosis-header.slc-header {
+        padding: 0 10px;
+        line-height: normal;
+        height: 26px;
+    }
+
+    .select-refined-diagnosis {
+        margin: 15px 0 5px;
+    }
+
+    .pf-input {
+        display: inline-block;
+    }
+
+    .toggle-search-mode,
+    .show-hide-codes-text {
+        text-align: right;
+    }
+
+    .toggle-search-mode {
+        span {
+            text-align: left;
+            color: @black;
+        }
+        span:not(:last-child) {
+            margin-right: 5px;
+        }
+
+        .pf-input {
+            margin: 0;
+        }
+    }
+
+    .show-hide-codes-text a {
+        font-size: 11px;
+        color: @sky-dark;
+        text-transform: none;
+    }
+
+    .refine-diagnosis-title {
+        font-weight: bold;
+        font-size: 13px;
+    }
+
+    .btn-sm, .btn-group-sm > .btn {
+        font-size: 10px;
+        height: 18px;
+        padding: 1px 7px 2px;
+    }
+}
+
+.summary-details .detail-pane-body-wrapper .diagnosis-refine .field-label {
+    margin-bottom: 0;
+}
+
+.diagnosis-codes {
+    .slc-header {
+        line-height: 25px;
+        padding-left: 0;
+    }
+
+    border: 1px solid @slate-light;
+    color: @charcoal-light;
+
+    .code-row {
+        margin: 5px 0;
+    }
+
+    .type,
+    .code,
+    .description {
+        padding: 0 10px;
+        float: left;
+    }
+
+    .type {
+        width: 26%;
+    }
+
+    .code {
+        width: 24%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .description {
+        width: 50%;
+    }
+}
+
+.diagnosis-typeahead {
+
+    .ember-select-result-item {
+        border-bottom: 1px solid #d6d6d6;
+        span {
+            display: inline-block;
+        }
+        .term {
+            width: 89%;
+        }
+
+        .refine-status {
+            width: 5%;
+
+            .force-refine {
+                color: @orange;
+            }
+
+            .optional-refine {
+                color: @slate-dark;
+            }
+        }
+    }
+
+    &.show-codes {
+        .icd10-code, .icd9-code {
+            display: inline-block;
+            width: 49%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+}
+
+.display-diagnosis-selector .dropdown-menu {
+    width: 80px;
+    min-width: auto;
+}
+
+@media (max-width: 785px) {
+    // Fixing wrapping issue on iPad for diagnosis dialog
+    .detail-pane-footer .diagnosis-detail--footer {
+      margin-right: -5px;
+      margin-left: -5px;
+      .btn {
+          font-size: 14px;
+      }
+    }
+}
+
+.create-clinical-document-modal, .referral-note-modal {
+    .content-modal-body {
+        .box-spacing(padding, A, md);
+        display: flex;
+        flex-direction: column;
+
+    }
+    .ccda-sections-header {
+        .box-spacing(margin, T, sm);
+        a {
+            .box-spacing(margin, LR, xs);
+        }
+    }
+    .ccda-sections {
+        flex: 1 1 200px;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        overflow: hidden;
+        .pf-input--checkbox-component {
+            width: 50%;
+        }
+    }
+    .ccda-section-row {
+        max-height: 210px;
+        display: flex;
+    }
+    p {
+        margin: 50px 0 0;
+    }
+    .content-modal-footer .btn {
+        margin: 0 5px;
+    }
+}
+
+.clinical-document-ready-modal {
+    .modal.info.content-modal.content-modal-style-8 {
+        footer {
+            padding-top: 0px;
+        }
+    }
+}
+
+.patient-ccda-modal {
+    .field-label {
+        line-height: 20px;
+    }
+}
+
+@import "immunizations.less";
+@import "support.less";
+
+.deprecation-popup-link {
+    position: absolute;
+    bottom: 20px;
+}
+.print-devices-container {
+    .table-content {
+        margin: 15px 5px 0;
+    }
+}
+.print-devices-section {
+    .print-device-section {
+        margin-bottom: 25px;
+
+        .header-row > div {
+            text-transform: none;
+            font-size: 10pt;
+
+            &.device-recorded-heading {
+                font-size: 9pt;
+                font-weight: normal;
+            }
+        }
+    }
+}
+
+@import "social-history.less";
+
+#dDevice .carbon-content-modal-component {
+    .content-modal-body {
+        padding: 10px 15px;
+    }
+    footer {
+        padding-top: 0px;
+
+        .pull-left button {
+            margin-left: 0px;
+        }
+    }
+}
+
+.patient-health-concerns-list {
+    label {
+        margin: 0;
+    }
+    textarea {
+        resize: none;
+        width: 100%;
+    }
+
+    .list {
+        margin-left: -5px;
+        li {
+            padding: 2px 0 2px 22px;
+            &::before {
+                background: @sky-dark;
+                border-color: @sky-dark;
+            }
+        }
+    }
+}
+.patient-health-concerns-list .patient-health-concern-note p, .patient-health-concerns-list .health-concern-title, .print-health-concern-note {
+    white-space: pre-wrap;
+}
+.disabled-hover {
+    pointer-events: none;
+    .health-concern-title {
+        color: @charcoal-dark;
+    }
+}
+.encounter-container .patient-health-concern-note {
+    width: 85%;
+}
+
+.health-concern-detail {
+    height: 100%;
+    h4 {
+        display: inline;
+        white-space: pre-wrap;
+    }
+    .detail-pane--scrollable-content();
+    .pf-input--checkbox-component label {
+        margin: 0;
+    }
+    .field-label {
+        .box-spacing(margin; A; n);
+    }
+    .detail-pane-body-wrapper {
+        .box-spacing(padding; A; lg-v2);
+    }
+    .k-datepicker {
+        height: auto;
+    }
+}
+@import "diagnosis-icd10.less";
+
+.popover-prescription-benefits {
+    max-width: 380px;
+    width: 380px;
+}
+
+.popover-prescription-benefits {
+    left: 150px !important;
+
+    &.ember-tether.popover.ember-tether-target-attached-top {
+        .arrow {
+            left: 38px;
+        }
+    }
+}
+
+.medication-typeahead {
+    .ember-select-results {
+        .box-spacing(padding; L; md-v2);
+        .box-spacing(padding; TB; sm-v2);
+        max-height: 240px;
+        overflow-y: scroll;
+
+        .option-description {
+            .box-spacing(padding; TB; sm-v2);
+            font-size: 13px;
+            line-height: 20px;
+        }
+    }
+}
+// summary v2 diagnoses section
+.diagnoses-summary-list .card {
+    .diagnosis-display-selector-wrapper {
+        display: inline-block;
+    }
+    .icon-ellipsis, .body-diagnosis-display-selector-wrapper {
+        display: none;
+    }
+    .display-diagnosis-selector {
+        width: 86px;
+        margin-left: 4px;
+        .dropdown-menu {
+            width: 86px;
+        }
+    }
+    @media only screen and (max-width: 1280px) {
+        .diagnosis-display-selector-wrapper {
+            display: none;
+        }
+        .icon-ellipsis, .body-diagnosis-display-selector-wrapper {
+            display: inline-block;
+        }
+    }
+}
+
+.clinical-summary {
+    // summary v2 medications section
+    .medications .card {
+        .duplicate-medications-alert {
+            .box-spacing(margin, B, xs-v2); // this will override line 476
+        }
+    }
+    // summary v2 health concerns section
+    .patient-health-concerns-list .card {
+        .list li:before {
+            background: @black; // to override line 2037, 2038
+            background-color: @black;
+            border-color: @black;
+        }
+        a.icon.text-color-placeholder {
+            color: @gray-dark-v2;
+        }
+    }
+    .encounter-list a {
+        margin: 2px 0 0 0;
+    }
+    // summary v2 overall
+    .card {
+        .box-spacing(margin, B, md-v2);
+
+        .print-menu-group {
+            vertical-align: text-bottom;
+            .dropdown-toggle.print-icon-button {
+                height: auto;
+            }
+        }
+        .allergy-free-text-message, .duplicate-medications-alert {
+            margin: 0 -16px;
+        }
+    }
+}
+
+.social-health-numeric-input {
+    width: 88px; // required by design
+}
+
+.worksheet-details-v2 {
+    ol.migraine-worksheet {
+        .item .pf-input--radio-label {
+            height: 21px;
+            padding-left: 21px;
+        }
+        .days-selector {
+          width: 125px;
+        }
+    }
+    .sia-start-date-picker {
+        .tooltip {
+            top: -60px;
+            left: -16px;
+            width: 230px;
+        }
+        .tooltip-inner {
+            word-break: break-word;
+            white-space: normal;
+        }
+    }
+}

@@ -1,0 +1,152 @@
+<div>
+    {{!-- TODO: remove once we delete d-diagnosis-detail --}}
+    {{#if showAllDescriptions}}
+        <div class="header14 diagnosis-detail-header">
+            {{#each diagnosis.diagnosisCodes as |codeObject|}}
+                <div data-element="header-diagnosis-description">{{codeObject.description}} ({{#if codeObject.code}}{{codeObject.code}}{{else}}No associated code{{/if}})</div>
+            {{/each}}
+        </div>
+    {{else}}
+        {{#unless isAddingNewDiagnosis}}
+            <div class="header14 diagnosis-detail-header">
+            {{diagnosis.description}}
+            </div>
+        {{/unless}}
+    {{/if}}
+
+    {{#if canRefine}}
+        {{!-- EDIT is a separate story and still need designs for it. We might do this from "show" codes below, by simply deleting the ICD-10, which will restart the ICD-10 up --}}
+        {{!-- <a href="#" {{action "refineDiagnosis"}}> Edit </a> | --}}
+        <div class="clearfix">
+            {{#if showingCodes}}
+                <a href="#" class="pull-right" data-element="hide-codes-toggle" {{action "toggleProperty" "showingCodes"}}> Hide codes </a>
+            {{else}}
+                <a href="#" class="pull-right" data-element="show-codes-toggle" {{action "toggleProperty" "showingCodes"}}> Show codes </a>
+            {{/if}}
+        </div>
+        {{#if needsRefine}}
+            <div class="diagnosis-detail-form-refine-label icon-urgent" data-element="refine-icon-urgent">
+                {{relatedDiagnoses.length}} diagnoses: <a href="#" data-element="refine-diagnosis-link" {{action "refineDiagnosis"}}>Refine diagnosis</a>
+            </div>
+        {{/if}}
+        {{#if showingCodes}}
+            {{diagnosis-codes diagnosis=diagnosis refineDiagnosis=refineDiagnosis needsRefine=needsRefine}}
+        {{/if}}
+    {{/if}}
+</div>
+
+{{#if diagnosis.isCustom}}
+    <div class="form-group encounter-date">
+        <div class="field-label">CODE</div>
+        {{input class="input-block-level" maxlength="50" placeholder="Enter code" value=diagnosis.customCode isDisabled=disabled data-element="custom-code"}}
+    </div>
+{{/if}}
+
+<div id="start-dates" class="encounter-date">
+    <div class="field-label">START DATE</div>
+    {{d-date-picker isLegacy=false value=diagnosis.startDate placeholder="MM/DD/YYYY"
+        disabled=disabled isValid=isStartDateValid autoCorrectYear=true data-element="diagnosis-start-date-picker"}}
+    <button type="button" class="btn" {{action "startToday"}} disabled={{disabled}}>Today</button>
+</div>
+<div id="start-stop" class="encounter-date">
+    <div class="field-label">STOP DATE</div>
+    {{d-date-picker isLegacy=false value=diagnosis.stopDate placeholder="MM/DD/YYYY"
+        disabled=disabled isValid=isStopDateValid autoCorrectYear=true data-element="diagnosis-stop-date-picker"}}
+    <button type="button" class="btn" {{action "stopToday"}} disabled={{disabled}}>Today</button>
+</div>
+
+<div class="form-group">
+    <div class="field-label">ACUITY</div>
+    <div class="inline-flex-group">
+        <div class="item gutter-sm box-fixed-sm">
+            {{#d-check-box checked=diagnosis.isAcute tabIndex=0 smaller=true data-element="acute-label"}}
+                Acute
+            {{/d-check-box}}
+        </div>
+        <div class="item gutter-sm box-fixed-md">
+            {{#d-check-box checked=diagnosis.isTerminal tabIndex=0 smaller=true data-element="terminal-label"}}
+                Is terminal
+            {{/d-check-box}}
+        </div>
+    </div>
+</div>
+
+{{#if canAddMedications}}
+    <div>
+        <div class="field-label">MEDICATIONS</div>
+        <div>
+            {{#if availableMedications}}
+                {{single-select
+                    content=availableMedications
+                    placeholder="Search for a patient medication"
+                    optionLabelPath="drugName"
+                    selectType="typeahead"
+                    addCustomItemText="Record new medication"
+                    openOnFocus=true
+                    select="associateMedication"
+                    disabled=disabled
+                    addItem=recordMedicationActionName
+                    class="diagnosis-detail-medication-search"
+                    data-element="diagnosis-panel-medication-search" searchDataElement="diagnosis-panel-medication-input"}}
+            {{else}}
+                <a href="#" data-element="record-medication-in-diagnosis-panel-link" {{action 'recordMedication'}}>Record medication</a>
+            {{/if}}
+        </div>
+        <div class="d-complex-list-container">
+            {{#each associatedMedications as |medication|}}
+                <div class="item">
+                    <span class="long-word">
+                        {{#if editMedication}}
+                            <a href="#" data-element="diagnosis-panel-medication-name" {{action 'editMedication' medication}}>{{medication.drugName}}</a>
+                        {{else}}
+                            {{medication.drugName}}
+                        {{/if}}
+                    </span>
+                    <a href="#" class="close-box" data-element="diagnosis-panel-remove-medication" {{action "disassociateMedication" medication}}></a>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+{{/if}}
+
+<div>
+    <div class="field-label">DIAGNOSIS COMMENT</div>
+    <div class="sig-text form-group">
+        {{text-area-counter class="diagnosis-detail--diagnosis-comment" value=diagnosisComment placeholderText="Enter a comment about this diagnosis" maxlength="500" rows="3" isDisabled=disabled}}
+    </div>
+</div>
+
+{{#if canToggleAttachToEncounter}}
+    {{#d-check-box checked=attachToEncounter tabIndex=0 smaller=true disabled=disabled data-element="diagnosis-attach-to-encounter"}}
+        Attach diagnosis to this encounter
+    {{/d-check-box}}
+{{/if}}
+
+{{#if attachToEncounter}}
+    <div>
+        <div class="field-label">COMMENT FOR THIS ENCOUNTER</div>
+        <div class="sig-text form-group" data-element="diagnosis-comment-for-this-encounter" >
+            {{text-area-counter value=encounterComment placeholderText="Enter a comment about this diagnosis for the current encounter" maxlength="500" rows="3" isDisabled=disabled}}
+        </div>
+    </div>
+{{/if}}
+
+{{#if diagnosis.encounterCommentsWithComment}}
+    <div class="d-complex-list-container">
+        <div class="field-label">ENCOUNTER COMMENTS</div>
+        {{#each diagnosis.encounterCommentsWithComment as |transcriptComment|}}
+            <div class="item">
+                {{transcript-comment transcriptComment=transcriptComment patientPracticeGuid=patientGuid}}
+            </div>
+        {{/each}}
+    </div>
+{{/if}}
+
+<div class="patientEducation d-complex-list-container">
+    <div class="field-label">RESOURCES</div>
+    {{#if diagnosis.icd9Code}}
+        <div class="item">
+            {{patient-education-link codeSet="icd9" code=diagnosis.icd9Code searchString=diagnosis.name patientPracticeGuid=patientGuid}}
+        </div>
+    {{/if}}
+</div>

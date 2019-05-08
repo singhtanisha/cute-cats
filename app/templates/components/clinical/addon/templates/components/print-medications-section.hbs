@@ -1,0 +1,54 @@
+<div class="row header-row">
+    <div class="col-xs-12"><h2>{{title}} Medications</h2></div>
+</div>
+<div class="row header-row">
+    <div class="col-xs-4">Medication</div>
+    <div class="col-xs-3">Sig</div>
+    <div class="col-xs-2">Start/Stop</div>
+    <div class="col-xs-3">Associated Dx</div>
+</div>
+{{#each medications as |medication|}}
+    <div class="row no-stripe no-borders">
+        <div class="col-xs-4" data-element="medication-item-text">
+            {{medication.fullGenericName}}
+        </div>
+        <div class="col-xs-3" data-element="medication-item-sig">{{medication.sig.patientDescription}}</div>
+        <div class="col-xs-2" data-element="medication-item-dates">{{datetime-formatted datetime=medication.startDateTime}} - {{datetime-formatted datetime=medication.stopDateTime}}</div>
+        <div class="col-xs-3" data-element="medication-item-diagnosis">{{#if medication.diagnosis.name}}{{medication.diagnosis.name}}{{else}}-{{/if}}</div>
+    </div>
+    <div class="row no-stripe sub-paragraph">
+        {{#if anyComments}}
+            <div class="col-xs-12">
+                {{#if showComments}}
+                    {{#if medication.medicationComment.comment}}
+                        {{transcript-comment transcriptComment=medication.medicationComment commentType="Provider comment" isCollapsible=false oneline=false}}
+                    {{/if}}
+                {{/if}}
+                {{#if showEncounterComments}}
+                    {{#each medication.encounterCommentsWithComment as |comment|}}
+                        {{transcript-comment patientPracticeGuid=medication.patientPracticeGuid transcriptComment=comment commentType="Encounter comment" isCollapsible=false oneline=false}}
+                    {{/each}}
+                {{/if}}
+                {{#if showScripts}}
+                    {{#if medication.prescriptions}}
+                        <ul class="read-only-complex-list">
+                            {{#each medication.prescriptions as |script|}}
+                                {{prescription-item prescription=script tagName="li"}}
+                            {{/each}}
+                        </ul>
+                    {{/if}}
+                {{/if}}
+            </div>
+        {{/if}}
+    </div>
+{{else}}
+    <div class="row no-stripe">
+        <div class="col-xs-12">
+            {{#if noKnownMedications}}
+                Patient has no known medications
+            {{else}}
+                No <span class="lowercase">{{title}}</span> medications recorded
+            {{/if}}
+        </div>
+    </div>
+{{/each}}

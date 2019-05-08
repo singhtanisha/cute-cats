@@ -1,0 +1,145 @@
+<div class="bg-color-default-hover box-margin-Amd-v2 box-padding-Alg-v2 box-padding-TBmd-v2">
+    <h5 class="required section-title {{unless isAddingImmunization "hidden"}}">Add a new immunization</h5>
+    <section data-element="add-immunization-content">
+        <div class="inline-flex-group-v2">
+            <div class="item gutter-sm box-padding-Tn">
+                {{#if isAddingImmunization}}
+                    {{#radio-button-group onSelect=(action "selectSourceType") name="sourceType" selectedValue=sourceType as |group|}}
+                        {{group.radio-button label="Administered" value="Administered" class="inline-option"}}
+                        {{group.radio-button label="Historical" value="Historical" class="inline-option"}}
+                        {{group.radio-button label="Refused or Not Administered" value="Refused" class="inline-option"}}
+                    {{/radio-button-group}}
+                {{else}}
+                    <label class="field-label">Type</label>
+                    <div>{{sourceType}}</div>
+                {{/if}}
+            </div>
+        </div>
+        {{#if sourceType}}
+            <div class="inline-flex-group-v2">
+                <div class="item gutter-sm">
+                    {{#if isAddingImmunization}}
+                        {{#if isVaccineSelected}}
+                            <div>
+                                <span class="h4 required">{{vaccination.vaccineName}}</span>
+                                <button class="btn--link box-padding-Lmd-v2" {{action "editVaccine"}}>Edit</button>
+                            </div>
+                        {{else}}
+                            <label class="field-label required">Vaccine</label>
+                            {{#composable-select
+                                content=vaccineSearchResults
+                                selection=selectedVaccine
+                                isLoading=searchVaccines.isRunning
+                                optionLabelPath="name"
+                                optionGroupPath="groupTitle"
+                                onSelect=(action "selectVaccine") as |options|}}
+                                {{options.typeahead minChars=1 onSearch=(perform searchVaccines) query=vaccineQuery shouldSearchOnFocus=true}}
+                                {{#options.dropdown-menu as |menu|}}
+                                    {{#menu.options as |menu-options|}}
+                                        {{#each-in menu-options.groupedContent as |groupName groupOptions|}}
+                                            {{#if groupName}}
+                                                {{menu-options.group-option groupName=groupName}}
+                                            {{/if}}
+                                            {{#each groupOptions as |option|}}
+                                                {{menu-options.option content=option}}
+                                            {{/each}}
+                                        {{/each-in}}
+                                    {{/menu.options}}
+                                    {{#menu.footer}}
+                                        Add custom vaccine: {{vaccineQuery}}
+                                    {{/menu.footer}}
+                                {{/options.dropdown-menu}}
+                            {{/composable-select}}
+                        {{/if}}
+                    {{else}}
+                        <label class="field-label required">Vaccine</label>
+                        <div>{{vaccination.vaccineName}}</div>
+                    {{/if}}
+                </div>
+                {{#unless isSearching}}
+                    <div class="item gutter-sm"></div>
+                {{/unless}}
+            </div>
+            {{#if errors.providerHasNpi}}
+                <div class="inline-flex-group-v2" data-element="npi-warning">
+                    <div class="item gutter-xs box-fixed">
+                        <i class="icon-urgent"></i>
+                    </div>
+                    <div class="item gutter-xs">
+                        <p>{{errors.providerHasNPI}}</p>
+                        <ul class="list">
+                            <li>
+                                <a onclick={{action "editProvider" vaccination.administeredByProviderGuid}}>
+                                    Add NPI for administering provider
+                                </a>
+                            </li>
+                            <li class="unstyled">or</li>
+                            <li>
+                                <a onclick={{action "editProvider" vaccination.orderingProviderGuid}}>
+                                    Add NPI for ordering provider
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            {{/if}}
+            {{#if selectedVaccine}}
+                {{component "immunizations/add-immunization-refused"
+                    disabled=isNotAllowedToEditImmunizations
+                    errors=errors
+                    facilities=facilities
+                    isAddingImmunization=isAddingImmunization
+                    isElectronicTransmission=isElectronicTransmission
+                    isSearching=isSearching
+                    isVisible=isRefused
+                    model=vaccination
+                    reference=referenceData
+                    selectPatientPrivacyConsent=(action "selectPatientPrivacyConsent")}}
+                {{component "immunizations/add-immunization-historical"
+                    disabled=isNotAllowedToEditImmunizations
+                    errors=errors
+                    facilities=facilities
+                    isAddingImmunization=isAddingImmunization
+                    isDetailsVisible=isDetailsVisible
+                    isElectronicTransmission=isElectronicTransmission
+                    isSearching=isSearching
+                    isVisible=isHistorical
+                    model=vaccination
+                    reference=referenceData
+                    toggleDetails=(action "toggleDetails")
+                    selectPatientPrivacyConsent=(action "selectPatientPrivacyConsent")}}
+                {{component "immunizations/add-immunization-details"
+                    disabled=isNotAllowedToEditImmunizations
+                    errors=errors
+                    facilities=facilities
+                    isAddingImmunization=isAddingImmunization
+                    isAdministered=isAdministered
+                    isElectronicTransmission=isElectronicTransmission
+                    isHistorical=isHistorical
+                    isSearching=isSearching
+                    isVisible=isDetailsVisible
+                    model=vaccination
+                    providers=providers
+                    providerUpdated=(action "providerUpdated")
+                    showExpirationWarning=showExpirationWarning
+                    confirmSave=(action "confirmSave")
+                    clearExpirationWarningResponse=(action "clearExpirationWarningResponse")
+                    isNdcNotRequired=isNdcNotRequired
+                    isVaccineCustom=isVaccineCustom
+                    reference=referenceData
+                    selectPatientPrivacyConsent=(action "selectPatientPrivacyConsent")}}
+            {{/if}}
+        {{/if}}
+    </section>
+    <nav data-element="add-immunization-nav" class="box-padding-TBlg-v2">
+        <div class="pull-right">
+            <button class="btn--default" data-element="btn-cancel-add" type="button" onclick={{action "cancel"}}>Cancel</button>
+            {{#unless isAddingImmunization}}
+                <button class="btn--default" data-element="btn-delete-immunization" type="button" disabled={{isNotAllowedToEditImmunizations}} onclick={{action (action delete vaccination)}}>Delete</button>
+            {{/unless}}
+            {{#if selectedVaccine}}
+                <button class="btn--brand" data-element="btn-save-immunization" type="button" disabled={{disableSave}} onclick={{action "save"}}>Save</button>
+            {{/if}}
+        </div>
+    </nav>
+</div>

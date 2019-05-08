@@ -1,0 +1,54 @@
+{{#detail-pane
+    classNames="side-fixed col-xs-5 summary-details health-concern-detail type-v2"
+    resizables=resizables
+    close=(action attrs.save)
+    bigHeaderText="Health concerns"
+    as |section|}}
+    {{#detail-pane-body sectionContext=section}}
+        {{#if model.healthConcernReferenceGuid}}
+            <h4 data-element="health-concern-reference-title">{{model.title}}</h4> <a class="box-margin-Lsm-v2 {{unless model.isNew "hidden"}}" onclick={{action "clearClinicalItem"}} data-element="edit-health-concern">Edit</a>
+            {{#d-check-box checked=model.isActive smaller=true class="box-margin-TBmd-v2"}}
+                Active health concern
+            {{/d-check-box}}
+            <div class="field-label required">Effective Date</div>
+            {{d-date-picker
+                autoCorrectYear=true
+                data-element="health-concern-effective-date"
+                errorMessage=errors.effectiveDate
+                isLegacy=false
+                isShorter=true
+                placeholder="MM/DD/YYYY"
+                value=model.effectiveDate}}
+        {{else}}
+            <div class="field-label required">Health concern</div>
+            {{multi-source-select
+                class="size-full"
+                focusOnInsert=true
+                includeCountInTabName=false
+                includeSearchResultsTab=false
+                isShorter=true
+                maxSelections=1
+                openOnFocus=true
+                optionDescriptionPath="description"
+                optionLabelPath="label"
+                optionValuePath="healthConcernReferenceGuid"
+                prompt="Add an existing diagnosis or allergy as a health concern"
+                select=(action "selectClinicalItem")
+                sortLabels=false
+                tabSelectedDefault=tabSelectedDefault
+                tabSources=categories
+                useTether=useTether}}
+        {{/if}}
+    {{/detail-pane-body}}
+    {{#detail-pane-footer sectionContext=section}}
+        <div class="pull-right {{unless model.healthConcernReferenceGuid "hidden"}}">
+            <button class="btn {{unless model.isNew "hidden"}}" onclick={{action "saveAndAddAnother"}} data-element="btn-save-add-another">
+                <span class="visible-xs visible-sm">Add another</span>
+                <span class="visible-md visible-lg">Save & add another</span>
+            </button>
+            <button class="btn btn-primary" onclick={{action "save"}} data-element="btn-save">Save</button>
+        </div>
+        <button class="btn" onclick={{action attrs.cancel}} data-element="btn-cancel">Cancel</button>
+        <button class="btn {{if model.isNew "hidden"}}" onclick={{action attrs.delete}} data-element="btn-delete">Delete</button>
+    {{/detail-pane-footer}}
+{{/detail-pane}}

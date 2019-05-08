@@ -1,0 +1,14 @@
+<div class="ellipses" data-element="patient-ribbon-plan-name" title={{patient.primaryInsurancePlan.planName}}>{{patient.primaryInsurancePlan.planName}}</div>
+
+{{#popover-modal isPopoverVisible=isPopoverVisible targetSelector=targetSelector width=200 height="auto"}}
+    <div class="field-label">Primary insurance</div>
+    <div class="box-margin-Bmd">{{patient.primaryInsurancePlan.planName}}</div>
+    {{#if patient.primaryInsurancePlan.claimsContactPhoneNumber}}
+        <div class="field-label">Claims phone number</div>
+        <div class="box-margin-Bmd">{{format-phone patient.primaryInsurancePlan.claimsContactPhoneNumber}}</div>
+    {{/if}}
+    <div class="box-margin-Bmd">
+        {{#link-to "patient.profile" patient.patientPracticeGuid (query-params sectionName="insurance")}}See more insurance information{{/link-to}}
+    </div>
+    <button class="btn btn-primary btn-sm pull-right">Close</button>
+{{/popover-modal}}

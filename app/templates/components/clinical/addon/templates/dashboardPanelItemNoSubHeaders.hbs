@@ -1,0 +1,27 @@
+<div data-qatest="dashboardpanel">
+    {{#with panelData}}
+        <header>
+            <h3 class="header3a">{{headerText}}</h3>
+        </header>
+        <section>
+            {{#each categoriesList as |category|}}
+                <div>
+                    {{#each category.summeryItems as |item|}}
+                        <span class="item"></span>
+                        <div>{{item.title}}
+                            {{#if item.description}}
+                            : {{item.description}}
+                            {{/if}}
+                        </div>
+                    {{/each}}
+                </div>
+            {{/each}}
+
+            {{#if emptyText}}
+                <div>
+                    {{emptyText}}
+                </div>
+            {{/if}}
+        </section>
+    {{/with}}
+</div>

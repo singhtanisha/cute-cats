@@ -1,0 +1,15 @@
+<a data-element="medication-name">{{medication.genericAndTradeName}}</a> {{medication.productStrength}} {{medication.route}} {{medication.doseForm}}
+{{#if medication.startDateTime}}
+    <div><span>Start:</span> {{datetime-formatted datetime=medication.startDateTime}}</div>
+{{/if}}
+{{#if medication.stopDateTime}}
+    <div><span>Stop:</span> {{datetime-formatted datetime=medication.stopDateTime}}</div>
+{{/if}}
+{{#if showProliaModalLink}}
+    <div {{action "stopBubble" bubbles=false}}>
+        <a class="prolia-modal-open-link" data-element="prolia-permanent-link" onclick={{action "openAssessment" "proliaAesiModal"}}>Record adverse events for Prolia safety</a>
+    </div>
+{{/if}}
+{{#if medication.duplicates}}
+    <div class="duplicate-medication-text" data-element="duplicate-medication-text-on-summary">(Duplicate therapy)</div>
+{{/if}}

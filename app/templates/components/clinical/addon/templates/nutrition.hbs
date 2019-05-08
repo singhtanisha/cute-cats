@@ -1,0 +1,34 @@
+{{#detail-pane-v2 class="side-fixed col-xs-5 type-v2" as |section|}}
+    {{#section.right-module class="fill-space flex-column"  as |right-module|}}
+        {{#right-module.header class="box-padding-Llg-v2" closeDetailPane=(action "closeDetailPane")}}
+            Nutrition history &gt; {{if isAllowedToEdit "Record" "Review"}}
+        {{/right-module.header}}
+        {{#right-module.body class="flex-grow box-padding-Alg-v2"}}
+            <label class="field-label">Nutrition history</label>
+            {{#view-spinner isLoading=isLoading}}
+                {{text-area-counter autofocus=true isDisabled=isNotAllowedToEdit autosize=true
+                    value=nutritionHistory placeholderText="Enter nutrition history"
+                    maxlength="4000" rows="3"}}
+            {{/view-spinner}}
+        {{/right-module.body}}
+        {{#right-module.footer class="inline-flex-group-v2 box-padding-LRlg-v2 box-padding-TBsm-v2"}}
+            {{#if isAllowedToEdit}}
+                <div class="item gutter-sm box-fixed">
+                    <button data-element="cancel-button" class="btn--default" type="button" onclick={{action "closeDetailPane"}}>Cancel</button>
+                </div>
+                {{#unless isNew}}
+                    <div class="item gutter-sm box-fixed">
+                        <button data-element="delete-button" class="btn--default" type="button" onclick={{action "delete"}}>Delete</button>
+                    </div>
+                {{/unless}}
+                <div class="item gutter-sm text-right">
+                    <button data-element="save-button" class="btn--brand" type="button" disabled={{disableSave}} onclick={{action "save"}}>Save</button>
+                </div>
+            {{else}}
+                <div class="item gutter-sm text-right">
+                    <button data-element="close-button" class="btn--brand" type="button"onclick={{action "closeDetailPane"}}>Close</button>
+                </div>
+            {{/if}}
+        {{/right-module.footer}}
+    {{/section.right-module}}
+{{/detail-pane-v2}}

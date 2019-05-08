@@ -1,0 +1,55 @@
+{{data-tunnel name="patient-summary-mixpanel-event" onDataReceived=(action "sendPatientSummaryMixpanelEvent")}}
+{{#view-spinner class="patient-summary flex-column flex-grow" isLoading=isLoading}}
+    {{walk-me }}
+    {{#if isDisplaySettingsVisible}}
+        {{patient-summary-display-settings class="fill-space--absolute flex-column"
+            cards=cards isUnsavedChangesModalVisible=isUnsavedDisplaySettingsModalVisible
+            cancel=(action "cancelDisplaySettings") cancelUnsavedChangesModal=(action "cancelUnsavedDisplaySettingChangesModal")
+            discardChangesAndExit=(action "discardDisplaySettingChangesAndExit")
+            save=(perform saveDisplaySettings)}}
+    {{else}}
+        {{#composable-header/tool-bar}}
+            <div class="inline-flex-group-v2">
+                {{#if isAllowedToEditSettings}}
+                    <div class="item gutter-md box-fixed box-padding-Bn">
+                        <a role="link" onclick={{action "toggleDisplaySettings"}} data-element="link-display-settings">
+                            <i class="icon-settings icon--md"></i>
+                            Display settings
+                        </a>
+                    </div>
+                {{/if}}
+                <div class="item gutter-sm col-xs-2 box-fixed box-padding-TBn">
+                    {{#composable-select content=goToItems onSelect=(action "selectGoToItem")
+                        data-element="dropdown-go-to" optionLabelPath="label" as |options|}}
+                        {{options.dropdown prompt="Go to..."}}
+                        {{options.dropdown-menu}}
+                    {{/composable-select}}
+                </div>
+                <div class="item gutter-sm box-padding-TBn text-right">
+                    <button type="button" class="btn--default" data-element="btn-print-chart-control-bar" onclick={{action "print"}}>Print chart</button>
+                </div>  
+                <div class="item gutter-sm box-fixed box-padding-TBn">
+                    {{#if isAllowedToEditSummary}}
+                        {{new-encounter-button navigateToEncounter="navigateToEncounter"
+                            newEncounter="newEncounter" patientPracticeGuid=patientGuid requiresValidation=true
+                            shouldCreateNewEncounter=shouldCreateNewEncounter validateNewEncounter="validateNewEncounter"}}
+                    {{/if}}
+                </div>
+            </div>
+        {{/composable-header/tool-bar}}
+        <div class="clinical-summary flex-grow bg-color-secondary inline-flex-group-v2 box-padding-Alg-v2">
+            {{#each-in cardColumns as |index cards|}}
+                <div class="item gutter-sm box-fixed {{cardColumnSizeClass}} box-padding-TBn">
+                    {{#each cards as |card|}}
+                        {{component card.componentName card=card
+                            isAllowedToEditSummary=isAllowedToEditSummary
+                            patient=patient selectedItem=selectedItem
+                            printAudit="printAudit" sendControllerAction=(action "sendSummaryAction")
+                            setControllerProperties=(action "updateProperties")}}
+                    {{/each}}
+                </div>
+            {{/each-in}}
+        </div>
+        {{outlet}}
+    {{/if}}
+{{/view-spinner}}

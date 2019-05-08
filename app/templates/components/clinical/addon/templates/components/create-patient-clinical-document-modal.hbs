@@ -1,0 +1,39 @@
+{{#content-modal
+    modalStyle=0
+    isVisible=isVisible
+    isDraggable=false
+    includeBackdrop=true
+    modalSize="fixed700w" as |section|}}
+    {{section.header title="Create clinical document" isCloseByXorOutsideVisible=true}}
+    {{#section.body}}
+        <div class="row type-v2">
+            <div class="col-xs-3">
+                <label class="field-label box-margin-Bmd-v2">Patient Information</label>
+                <label class="field-label box-margin-Bmd-v2">Document type</label>
+            </div>
+            <div class="col-xs-9">
+                <p class="box-margin-Tn box-margin-Bmd-v2">{{patientName}}, {{gender}}, {{format-date-time-utc dob}}</p>
+                <p class="box-margin-Tn">Continuity of Care Document</p>
+            </div>
+        </div>
+        <div class="row ccda-section-row type-v2">
+            <div class="col-xs-3">
+                <div class="field-label box-margin-Bsm-v2">Sections to include</div>
+                <a onclick={{action "selectAll" true}} data-element="create-ccda-select-all">Select all</a>|<a onclick={{action "selectAll" false}} data-element="create-ccda-select-none">none</a>
+            </div>
+            <div class="ccda-sections col-xs-8">
+                {{#each sections as |section|}}
+                    {{#d-check-box disabled=isSelectionDisabled checked=section.isChecked value=section.id name=section.id smaller=true data-element=section.id}}
+                        {{section.name}}
+                    {{/d-check-box}}
+                {{/each}}
+            </div>
+        </div>
+        <p class="type-v2 box-margin-Tn">The patient's records will be exported into a continuity of care document which can be used to share the patient's chart with other providers. The export process can take a few minutes to complete. Once it is complete you can download the generated export file from the patient's timeline under "Exported patient records".</p>
+    {{/section.body}}
+    {{#section.footer}}
+        <div class="pull-right type-v2">
+            <button class="btn btn-sm btn-primary box-margin-Rxs" onclick={{action "create"}} data-element="create-ccda-create">Create</button>
+        </div>
+    {{/section.footer}}
+{{/content-modal}}

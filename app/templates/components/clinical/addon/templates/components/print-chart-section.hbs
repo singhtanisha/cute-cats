@@ -1,0 +1,23 @@
+{{#if includeHeaderAndFooter}}
+    <div class="row">
+        {{print-patient-header patientSummary=patientSummary patientSnapshot=patientSnapshot showZip=showZip}}
+        {{print-facility-header  facilityGuid=chartNote.facilityGuid facilitySnapshot=facilitySnapshot}}
+        {{#if chartNote}}
+            {{print-encounter-header chartNote=chartNote chartNotePrintInfo=chartNotePrintInfo encounterType=encounterType patient=patientSummary}}
+        {{/if}}
+        {{#if superbill}}
+            {{print-bill-header superbill=superbill }}
+        {{/if}}
+    </div>
+    {{#if includeChiefComplaint}}
+        <header>
+            <h2>Chief complaint</h2>
+            {{text-with-empty-state text=chartNote.chiefComplaint title="chief complaint" tagName="p" class="formatted-text"}}
+        </header>
+    {{/if}}
+{{/if}}
+
+{{yield}}
+{{#if includeFooter}}
+    <div class="col-logo">{{pf-logo width="150"}}</div>
+{{/if}}

@@ -1,0 +1,29 @@
+{{data-tunnel name="behavioral-health-refresh" onDataReceived=(perform loadBehavioralHealth)}}
+{{data-tunnel name="social-health-refresh" onDataReceived=(action "refreshSocialHealth")}}
+{{data-tunnel name="update-editing-social-history" onDataReceived=(action "setIsEditing")}}
+{{data-tunnel name="social-history" onDataReceived=(action "updateTobaccoUse")}}
+
+{{#composable-card as |options|}}
+    {{#options.header as |header|}}
+        {{#header.title}}
+            {{card.title}}
+            <a class="icon-printer icon--md text-color-placeholder box-margin-Lmd-v2 {{if isLoading "hidden"}}" onclick={{perform print}} data-element="print-behavioral-health-button"></a>
+        {{/header.title}}
+    {{/options.header}}
+    {{#options.content}}
+        {{#unless isLoading}}
+            {{#each cardFields as |field|}}
+                {{card-field
+                    isAllowedToEdit=isAllowedToEdit isEditing=field.isEditing selectedItem=selectedItem
+                    data-element=(concat field.key '-section') card-data-element="behavioral-health"
+                    content=field.content isError=error canHaveMultipleRecord=field.canHaveMultipleRecord
+                    title=field.title create=(action "create" field) edit=(action "edit" field)}}
+            {{/each}}
+        {{/unless}}
+        <p class="text-color-placeholder box-margin-Bn box-padding-Txs-v2 {{unless isLoading "hidden"}}" data-element="social-history-placeholder-message">Loading social history...</p>
+    {{/options.content}}
+{{/composable-card}}
+
+{{#print-preview-content printTitle=printTitle isVisible=isPrintPreviewVisible}}
+    {{print-social-behavioral-health-section content=printInfo patient=patient class="bh-print chart-print-container"}}
+{{/print-preview-content}}

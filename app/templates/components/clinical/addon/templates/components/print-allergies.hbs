@@ -1,0 +1,7 @@
+{{#print-chart-section patientSummary=patient  title=title chartNote=chartNote includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+    <div class="table-content">
+        {{print-allergies-section data=drugAllergies noKnownAllergies=noKnownAllergies showAllComments=showAllComments  title="Drug" visibleComments=visibleComments}}
+        {{print-allergies-section data=foodAllergies showAllComments=showAllComments  title="Food" visibleComments=visibleComments}}
+        {{print-allergies-section data=environmentalAllergies showAllComments=showAllComments  title="Environmental" visibleComments=visibleComments}}
+    </div>
+{{/print-chart-section}}

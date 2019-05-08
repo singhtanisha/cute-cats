@@ -1,0 +1,122 @@
+<div class="favorite-diagnoses-settings-wrapper">
+    <div class="name-container">
+        <h5 class="header5 name-ribbon">Diagnoses list</h5>
+        <div class="header-description">Add and edit your frequently used Diagnoses</div>
+    </div>
+    <div class="favorite-diagnoses-settings">
+        <div class="diagnosis-list-settings">
+            <div class="option-ribbon type-v2">
+                <div class="pull-right box box-margin-Rlg-v2">
+                    <button class="btn btn-warning" data-element="add-favorite-diagnosis-button" type="button" onclick={{action "addNewDiagnosisInline"}}>Add diagnosis</button>
+                </div>
+            </div>
+
+            <div class="favorite-dx-list">
+                <div class="my-list my-list-icd10">
+                    <header class="clearfix">
+                        <div class="gripper-wrapper"></div>
+                        <span class="term-column">
+                            {{#if isManuallySorted}}
+                                <span class="pointer diagnoses-column-header" data-element="dx-list-sort-toggle" {{action "sortAlphabetically"}}>Term</span>&nbsp;
+                            {{else}}
+                                <span class="diagnoses-column-header">Term</span>&nbsp;
+                                {{#if sortAscending}}
+                                    <span class="icon-move-up" data-element="dx-list-sorted-ascending" {{action "sortDescending"}}></span>
+                                {{else}}
+                                    <span class="icon-move-up inverted" data-element="dx-list-sorted-descending" {{action "sortAscending"}}></span>
+                                {{/if}}
+                            {{/if}}
+                        </span>
+                        <span class="diagnoses-column-header type-column">Type</span>
+                        <span class="diagnoses-column-header code-column">Code</span>
+                        <span class="diagnoses-column-header description-column">Description</span>
+                        <span class="diagnoses-column-header expand-column"><a onclick={{action "toggleExpandAll" anyItemsCollapsed}}>
+                                {{#if anyItemsCollapsed}}
+                                    Expand all
+                                {{else}}
+                                    Collapse all
+                                {{/if}}
+                            </a>
+                        </span>
+                        <span class="diagnoses-column-header blank-column">&nbsp;</span>
+                    </header>
+                    <section>
+                        {{#if error}}
+                            <div class="error-set">There was an error downloading your favorites. <a {{action "retryAfterError"}}>Retry.</a></div>
+                        {{else if model.length}}
+                            {{#sortable-group tagName="ul" class="sortable-dx-list" onChange="reorderItems" as |group|}}
+                                {{#each sortedModel as |item|}}
+                                    {{#sortable-item tagName="li" handle=".gripper-wrapper" class="diagnosis-list-item diagnosis-list-item-v2 clearfix" model=item group=group}}
+                                        <div class="gripper-wrapper"><icon class="icon-row-gripper"></icon></div>
+                                        <div class="term-column" data-element="term-string">{{item.name}}</div>
+                                        <div class="diagnosis-codes-group">
+                                            {{#if item.isExpanded}}
+                                                {{#each item.sortedICD10DiagnosisCodes as |diagnosisCode|}}
+                                                    <div class="diagnosis-codes-row">
+                                                        <div class="type-column" data-element="code-system-string">{{diagnosisCode.codeSystem}}</div>
+                                                        <div class="code-column" data-element="code-string">{{diagnosisCode.code}}</div>
+                                                        <div class="description-column" data-element="description-string">{{diagnosisCode.description}}</div>
+                                                    </div>
+                                                {{/each}}
+                                            {{else}}
+                                                <div class="diagnosis-codes-row">
+                                                    <div class="type-column" data-element="code-system-string">{{item.preferredIcd10Code.codeSystem}}</div>
+                                                    <div class="code-column" data-element="code-string">{{item.preferredIcd10Code.code}}</div>
+                                                    <div class="description-column" data-element="description-string">{{item.preferredIcd10Code.description}}</div>
+                                                </div>
+                                            {{/if}}
+                                        </div>
+                                        <div class="expand-column" data-element="expand-row-control">
+                                            <a onclick={{action "toggleExpand" item}}>
+                                                {{#if item.isExpanded}}
+                                                    less
+                                                {{else}}
+                                                    more
+                                                {{/if}}
+                                            </a>
+                                        </div>
+                                        <div><icon class="close-box-small box-margin-Asm-v2 box-padding-Rlg-v2" data-element="remove-dx-from-list" {{action "removeDiagnosis" item}}></icon></div>
+                                    {{/sortable-item}}
+                                {{/each}}
+                            {{/sortable-group}}
+                        {{/if}}
+                    </section>
+                    {{#if showInlineAddDiagnosis}}
+                        <div class="inline-add-diagnosis" data-element="dx-add-inline">
+                            <i class="icon-add"></i>
+                            {{diagnosis-typeahead-icd10
+                                canAddCustom=false
+                                canShowTabs=false
+                                query=addQuery
+                                showCodes=false
+                                useTether=true
+                                diagnosisSelected="addFavoriteDiagnosisInline"
+                                data-element="diagnosis-result-search"
+                                hintText="Type at least 2 characters to start seeing results"
+                                prompt="Search for diagnosis"
+                                searchDataElement="diagnosis-search-input"}}
+                        </div>
+                    {{/if}}
+                </div>
+                {{#if isRefiningDiagnosis}}
+                    {{#favorite-diagnosis-detail bigHeaderText="Refine diagnosis" close="cancelAddInline" as |section|}}
+                        {{#detail-pane-body sectionContext=section as |content|}}
+                            {{diagnosis-refine
+                                diagnosis=diagnosisToRefine
+                                diagnoses=relatedDiagnoses
+                                isAddingNewDiagnosis=true
+                                searchByCodeSystem="icd10Code"
+                                showFacets=showRefineFacets
+                                hideAllPopups=false
+                                facetOffset="182px 216px"
+                                diagnosisRefined="addFavoriteDiagnosisInline"}}
+                        {{/detail-pane-body}}
+                        {{#detail-pane-footer sectionContext=section}}
+                            <button type="button" class="btn" data-element="cancel-refine-favorite-dx" {{action "cancelAddInline"}}>Cancel</button>
+                        {{/detail-pane-footer}}
+                    {{/favorite-diagnosis-detail}}
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,117 @@
+{{#detail-pane-v2 class="side-fixed col-xs-5 type-v2" as |section|}}
+    {{#section.right-module class="fill-space flex-column" as |right-module|}}
+        {{right-module.header
+            bigHeaderText=bigHeaderText
+            smallHeaderText=smallHeaderText
+            closeDetailPane=(action "closeDetailPane")}}
+        {{#right-module.body class="flex-grow box-padding-Alg-v2"}}
+            {{#if model.instructionText}}
+                <h4>{{model.instructionText}}</h4>
+            {{/if}}
+            <ul class="list list--unstyled">
+                {{#each questions as |question index|}}
+                    {{#if question.isShowing}}
+                        <li class="box-margin-Blg-v2 box-padding-TBn" data-element="worksheet-question-{{index}}">
+                            {{#if question.isCheckboxQuestion}}
+                                {{#check-box disabled=isNotAllowedToEdit checked=question.response.value data-element="decline-checkbox" onChecked=(action "toggleCheckbox" question)}}
+                                    {{{question.label}}}
+                                {{/check-box}}
+                            {{else}}
+                                <p>
+                                    {{#if question.numbering}}
+                                        {{question.numbering}}.
+                                    {{/if}}
+                                    <span>{{{question.label}}}</span>
+                                    {{#if question.showUndo}}
+                                        <a data-element="undo-question-{{index}}" class="box-margin-Lmd-v2" onclick={{action "undo" question}}>Undo</a>
+                                    {{/if}}
+                                </p>
+                                {{#if question.isRadioQuestion}}
+                                    <div class="options">
+                                        {{#each question.options as |option index|}}
+                                            <div data-element="option-{{index}}" class={{if question.isHorizontalRadioType "horizontal-radio"}}>
+                                                {{#if disabled}}
+                                                    {{d-radio-button id=option.id name=question.componentGuid value=option.value
+                                                        selectedValue=question.selectedOptionValue disabled=true}}
+                                                {{else}}
+                                                    {{d-radio-button id=option.id name=question.componentGuid value=option.value
+                                                        selectedValue=question.selectedOptionValue disabled=question.isDisabled
+                                                        radioChecked=(action "responseChecked" question option)}}
+                                                {{/if}}
+                                                <label for="{{option.id}}" class="pf-input pf-input--radio-label text-color-default ib">
+                                                    {{#unless question.isHorizontalRadioType}}
+                                                        {{option.label}}
+                                                        {{#if option.showValue}}
+                                                            <span class="text-color-placeholder">({{option.displayValue}})</span>
+                                                        {{/if}}
+                                                    {{/unless}}
+                                                </label>
+                                                {{#if question.isHorizontalRadioType}}
+                                                    <div class="radio-value">
+                                                        {{option.label}}
+                                                        {{#if option.showValue}}
+                                                            <span class="text-color-placeholder">({{option.displayValue}})</span>
+                                                        {{/if}}
+                                                    </div>
+                                                {{/if}}
+                                            </div>
+                                        {{/each}}
+                                    </div>
+                                {{/if}}
+                                {{#if question.isNumericType}}
+                                    <div class="social-health-numeric-input">
+                                        {{text-field type="number" min=question.inputMin max=question.inputMax value=question.textFieldValue disabled=question.isDisabled errorMessage=question.rangeError refocusOnError=true key-up=(action "responseEntered" question)}}
+                                    </div>
+                                {{/if}}
+                                {{#if question.secondaryLabel}}
+                                    <p class="secondary-label">{{question.secondaryLabel}}</p>
+                                {{/if}}
+                            {{/if}}
+                        </li>
+                    {{/if}}
+                {{/each}}
+            </ul>
+            {{#if model.scoreMethod}}
+                <label class="field-label">Score</label>
+                <h4 data-element="worksheet-score">
+                    {{#if model.scoreText}}
+                        {{model.scoreText}}{{#if model.resultDescription}} - {{model.resultDescription}}{{/if}}
+                    {{else}}
+                        No score
+                    {{/if}}
+                </h4>
+            {{/if}}
+            {{#if model.worksheet.summary}}
+                {{#if model.displaySummary}}
+                    <label class="field-label box-margin-Tmd-v2">Score key</label>
+                    <div data-element="worksheet-summary">{{{model.worksheet.summary}}}</div>
+                {{/if}}
+            {{/if}}
+            {{#if model.worksheet.secondarySummary}}
+                {{#if model.displaySecondarySummary}}
+                    <div data-element="worksheet-secondary-summary" class="box-margin-Tmd-v2">{{{model.worksheet.secondarySummary}}}</div>
+                {{/if}}
+            {{/if}}
+            {{#if model.worksheet.copyright}}
+                <div data-element="worksheet-copyright" class="box-margin-Tmd-v2 text-color-placeholder">{{{model.worksheet.copyright}}}</div>
+            {{/if}}
+        {{/right-module.body}}
+        {{#right-module.footer class="inline-flex-group-v2 box-padding-LRlg-v2 box-padding-TBsm-v2"}}
+            {{#if isAllowedToEdit}}
+                <div class="item gutter-sm box-fixed">
+                  <button data-element="cancel-button" class="btn--default" type="button" onclick={{action "closeDetailPane"}}>Cancel</button>
+                </div>
+                <div class="item gutter-sm box-fixed">
+                    <button data-element="delete-button" class="btn--default {{if isNew "hidden"}}" type="button" onclick={{action "delete"}}>Delete</button>
+                </div>
+                <div class="item gutter-sm text-right">
+                    <button data-element="save-button" disabled={{disableSave}} class="btn--brand" type="button" onclick={{action "save"}}>{{if showSave "Save" "Mark as reviewed"}}</button>
+                </div>
+            {{else}}
+                <div class="item gutter-sm text-right">
+                    <button data-element="close-button" class="btn--brand" type="button" onclick={{action "closeDetailPane"}}>Close</button>
+                </div>
+            {{/if}}
+        {{/right-module.footer}}
+    {{/section.right-module}}
+{{/detail-pane-v2}}

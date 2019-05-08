@@ -6,3 +6,7 @@
 .image-row {
     display: inline-block
 }
+.cat-container {
+    margin: 0 auto;
+    width: 80%;
+}

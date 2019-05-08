@@ -1,0 +1,15 @@
+<div class="transmission-errors-heading" onclick={{action "toggleExpanded"}}>
+    <i class="icon-urgent icon-color-error" /> {{errorCount}} {{pluralize errorCount "error" "errors"}} - The registry has indicated the following errors or warnings from the transmission on {{date}}.
+    <a class="pull-right">
+        {{#if isExpanded}}
+            Minimize
+        {{else}}
+            Show {{pluralize errorCount "error" "errors"}}
+        {{/if}}
+    </a>
+</div>
+<div class="transmission-errors-content">
+    {{#each errors as |error|}}
+        <div class="transmission-error">{{error.errorMessage}}</div>
+    {{/each}}
+</div>

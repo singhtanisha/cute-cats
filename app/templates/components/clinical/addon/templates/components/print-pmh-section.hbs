@@ -1,0 +1,19 @@
+{{#print-chart-section chartNote=chartNote patientSummary=patient title=title includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+    <div class="table-content">
+        <div class="table">
+            <div class="row header-row"><div class="col-xs-12"><h2 data-element="print-past-medical-history-header">Past medical history</h2></div></div>
+            {{#each pmhWithValue as |pmh index|}}
+                <div class="row header-row">
+                    <div data-element="print-past-medical-history-title" class="col-xs-12">{{pmh.title}}</div>
+                </div>
+                <div class="row no-stripe">
+                    <div class="col-xs-12 formatted-text" data-element="print-past-medical-history-field-value-{{index}}">{{pmh.value}}</div>
+                </div>
+            {{else}}
+                <div class="row no-stripe">
+                    <div class="col-xs-12">No past medical history available for this patient.</div>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+{{/print-chart-section}}

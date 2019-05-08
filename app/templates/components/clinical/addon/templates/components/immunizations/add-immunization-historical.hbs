@@ -1,0 +1,101 @@
+<div class="{{unless isSearching "inline-flex-group-v2"}}">
+    {{#check-box checked=model.isPartiallyComplete class="item gutter-sm" disabled=disabled}}
+        Partially administered
+    {{/check-box}}
+</div>
+<div class="{{unless isSearching "inline-flex-group-v2"}}">
+    <div class="item gutter-sm box-fixed">
+        <label class="field-label">Date Administered</label>
+        {{#if isAddingImmunization}}
+            {{d-date-picker value=model.vaccinationDate data-element="date-administered" isLegacy=false isShorter=true startDate="01/01/1900"}}
+        {{else}}
+            <div>
+                {{#if model.vaccinationDate}}{{format-date-time model.vaccinationDate}}{{else}}n/a{{/if}}
+            </div>
+        {{/if}}
+    </div>
+    <div class="item gutter-sm">
+        <label class="field-label required">Source for information</label>
+        {{#composable-select
+            content=vaccinationSources
+            disabled=disabled
+            errorMessage=errors.vaccinationsource
+            selection=model.source
+            optionLabelPath="vaccinationSourceName" as |options|}}
+            {{options.dropdown prompt="Select value"}}
+            {{options.dropdown-menu}}
+        {{/composable-select}}
+    </div>
+    <div class="item gutter-sm">
+        <label class="field-label">
+            Reporting Facility
+            {{#if isElectronicTransmission}}
+                {{#composable-popover data-element="info-popover" classNames="inline-option box-margin-Lxs" as |options|}}
+                    {{options.popover-target tagName="a" classNames="icon-info" data-element="info-popover-target"}}
+                    {{#options.popover}}
+                        <div class="popover-content">
+                            If the facility selected has an associated registry connection, this vaccine record will be included when transmitting patient history.
+                        </div>
+                    {{/options.popover}}
+                {{/composable-popover}}
+            {{/if}}
+        </label>
+        {{#composable-select
+            content=knownFacilities
+            disabled=disabled
+            errorMessage=errors.vaccinationfacilityGuid
+            onSelect=(action "selectFacility")
+            optionLabelPath="name"
+            data-element="dropdown-facility"
+            selection=selectedFacility as |options|}}
+            {{options.dropdown prompt="Select value"}}
+            {{options.dropdown-menu}}
+        {{/composable-select}}
+    </div>
+</div>
+<div class={{unless isSearching "inline-flex-group-v2"}}>
+    {{#if config.isSelfPayRestrictionOn}}
+        <div class={{unless isSearching "item gutter-sm"}}>
+            <div class="inline-flex-group-v2">
+                {{self-pay-restriction-dropdown
+                    class="item gutter-sm"
+                    fixedWidth=false
+                    isNew=isAddingImmunization
+                    isSaveEnabled=false
+                    disabled=disabled value="deny"
+                    data-element="self-pay-restriction-dropdown"
+                    dropdownPadding=false
+                    patientPracticeGuid=model.patientPracticeGuid
+                    entityGuid=model.vaccinationGuid
+                    entityTypeCode="immz"
+                    entityTypeText="Immunizations"
+                    isImmunization=true
+                    selectSPR=(action selectPatientPrivacyConsent)}}
+            </div>
+        </div>
+    {{/if}}
+    <div class={{unless isSearching "item gutter-sm"}}>
+        <div class="inline-flex-group-v2">
+            <div class="item gutter-sm" data-element="comments">
+                <label class="field-label">Comments</label>
+                {{textarea
+                    class="immunization-comment"
+                    dataElement="txt-comments"
+                    disabled=disabled
+                    maxlength="256"
+                    rows="3"
+                    placeholder="Add a comment"
+                    value=model.comment}}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="inline-flex-group-v2">
+    <button class="btn--link" onclick={{action attrs.toggleDetails}}>
+        {{#if isDetailsVisible}}
+            Show less
+        {{else}}
+            Show more
+        {{/if}}
+    </button>
+</div>

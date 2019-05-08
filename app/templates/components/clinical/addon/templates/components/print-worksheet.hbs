@@ -1,0 +1,63 @@
+<div class="row no-stripe">
+    {{#if worksheet.isDeclinedChecked}}
+        <div class="col-xs-10">Patient declined to specify on all questions</div>
+        <div class="col-xs-2">{{format-date-time-utc worksheet.content.updatedAt}}</div>
+    {{else}}
+            {{#each allOtherQuestions as |question index|}}
+                {{#if question.isShowing}}
+                    {{#unless question.isSeparator}}
+                        <div class="col-xs-10">
+                            <div data-element="worksheet-question-{{index}}">
+                                <p class="box-margin-Bn">
+                                    {{#if question.numbering}}
+                                        {{question.numbering}}.
+                                    {{/if}}
+                                    <span data-element="worksheet-question-label-{{index}}">{{{question.label}}}</span>
+                                </p>
+                                <h4 data-element="worksheet-question-anwser-{{index}}" class="h4">
+                                    {{#if question.isRadioQuestion}}
+                                        {{if question.responseText question.responseText "--"}}
+                                    {{/if}}
+                                    {{#if question.isNumericType}}{{if question.value question.value "--"}}{{/if}}
+                                </h4>
+                                {{#if question.secondaryLabel}}
+                                    <p class="secondary-label">{{question.secondaryLabel}}</p>
+                                {{/if}}
+                            </div>
+                        </div>
+                        <div class="col-xs-2">{{#if showUpdatedDate}}{{format-date-time-utc question.enteredAt}}{{/if}}</div>
+                    {{/unless}}
+                    {{#if question.isTextSeparator}}
+                        <div class="col-xs-12" data-element="worksheet-question-label-{{index}}">{{question.label}}</div>
+                    {{/if}}
+                {{/if}}
+            {{/each}}
+        {{#if worksheet.scoreMethod}}
+            <div class="col-xs-10">
+                <label class="field-label">Score</label>
+                <h4 data-element="worksheet-score" class="h4">
+                    {{#if worksheet.scoreText}}
+                        {{worksheet.scoreText}}{{#if worksheet.resultDescription}} - {{worksheet.resultDescription}}{{/if}}
+                    {{else}}
+                        No score
+                    {{/if}}
+                </h4>
+            </div>
+            <div class="col-xs-2">{{format-date-time-utc worksheet.content.updatedAt}}</div>
+        {{/if}}
+        {{#if worksheet.content.worksheet.summary}}
+            {{#if worksheet.displaySummary}}
+                <div class="col-xs-12">
+                    <p data-element="worksheet-summary">{{{worksheet.content.worksheet.summary}}}</p>
+                </div>
+            {{/if}}
+        {{/if}}
+        {{#if worksheet.content.worksheet.secondarySummary}}
+            {{#if worksheet.displaySecondarySummary}}
+                <div class="col-xs-12">
+                    <p data-element="worksheet-secondary-summary">{{{worksheet.content.worksheet.secondarySummary}}}</p>
+                </div>
+            {{/if}}
+        {{/if}}
+    {{/if}}
+</div>

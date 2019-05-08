@@ -1,0 +1,15 @@
+{{#each healthConcerns as |healthConcern index|}}
+    <li onclick={{if isAllowedToEditHealthConcerns (action "edit" healthConcern)}} class="{{if isNotAllowedToEditHealthConcerns "disabled-hover"}}" data-element="health-concern-item-{{index}}">
+        <div data-element="health-concern-title" class="text-color-link text-wrap">{{healthConcern.title}}</div>
+        {{#if healthConcern.healthConcernReferenceItem.severityText}}
+            <div>
+                <i class="icon-triangle icon--md box-margin-Rsm-v2 {{healthConcern.healthConcernReferenceItem.severityClass}}"></i>
+                <span class="h4 box-margin-Rmd-v2" data-element="severity-text">{{healthConcern.healthConcernReferenceItem.severityText}}</span>
+                <span>{{healthConcern.healthConcernReferenceItem.reactionsText}}</span>
+            </div>
+        {{/if}}
+        <div>
+            <span>Start: <span data-element="health-concern-effective-date">{{healthConcern.effectiveDate}}</span></span>
+        </div>
+    </li>
+{{/each}}

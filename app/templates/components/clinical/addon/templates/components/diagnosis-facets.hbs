@@ -1,0 +1,14 @@
+<div class="arrow"></div>
+<div class="diagnosis-facets">
+    <h4 class="header4">Refine your search</h4>
+    {{#each filteredDiagnoses.facets as |facet|}}
+        <strong>{{facet.name}}</strong>
+        {{#each facet.constraints as |constraint|}}
+            {{#d-check-box smaller=true checked=(array-contains selectedConstraintIds constraint.id) checkedValue=constraint onChecked="constraintClicked" data-element="facet-check-box"}}
+                {{constraint.name}} ({{constraint.diagnoses.length}})
+            {{/d-check-box}}
+        {{/each}}
+    {{else}}
+        <div data-element="no-facets-text">There are no facets needed to further refine this diagnosis.</div>
+    {{/each}}
+</div>

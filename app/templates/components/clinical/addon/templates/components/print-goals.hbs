@@ -1,0 +1,10 @@
+{{#print-chart-section patientSummary=patient includeHeaderAndFooter=includeHeaderAndFooter}}
+    <div class="table-content">
+        {{#if showActiveGoals}}
+            {{print-goals-section data=activeGoals title="Active" noGoalsText=noActiveGoalsText}}
+        {{/if}}
+        {{#if showInactiveGoals}}
+            {{print-goals-section data=inactiveGoals title="Inactive" noGoalsText=noInactiveGoalsText}}
+        {{/if}}
+    </div>
+{{/print-chart-section}}

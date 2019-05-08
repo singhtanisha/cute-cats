@@ -1,0 +1,81 @@
+{{data-tunnel name="summary-devices-list" onDataReceived=(action "loadDevices")}}
+{{#composable-card as |card|}}
+    {{#card.header as |header|}}
+        {{#header.title}}
+            Implantable devices
+            {{#if canRecordDevice}}
+                {{#if isAllowedToEditSummary}}
+                    <a onclick={{action "recordDevice"}} data-element="record-device" class="icon icon-add icon--md text-color-placeholder box-margin-Lmd-v2"></a>
+                {{/if}}
+            {{/if}}
+            {{#unless isLoading}}
+                <a onclick={{action "print"}} data-element="print-devices-button" class="icon icon-printer icon--md text-color-placeholder box-margin-Lmd-v2"></a>
+            {{/unless}}
+        {{/header.title}}
+    {{/card.header}}
+    {{#card.content as |content|}}
+        {{#if isLoading}}
+            <p>Loading devices...</p>
+        {{else}}
+            {{#if loadDevicesFailed}}
+                <p class="text-color-placeholder">Can't load implantable devices. Please <a onclick={{action "loadDevices"}}>try again.</a></p>
+            {{else}}
+                {{#if isEditing}}
+                    {{#unless selectedDeviceGuid}}
+                        <section class="active">
+                            <div>Record device</div>
+                        </section>
+                    {{/unless}}
+                {{/if}}
+                {{#if activeDevices}}
+                    <div>
+                        <ul class="list list--selectable list--hover">
+                            {{#each activeDevices as |device index|}}
+                                {{summary-devices-list-item isAllowedToEditSummary=isAllowedToEditSummary 
+                                    editDevice=(action "editDevice") device=device selectedDeviceGuid=selectedDeviceGuid 
+                                    class="active-device" data-element=(concat "active-device-" index)}}
+                            {{/each}}
+                        </ul>
+                    </div>
+                {{else}}
+                    {{#if isAllowedToEditSummary}}
+                        {{#check-box checked=isNoDevicesChecked disabled=isLoading data-element="no-devices-label"}}
+                            Patient has no implantable device
+                        {{/check-box}}
+                    {{else}}
+                        {{#if isNoDevicesChecked}}
+                            Patient has no implantable device
+                        {{else}}
+                            No implantable device is recorded
+                        {{/if}}
+                    {{/if}}
+                {{/if}}
+                {{#if showInactiveDevices}}
+                    <div class="box-margin-Txs-v2">
+                        <h4 class="h4" data-element="inactive-devices-header">Inactive</h4>
+                        <ul class="list list--selectable list--hover">
+                            {{#each inactiveDevices as |device|}}
+                                {{summary-devices-list-item isAllowedToEditSummary=isAllowedToEditSummary editDevice=(action "editDevice") device=device selectedDeviceGuid=selectedDeviceGuid}}
+                            {{/each}}
+                        </ul>
+                    </div>
+                {{/if}}
+                {{#if inactiveDevices}}
+                    <div class="box-margin-Txs-v2">
+                        <a class="summary-devices-list-inactive-toggle box-padding-Txs" data-element="inactive-devices" onclick={{action "toggleInactiveDevices"}}>
+                            {{#if showInactiveDevices}}
+                                Hide inactive
+                            {{else}}
+                                Show inactive ({{inactiveDevices.length}})
+                            {{/if}}
+                        </a>
+                    </div>
+                {{/if}}
+            {{/if}}
+        {{/if}}
+    {{/card.content}}
+{{/composable-card}}
+
+{{#print-preview-content isVisible=isPrintVisible printTitle=printTitle class="chart-print-container print-devices-container"}}
+    {{print-devices-section data=devices noDevices=noImplantableDevices users=practiceUsers patient=patient includeHeaderAndFooter=true}}
+{{/print-preview-content}}

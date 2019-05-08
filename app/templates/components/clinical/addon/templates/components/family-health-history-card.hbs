@@ -1,0 +1,25 @@
+{{#composable-card as |card|}}
+    {{#card.header as |header|}}
+        {{#header.title}}
+            Family health history
+            {{#unless hideEdit}}
+                <a class="icon-add icon--md text-color-placeholder box-margin-Lmd-v2" onclick={{action "edit"}} data-element="add-family-history-button" role="link"></a>
+            {{/unless}}
+            <a class="icon-printer icon--md text-color-placeholder box-margin-Lmd-v2" onclick={{perform print}} data-element="print-family-history-button"></a>
+        {{/header.title}}
+    {{/card.header}}
+    {{#card.content}}
+        <ul class="list list--selectable list--hover {{unless isListVisible "hidden"}}">
+            <li class="{{if isEditing "is-active"}} {{unless hasRecordedHistory "hidden"}}" onclick={{action "edit"}} data-element="family-health-history-card-list-item" role="link">
+                <a class="text-wrap" data-element="family-history-text">{{preserve-linebreak pastMedicalHistory.familyHealthHistory}}</a>
+            </li>
+            <li class="{{if isEditing "is-active"}} {{if hasRecordedHistory "hidden"}}" data-element="family-health-history-card-list-record-item">
+                <p class="box-margin-Bn" data-element="family-history-record-text">Record family health history</p>
+            </li>
+        </ul>
+        <p class="text-color-placeholder box-margin-Bn box-padding-Txs-v2 {{unless defaultMessage "hidden"}}" data-element="family-history-section-message">{{defaultMessage}}</p>
+    {{/card.content}}
+{{/composable-card}}
+{{#print-preview-content printTitle=printTitle isVisible=isPrintPreviewVisible}}
+    {{print-family-health-history-section content=pastMedicalHistory.familyHealthHistory patient=patient class="pmh-print chart-print-container"}}
+{{/print-preview-content}}

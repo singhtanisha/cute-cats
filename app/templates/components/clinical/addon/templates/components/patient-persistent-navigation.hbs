@@ -1,0 +1,4 @@
+{{#if patient.patientPracticeGuid}}
+    {{patient-previews patient=patient}}
+    {{patient-pinned-note patientId=patient.id patientName=patient.fullName editPinnedNote=editPinnedNote location="Patient ribbon"}}
+{{/if}}

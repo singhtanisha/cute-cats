@@ -1,0 +1,50 @@
+{{data-tunnel name="patient-risk-score" onDataReceived=(perform loadHealthConcerns)}}
+
+{{#composable-card as |card|}}
+    {{#card.header as |header|}}
+        {{#header.title}}
+            Health concerns
+            {{#if isAllowedToEditHealthConcerns}}
+                {{#if transcriptGuid}}
+                    {{#link-to healthConcernRoute patientPracticeGuid transcriptGuid "new" class=addHealthConcernClass data-element="add-health-concern-button"}}{{addHealthConcernButtonText}}{{/link-to}}
+                {{else}}
+                    {{#link-to healthConcernRoute patientPracticeGuid "new" class=addHealthConcernClass data-element="add-health-concern-button"}}{{addHealthConcernButtonText}}{{/link-to}}
+                {{/if}}
+            {{/if}}
+            {{print-dropdown class=printDropdownClass data-element="print-health-concerns" options=printOptions print=(action "print") useIcons=useIcons}}
+        {{/header.title}}
+    {{/card.header}}
+    {{#card.content}}
+        {{#if isLoadingOrError}}
+            <p class="box-margin-Bn">{{loadingOrErrorText}}</p>
+        {{else}}
+            {{patient-health-concern-note isAllowedToEditHealthConcerns=isAllowedToEditHealthConcerns healthConcernNote=healthConcernNote isEditing=isEditingNote value=noteText saveNote=(action "saveNote") editNote=(action "editNote")}}
+            {{#if healthConcerns}}
+                {{patient-health-concerns-list-section isAllowedToEditHealthConcerns=isAllowedToEditHealthConcerns isNotAllowedToEditHealthConcerns=isNotAllowedToEditHealthConcerns healthConcerns=activeHealthConcerns healthConcernRoute=healthConcernRoute}}
+                {{#if inactiveHealthConcerns}}
+                    {{#if showInactiveHealthConcerns}}
+                        <h4 class="box-margin-TBsm-v2 h4">Inactive</h4>
+                        {{patient-health-concerns-list-section isAllowedToEditHealthConcerns=isAllowedToEditHealthConcerns isNotAllowedToEditHealthConcerns=isNotAllowedToEditHealthConcerns healthConcerns=inactiveHealthConcerns healthConcernRoute=healthConcernRoute}}
+                    {{/if}}
+                    <a role="link" onclick={{action "toggleShowInactive"}} class="ib box-margin-Txs-v2" data-element="health-concerns-toggle-inactive">{{toggleInactiveText}}</a>
+                {{/if}}
+            {{else}}                  
+                {{#if isAllowedToEditHealthConcerns}}
+                    {{#check-box checked=noKnownHealthConcerns onChecked=(action "noKnownChecked")}}
+                        Patient has no health concerns
+                    {{/check-box}}
+                {{else}}
+                    {{#if noKnownHealthConcerns}}
+                        Patient has no health concerns
+                    {{else}}
+                        No health concerns recorded
+                    {{/if}}
+                {{/if}}
+            {{/if}}
+        {{/if}}
+    {{/card.content}}
+{{/composable-card}}
+
+{{#print-preview-content isVisible=isPrintVisible printTitle=printTitle}}
+    {{print-health-concerns patient=patient class="chart-print-container" healthConcerns=healthConcerns includeHeaderAndFooter=true noKnownHealthConcerns=noKnownHealthConcerns showActiveHealthConcerns=printActiveHealthConcerns showInactiveHealthConcerns=printInactiveHealthConcerns}}
+{{/print-preview-content}}

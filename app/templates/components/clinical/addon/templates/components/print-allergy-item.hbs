@@ -1,0 +1,12 @@
+<div class="col-xs-7">
+    <div data-element="print-allergen-text">{{allergy.allergenText}}</div>
+    <div class="sub-paragraph">
+        {{#if showComments}}
+            {{#if allergy.comments}}
+                {{transcript-comment transcriptComment=allergy comment=allergy.comments commentType="Provider comment" classNames="allergy-comment" isCollapsible=false}}
+            {{/if}}
+        {{/if}}
+    </div>
+</div>
+<div class="col-xs-3"><div data-element="print-allergen-severity">{{allergy.severityText}}</div><div data-element="print-allergen-reaction">{{allergy.reactionsText}}</div></div>
+<div class="col-xs-2" data-element="print-allergen-onset-date">{{allergy.onsetText}}</div>

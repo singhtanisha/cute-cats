@@ -1,0 +1,240 @@
+<div>
+    {{!-- TODO: remove once we delete d-diagnosis-detail --}}
+    {{#if showAllDescriptions}}
+        <div class="header14 diagnosis-detail-header">
+            {{#each diagnosis.diagnosisCodes as |codeObject|}}
+                <div data-element="header-diagnosis-description">{{codeObject.description}} ({{#if codeObject.code}}{{codeObject.code}}{{else}}No associated code{{/if}})</div>
+            {{/each}}
+        </div>
+    {{else}}
+        {{#unless isAddingNewDiagnosis}}
+            <div class="diagnosis-description-icd10">
+                <h4>{{diagnosis.icd10OrSnomedCode}} {{diagnosis.description}}</h4>
+            </div>
+        {{/unless}}
+    {{/if}}
+</div>
+
+{{#if diagnosis.isCustom}}
+    {{#if isAllowedToEditDiagnoses}}
+        <div class="form-group encounter-date">
+            <div class="field-label">CODE</div>
+            {{input class="input-block-level" maxlength="50" placeholder="Enter code" value=diagnosis.customCode isDisabled=disabled data-element="custom-code"}}
+        </div>
+    {{/if}}
+{{/if}}
+
+
+{{#if canToggleAttachToEncounter}}
+    {{#d-check-box checked=attachToEncounter tabIndex=0 smaller=true disabled=disabled data-element="diagnosis-attach-to-encounter" classNames="detail-section"}}
+        Associate diagnosis with encounter {{transcriptDate}}
+    {{/d-check-box}}
+{{/if}}
+
+<div class="inline-flex-group detail-section">
+    <div class="item gutter-lg">
+        <div class="field-label-row">
+            <span class="field-label">ACUITY</span>
+            {{#if isAllowedToEditDiagnoses}}
+                <a class="box box-margin-Lsm" onclick={{action "clearAcuity"}}>Clear</a>
+            {{/if}}
+        </div>
+        <div>
+            <div>
+                {{d-radio-button id="acuity-chronic" value="chronic" selectedValue=acuity tabIndex=0 smaller=true data-element="chronic-label" disabled=isNotAllowedToEditDiagnoses}}
+                <label for="acuity-chronic" data-element="chronic-label" class="pf-input pf-input--radio-label">Chronic</label>
+            </div>
+            <div>
+                {{d-radio-button id="acuity-acute" value="acute" selectedValue=acuity tabIndex=0 smaller=true data-element="acute-label" disabled=isNotAllowedToEditDiagnoses}}
+                <label for="acuity-acute" data-element="acute-label" class="pf-input pf-input--radio-label">Acute</label>
+            </div>
+            {{#if showExistingIsTerminal}}
+                <div class="box box-margin-Axs-v2">
+                    {{#d-check-box checked=diagnosis.isTerminal tabIndex=0 smaller=true data-element="terminal-label" disabled=isNotAllowedToEditDiagnoses}}
+                        Is terminal
+                    {{/d-check-box}}
+                </div>
+            {{/if}}
+        </div>
+    </div>
+    <div class="item gutter-xs">
+        <div id="start-dates" class="encounter-date">
+            <div><label class="field-label">START DATE</label></div>
+            {{d-date-picker isLegacy=false value=diagnosis.startDate placeholder="MM/DD/YYYY"
+                disabled=disabled isValid=isStartDateValid autoCorrectYear=true data-element="diagnosis-start-date-picker"}}
+            {{#if isAllowedToEditDiagnoses}}
+                <a {{action "startToday"}} disabled={{disabled}}>Today</a>
+            {{/if}}
+        </div>
+        <div id="start-stop" class="encounter-date box-padding-Tlg-v2">
+            <div><label class="field-label">STOP DATE</label></div>
+            {{d-date-picker isLegacy=false value=diagnosis.stopDate placeholder="MM/DD/YYYY"
+                disabled=disabled isValid=isStopDateValid autoCorrectYear=true data-element="diagnosis-stop-date-picker"}}
+            {{#if isAllowedToEditDiagnoses}}
+                <a {{action "stopToday"}} disabled={{disabled}}>Today</a>
+            {{/if}}
+        </div>
+    </div>
+</div>
+{{#if canAddMedications}}
+    <div class="detail-section">
+        <div class=class="field-label-row">
+            <span class="field-label">Medications associated with diagnosis</span>
+            {{#if canAddMedicationsLink}}
+                <a class="box box-margin-Lsm" data-element="dx-add-medication-link" onclick={{action "toggleAddMedications"}}>Add</a>
+            {{/if}}
+            {{#if canEditMedications}}
+                <a class="box box-margin-Lsm" data-element="dx-edit-medication-link" onclick={{action "toggleEditMedications"}}>Edit</a>
+            {{/if}}
+        </div>
+        <div class="d-complex-list-container">
+            {{#each associatedMedications as |medication|}}
+                <div class="item box-padding-TBxs-v2 box-margin-Llg-v2 {{unless isAllowedToEditDiagnoses "disable-hover"}}">
+                    <span class="long-word">
+                        {{medication.drugName}}
+                    </span>
+                    {{#if showMedicationEdit}}
+                        {{#if isAllowedToEditDiagnoses}}
+                            <a class="icon-clear box box-margin-Lsm-v2" data-element="diagnosis-panel-remove-medication" onclick={{action "disassociateMedication" medication}}></a>
+                        {{/if}}
+                    {{/if}}
+                </div>
+            {{/each}}
+        </div>
+        {{#if showMedicationAdd}}
+            <div class="diagnosis-medications">
+                {{#if availableMedications}}
+                    <i class="icon-add"></i>
+                    {{checkbox-multi-select
+                        content=availableMedications
+                        selectType="typeahead"
+                        prompt="Add medications"
+                        optionLabelPath="drugName"
+                        optionValuePath="medicationGuid"
+                        addCustomItem="recordMedication"
+                        addCustomItemText="Record new medication"
+                        openOnFocus=true
+                        disabled=disabled
+                        maxSelections=10
+                        minChar=0
+                        query=medicationsQuery
+                        checkItem="associateMedication"
+                        uncheckItem="disassociateMedication"
+                        class="diagnosis-detail-medication-search"
+                        closeAction="toggleAddMedications"
+                        closeLinkText="Done"
+                        hideSelectedItemControls=true
+                        enableRemoveOnDelete=false
+                        data-element="diagnosis-panel-medication-search" searchDataElement="diagnosis-panel-medication-input"}}
+                {{else}}
+                    {{#if isAllowedToEditDiagnoses}}
+                        <a data-element="record-medication-in-diagnosis-panel-link" onclick={{action "recordMedication" ""}}>Record new medication</a>
+                    {{/if}}
+                {{/if}}
+            </div>
+        {{/if}}
+    </div>
+{{/if}}
+<div class="detail-section">
+    {{#if canRefine}}
+        <div class="field-label-row">
+            <span class="field-label">Mapped codes</span>
+            {{#if showingCodes}}
+                <a data-element="hide-codes-toggle" class="box box-margin-Lsm" onclick={{action "toggleProperty" "showingCodes"}}>Hide</a>
+            {{else}}
+                <a data-element="show-codes-toggle" class="box box-margin-Lsm" onclick={{action "toggleProperty" "showingCodes"}}>Show</a>
+            {{/if}}
+        </div>
+        {{#if showingCodes}}
+            {{#if needsRefine}}
+                <div class="diagnosis-detail-form-refine-label icon-urgent" data-element="refine-icon-urgent">
+                    {{relatedDiagnoses.length}} diagnoses: <a data-element="refine-diagnosis-link" onclick={{action "refineDiagnosis"}}>Refine diagnosis</a>
+                </div>
+            {{/if}}
+            {{diagnosis-codes diagnosis=diagnosis refineDiagnosis=refineDiagnosis needsRefine=needsRefine excludeSelectedCode=true}}
+        {{/if}}
+    {{/if}}
+</div>
+<div class="detail-section">
+    <div class="field-label-row">
+        <span class="field-label">Comment</span>
+        {{#unless showComment}}
+            {{#if isAllowedToEditDiagnoses}}
+                <a class="box box-margin-Lsm" data-element="dx-show-comment-link" onclick={{action "toggleComment"}}>
+                    {{#if diagnosisComment}}
+                        Edit
+                    {{else}}
+                        Add
+                    {{/if}}
+                </a>
+            {{/if}}
+        {{else}}
+            <a class="box box-margin-Lsm" onclick={{action "toggleComment"}}>Hide</a>
+        {{/unless}}
+    </div>
+    {{#if showComment}}
+        <div class="sig-text form-group">
+            {{text-area-counter class="diagnosis-detail--diagnosis-comment" value=diagnosisComment placeholderText="Add a comment" maxlength="500" rows="3" isDisabled=disabled}}
+        </div>
+    {{else}}
+        {{#if isAllowedToEditDiagnoses}}
+            {{#if diagnosisComment}}
+                <ul class="diagnosis-comments-display">
+                    <li>{{diagnosisComment}}</li>
+                </ul>
+            {{/if}}
+        {{else}}
+            <ul class="diagnosis-comments-display">
+                {{#if diagnosisComment}}
+                    <li>{{diagnosisComment}}</li>
+                {{else}}
+                    <li>No comment recorded</li>
+                {{/if}}
+            </ul>
+        {{/if}}
+    {{/if}}
+</div>
+
+{{#if showEncounterCommentsSection}}
+    <div class="detail-section">
+        <div class="field-label-row">
+            <span class="field-label">Encounter comment</span>
+            {{#if attachToEncounter}}
+                {{#if isAllowedToEditDiagnoses}}
+                    {{#unless showEncounterComment}}
+                        <a class="box box-margin-Lsm" onclick={{action "toggleEncounterComment"}}>
+                            {{#if encounterComment}}
+                                Edit
+                            {{else}}
+                                Add
+                            {{/if}}
+                        </a>
+                    {{else}}
+                        <a class="box box-margin-Lsm" onclick={{action "toggleEncounterComment"}}>Hide</a>
+                    {{/unless}}
+                {{/if}}
+            {{/if}}
+        </div>
+        {{#if showEncounterComment}}
+            <div class="sig-text form-group">
+                {{text-area-counter class="diagnosis-detail--diagnosis-comment" value=encounterComment placeholderText="Add a comment for the current encounter" maxlength="500" rows="3" isDisabled=disabled}}
+            </div>
+        {{else}}
+            <div class="d-complex-list-container">
+                {{#each diagnosis.encounterCommentsWithComment as |transcriptComment|}}
+                    {{#if transcriptComment}}
+                        <div class="item">{{transcript-comment transcriptComment=transcriptComment patientPracticeGuid=patientGuid}}</div>
+                    {{/if}}
+                {{/each}}
+            </div>
+        {{/if}}
+    </div>
+{{/if}}
+{{#if showResourcesSection}}
+    <div class="patientEducation d-complex-list-container detail-section">
+        <div class="field-label">RESOURCES</div>
+        <div class="item box-padding-TBxs-v2 box-margin-Llg-v2">
+            {{patient-education-link codeSet=diagnosis.ic10orIcd9Code.codeSet code=diagnosis.ic10orIcd9Code.code searchString=diagnosis.name patientPracticeGuid=patientGuid}}
+        </div>
+    </div>
+{{/if}}

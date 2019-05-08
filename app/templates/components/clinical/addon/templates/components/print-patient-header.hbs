@@ -1,0 +1,28 @@
+<div>PATIENT</div>
+<h2 data-element="print-header-patient-name" class="wrap-all">{{patientName}}</h2>
+<div class="row">
+    <div class="col-xs-3 semibold">DOB</div>
+    <div class="col-xs-9" data-element="print-header-patient-dob">{{format-date-time patient.birthDate}}</div>
+</div>
+<div class="row">
+    <div class="col-xs-3 semibold">AGE</div>
+    <div class="col-xs-9" data-element="print-header-patient-age">{{patientSummary.age}}</div>
+</div>
+<div class="row">
+    <div class="col-xs-3 semibold">
+        SEX
+    </div>
+    <div class="col-xs-9" data-element="print-header-patient-gender">
+        {{patientSummary.genderString}}
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-3 semibold">PRN</div>
+    <div class="col-xs-9" data-element="print-header-patient-prn">{{patient.patientRecordNumber}}</div>
+</div>
+{{#if showZip}}
+    <div class="row">
+        <div class="col-xs-3 semibold">ZIP</div>
+        <div class="col-xs-9" data-element="print-header-patient-zip">{{patient.postalCode}}</div>
+    </div>
+{{/if}}

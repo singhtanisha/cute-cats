@@ -1,0 +1,37 @@
+<div>
+    {{diagnosis-description hideAcuity=true diagnosis=diagnosis diagnosisDescriptionDisplay=diagnosisDescriptionDisplay isIcd10Display=isIcd10Display}}
+    {{#if diagnosis.startDate}}
+        <div><span class="{{hintTextClass}}">Start:</span> {{datetime-formatted datetime=diagnosis.startDate}}</div>
+    {{/if}}
+    {{#if diagnosis.stopDate}}
+        <div><span class="{{hintTextClass}}">Stop:</span> {{datetime-formatted datetime=diagnosis.stopDate}}</div>
+    {{/if}}
+    {{#if showDiagnosisComment}}
+        {{#if diagnosis.diagnosisComment.comment}}
+            {{transcript-comment transcriptComment=diagnosis.diagnosisComment isCollapsible=false
+                commentType="Comment" patientPracticeGuid=diagnosis.patientPracticeGuid}}
+        {{/if}}
+    {{/if}}
+    {{#if showEncounterComment}}
+        {{#if diagnosis.encounterCommentsWithComment}}
+            {{transcript-comments items=diagnosis.encounterCommentsWithComment isCollapsible=false
+                commentType="Encounter Comments" patientPracticeGuid=diagnosis.patientPracticeGuid}}
+        {{/if}}
+    {{/if}}
+    {{#if showMedication}}
+        {{#each diagnosis.medications as |medication|}}
+            <div>
+                <span class="{{hintTextClass}}">Medication:</span>
+                <span>{{medication.drugName}}</span>
+                {{#if medication.startDateTime}}
+                    <span class="{{hintTextClass}}">Start:</span>
+                    {{datetime-formatted datetime=medication.startDateTime}}
+                {{/if}}
+                {{#if medication.stopDateTime}}
+                    <span class="{{hintTextClass}}">Stop:</span>
+                    {{datetime-formatted datetime=medication.stopDateTime}}
+                {{/if}}
+            </div>
+        {{/each}}
+    {{/if}}
+</div>

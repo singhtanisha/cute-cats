@@ -1,0 +1,74 @@
+{{#if isWaitingMessageVisible}}
+    <section data-element="query-waiting">
+        <h2>Request history &amp; forecast</h2>
+        <h3>Result is still loading</h3>
+        <p class="h4 box-padding-TBmd-v2">Your query has been sent. Stay on this screen to view the results, which may take up to two minutes to load.</p>
+        <button class="btn--link" onclick={{action "cancelWait"}}>Cancel request</button>
+    </section>
+{{else}}
+    {{#if isSearchVisible}}
+        <section data-element="query-registry-selection">
+            <h2>Request history &amp; forecast</h2>
+            {{#if error}}
+                <div class="query-registry-error">
+                    <i class="icon icon-urgent icon-color-error" /> {{error.errorMessage}}
+                </div>
+            {{/if}}
+            {{#if hasMultipleConnectedRegistries}}
+                <h4>Available registries</h4>
+                {{#composable-select  content=connectedRegistries  selection=selectedRegistry optionLabelPath="displayName" as |options|}}
+                    {{options.dropdown prompt="Select value"}}
+                    {{options.dropdown-menu}}
+                {{/composable-select}}
+            {{else}}
+                <h4>{{selectedRegistry.displayName}}</h4>
+            {{/if}}
+        </section>
+    {{else}}
+        <h2>{{selectedRegistry.displayName}}</h2>
+    {{/if}}
+    <section data-element="query-body" class="query-body {{if isSearchVisible "with-registry-selector"}}">
+        {{component "immunizations/registry-search-form" isVisible=isSearchVisible model=patientFilters isAdvancedVisible=isAdvancedVisible toggleAdvanced=(action "toggleAdvanced") search=(action "search")}}
+        {{#unless isSearchVisible}}
+            <section class="inline-flex-group-v2" data-element="query-patient-summary-info">
+                <div class="item gutter-md box-fixed">
+                    <span class="h4">Name:</span> <span>{{searchResults.patientFilters.fullName}}</span>
+                </div>
+                <div class="item gutter-md box-fixed">
+                    <span class="h4">DOB:</span> <span>{{format-date-time-utc searchResults.patientFilters.dateOfBirth 'MM/DD/YYYY'}}</span>
+                </div>
+                <div class="item gutter-md box-fixed">
+                    <span class="h4">Sex:</span> <span>{{searchResults.patientFilters.gender}}</span>
+                </div>
+                <div class="item gutter-md box-fixed">
+                    <span class="h4">PRN:</span> <span>{{searchResults.patientFilters.patientRecordNumber}}</span>
+                </div>
+                <div class="item gutter-md">
+                    <button class="btn--link" onclick={{action "toggleSearch" true}}>Edit search</button>
+                </div>
+            </section>
+            <nav class="inline-flex-group-v2" data-element="query-result-view-links">
+                <div class="item gutter-sm box-fixed">
+                    <button class="btn--link" disabled={{isHistoryVisible}} onclick={{action "toggleResultsView" "history"}}>History</button> | 
+                </div>
+                <div class="item gutter-sm box-fixed">
+                    <button class="btn--link" disabled={{isForecastVisible}} onclick={{action "toggleResultsView" "forecast"}}>Forecast</button>
+                </div>
+                {{#if isForecastVisible}}
+                    <div class="item gutter-lg">
+                        <span class="h4">Schedule:</span> <span>{{searchResults.schedule}}</span>
+                    </div>
+                {{/if}}
+            </nav>
+            {{component "immunizations/registry-results-history" isVisible=isHistoryVisible model=searchResults.history patient=patient}}
+            {{component "immunizations/registry-results-forecast" isVisible=isForecastVisible model=searchResults.forecast patient=patient}}
+            {{component "immunizations/print-immunizations"
+                registryContent=searchResults
+                isVisible=printRegistryRecord
+                patient=patient
+                isRegistryRecord=true
+                registryName=selectedRegistry.displayName
+            }}
+        {{/unless}}
+    </section>
+{{/if}}

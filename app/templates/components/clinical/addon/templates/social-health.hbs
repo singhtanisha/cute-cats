@@ -1,0 +1,41 @@
+{{#detail-pane-v2 class="side-fixed col-xs-5 type-v2" as |section|}}
+    {{#section.right-module class="fill-space flex-column"  as |right-module|}}
+        {{#right-module.header class="box-padding-Llg-v2" closeDetailPane=(action "cancel")}}{{headerText}}{{/right-module.header}}
+        {{#right-module.body class="flex-grow box-padding-An"}}
+            {{view-spinner isLoading=isLoading}}
+            <div class="box-padding-Alg-v2" data-element="{{model.socialHealthFieldKey}}-detail">
+                {{#if socialHealthFieldComponent}}
+                    {{component socialHealthFieldComponent content=socialHealthField
+                        demographicOptions=demographicOptions isNotAllowedToEdit=isNotAllowedToEdit
+                        undo=(action "undo")
+                        onSelectOption=(action "selectOption")}}
+                {{/if}}
+            </div>
+        {{/right-module.body}}
+        {{#right-module.footer class="inline-flex-group-v2 box-padding-LRlg-v2 box-padding-TBsm-v2"}}
+            {{#if isAllowedToEdit}}
+                <div class="item gutter-sm box-fixed">
+                    <button type="button" class="btn--default" onclick={{action "cancel"}} data-element="btn-social-health-cancel">
+                        Cancel
+                    </button>
+                </div>
+                <div class="item gutter-sm box-fixed">
+                    <button type="button" class="btn--default {{unless socialHealthField.description "hidden"}}" onclick={{perform delete}} data-element="btn-social-health-delete">
+                        Delete
+                    </button>
+                </div>
+                <div class="item gutter-sm text-right">
+                    <button type="button" class="btn--brand" disabled={{disableSave}} onclick={{perform save}} data-element="btn-social-health-save">
+                        {{if socialHealthField.canMarkAsReviewed "Mark as reviewed"  "Save"}}
+                    </button>
+                </div>
+            {{else}}
+                <div class="item gutter-sm text-right">
+                    <button type="button" class="btn--brand" onclick={{action "cancel"}} data-element="btn-social-health-close">
+                        Close
+                    </button>
+                </div>
+            {{/if}}
+        {{/right-module.footer}}
+    {{/section.right-module}}
+{{/detail-pane-v2}}

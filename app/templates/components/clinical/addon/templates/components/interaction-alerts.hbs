@@ -1,0 +1,30 @@
+{{#if medication}}
+    <div class="field-label">Alerts</div>
+
+    {{#if isLoading}}
+        <div class="panel-group">Loading drug and allergy interaction alerts...</div>
+    {{else if loadInteractionsFailed}}
+        <div class="p-red">Drug and allergy alerts check could not be performed.</div>
+    {{else}}
+        {{#if hasNoInteraction}}
+            No drug or allergy alerts triggered for this medication.
+        {{/if}}
+
+        <div class="box-margin-Bsm">
+            {{#if duplicateTherapies}}
+                {{interaction-alert-duplicate-therapies duplicateTherapies=duplicateTherapies}}
+            {{/if}}
+
+            {{#each interactions as |interaction interactionIndex|}}
+                {{#each interaction.drugsInvolved as |drug drugIndex|}}
+                    {{interaction-alert-item drug=drug interaction=interaction drugIndex=drugIndex interactionIndex=interactionIndex}}
+                {{/each}}
+            {{/each}}
+        </div>
+
+        {{#each drugAlertErrors as |error|}}
+            <div>{{error.errorText}}</div>
+        {{/each}}
+    {{/if}}
+
+{{/if}}

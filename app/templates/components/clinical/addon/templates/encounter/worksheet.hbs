@@ -1,0 +1,43 @@
+{{#detail-pane-v2 class=worksheetClassNames as |section|}}
+    {{#section.right-module class="fill-space flex-column" as |right-module|}}
+        {{#right-module.header class="box-padding-Llg-v2" closeDetailPane=(action "closeWorksheet")}}
+            Screenings/ Interventions/ Assessments &gt; {{if disabled "Review" "Record"}}
+        {{/right-module.header}}
+        {{#right-module.body class="flex-grow box-padding-Alg-v2"}}
+            {{component (concat worksheetComponent "-v2")
+                permittedStates=permittedStates disabled=disabled reason=reason reasonCode=reasonCode reasonCodes=reasonCodes
+                responses=model selectedStatus=selectedStatus
+                setErrors=(action "setErrors")
+                selectWorksheetReason=(action "selectWorksheetReason")
+                selectWorksheetStatus=(action "selectWorksheetStatus")
+            }}
+        {{/right-module.body}}
+        {{#right-module.footer class="inline-flex-group-v2 box-padding-LRlg-v2 box-padding-TBsm-v2"}}
+            {{#if disabled}}
+                <div class="item gutter-sm text-right">
+                    <button type="button" class="btn--brand" onclick={{action "closeWorksheet"}} data-element= "btn-worksheet-close">
+                        Close
+                    </button>
+                </div>
+            {{else}}
+                <div class="item gutter-sm box-fixed">
+                    <button type="button" class="btn--default" onclick={{action "cancelWorksheet"}} data-element="btn-worksheet-cancel">
+                        Cancel
+                    </button>
+                </div>
+                <div class="item gutter-sm box-fixed">
+                    <button type="button" class="btn--default {{unless model.responsesGuid "hidden"}}" onclick={{action "deleteWorksheet"}} data-element="btn-worksheet-delete">
+                        Delete
+                    </button>
+                </div>
+                <div class="item gutter-sm text-right">
+                    <button type="button" class="btn--brand" onclick={{action "saveWorksheet"}} disabled={{isSaveDisabled}} data-element="btn-worksheet-save">
+                        Save
+                    </button>
+                </div>
+            {{/if}}
+
+        {{/right-module.footer}}
+    {{/section.right-module}}
+{{/detail-pane-v2}}
+

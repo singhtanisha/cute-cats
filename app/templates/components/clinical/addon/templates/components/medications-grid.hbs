@@ -1,0 +1,221 @@
+<section class="medications">
+    <div class="heading">
+        <span>
+              <h3>Medications</h3>
+        </span>
+        {{#if canRecordMedication}}
+            <a class="btn heading-action" {{action "recordMedication"}} data-element="encounter-record-medication-btn">Record</a>
+        {{/if}}
+        {{#if medications}}
+            <span class="med-grid-checkbox-dropdown">
+                {{d-checkbox-dropdown-grouping  menuLabel="Show" dropdownItems=showOptions selections=medicationColumnItemsSelection}}
+            </span>
+            {{print-dropdown data-element="medication-print-preview" options=printOptions print=(action "selectPrintOption")}}
+        {{/if}}
+    </div>
+    <div class="section">
+        {{#if isLoading}}
+            <div class="medications--content">
+                <p>Loading medications...</p>
+            </div>
+        {{else if medicationsError}}
+            <div class="medications--content">
+                <p class="p-666">Can't load medications. Please
+                    <a href="#" {{action "reloadMedications"}}>try again.</a>
+                </p>
+            </div>
+        {{else}}
+            {{#if medications.groupOfDuplicates}}
+                {{#popover-info
+                    popoverContent="Select a medication to reconcile therapeutic duplications."
+                    classNames="duplicate-medications-alert"
+                    popoverClass="duplicate-medications-alert-popover"
+                    tagName="div"
+                    triggerOn="hover"
+                    placement="right"}}
+                    <span>
+                        <i class="icon-urgent" data-element="duplicate-medication-icon-on-encounter"></i>
+                        <span class="p-semibold" data-element="duplicate-medication-warning-on-encounter">
+                            You may have therapeutic duplications ({{medications.groupOfDuplicates.length}})
+                        </span>
+                    </span>
+                {{/popover-info}}
+            {{/if}}
+            {{#if hasErxOrderDrafts}}
+                <div class="box-margin-Lmd box-margin-Bmd-v2">
+                    <i class="icon-pending icon-slate-dark"></i>
+                    <span class="p-semibold" data-element="prescription-drafts">{{erxOrderDraftCount}} prescription {{pluralize erxOrderDraftCount "draft" "drafts"}}</span>
+                    {{#link-to "timeline.events" patientGuid "erx-order" class="box-margin-Lmd-v2"}}View{{/link-to}}
+                </div>
+            {{/if}}
+            {{#if activePatientMedications}}
+                {{#data-grid content=activePatientMedications class="medications-grid medications--content" height="300px"
+                    sortProperty=activeGridPreferences.sortProperty sortAscending=activeGridPreferences.sortAscending
+                    selectedItem=selectedMedication}}
+                    {{#data-grid-column field="fullGenericName" title="Name" isFrozen="true" width="300px" as |medication|}}
+                        <a href="#" {{action "editMedication" medication}}>
+                            {{medication.genericAndTradeName}}
+                        </a>
+                        {{medication.productStrength}} {{medication.route}} {{medication.doseForm}}
+                        {{#if medication.hasProliaPermanentPlacelink}}
+                            {{#if medication.duplicates}}
+                                <span class="duplicate-medication-text" data-element="duplicate-medication-text--shortened-on-encounter">
+                                    (Duplicate)
+                                </span>
+                            {{/if}}
+                            {{#if isEntitledToEditMedications}}
+                                <br />
+                                <a class="prolia-modal-open-link" data-element="prolia-permanent-link" onclick={{action "openAssessment" "proliaAesiModal"}}>Record adverse events for Prolia safety</a>
+                            {{/if}}
+                        {{else}}
+                            {{#if medication.duplicates}}
+                                <span class="duplicate-medication-text" data-element="duplicate-medication-text-on-encounter">
+                                    (Duplicate therapy)
+                                </span>
+                            {{/if}}
+                        {{/if}}
+                    {{/data-grid-column}}
+                    <div class="data-grid-scroll">
+                        {{#data-grid-column field="sig.patientDescription" title="Sig" width="250px" as |medication|}}
+                            {{dash-if-null medication.sig.patientDescription}}
+                        {{/data-grid-column}}
+                        {{#data-grid-column field="startDateTime" title="Start" width="100px" as |medication|}}
+                            {{#if medication.startDateTime}}
+                                {{format-date-time-local medication.startDateTime format="MM/DD/YY"}}
+                            {{else}}
+                                -
+                            {{/if}}
+                        {{/data-grid-column}}
+                        {{#data-grid-column field="medicationComment" isSortable=false title="Medication Comment" width="300px"
+                            shown=showMedicationComments as |medication|}}
+                            {{#if medication.medicationComment.comment}}
+                                {{transcript-comment transcriptComment=medication.medicationComment isCollapsible=false}}
+                            {{else}}
+                                -
+                            {{/if}}
+                        {{/data-grid-column}}
+                        {{#data-grid-column field="encounterCommentsWithComment" isSortable=false title="Encounter Comments" width="300px"
+                            shown=showEncounterComments as |medication|}}
+                            {{transcript-comments items=medication.encounterCommentsWithComment emptyPlaceHolder="-"
+                                patientPracticeGuid=medication.patientPracticeGuid isCollapsible=false}}
+                        {{/data-grid-column}}
+
+                        {{#data-grid-column field="diagnosis" isSortable=false title="Diagnosis" width="300px"
+                            shown=showDiagnosis as |medication|}}
+                            {{#if medication.diagnosis.isPending}}
+                                ...
+                            {{else}}
+                                {{#if medication.diagnosis.description}}
+                                    {{medication.diagnosis.description}}
+                                {{else}}
+                                    -
+                                {{/if}}
+                            {{/if}}
+                        {{/data-grid-column}}
+
+                        {{#data-grid-column field="prescriptions" isSortable=false title="Prescriptions" width="300px"
+                            shown=showPrescriptions as |medication|}}
+                            {{prescriptions-list items=medication.prescriptions emptyPlaceHolder="-"}}
+                        {{/data-grid-column}}
+                    </div>
+                {{/data-grid}}
+            {{else if isEntitledToEditMedications}}
+                {{#d-check-box checked=isNoKnownChecked disabled=isLoadingNoKnown classNames="noKnowCheckBox"}}
+                    Patient has no active medications
+                {{/d-check-box}}
+            {{else if isNoKnownChecked}}
+                <div class="box-margin-Lmd">Patient has no active medications</div>
+            {{else}}
+                <div class="text-charcoal-light box-margin-Lmd">No active medications recorded</div>
+            {{/if}}
+
+            {{#if historicalPatientMedications}}
+                {{#if historicalMedicationsVisible}}
+                    <p></p>
+                    <div>
+                        <h3 class="header3b">Historical medications</h3>
+                    </div>
+                    <div class="section-group">
+                        {{#data-grid content=historicalPatientMedications class="medications-grid medications--content" height="300px"
+                            sortProperty=historicalGridPreferences.sortProperty sortAscending=historicalGridPreferences.sortAscending
+                            selectedItem=selectedMedication}}
+                            {{#data-grid-column field="fullGenericName" title="Name" isFrozen="true" width="300px" as |medication|}}
+                                <a href="#" {{action "editMedication" medication}}>
+                                    {{medication.genericAndTradeName}}
+                                </a>
+                                {{medication.productStrength}} {{medication.route}} {{medication.doseForm}}
+                                {{#if medication.hasProliaPermanentPlacelink}}
+                                    {{#if isEntitledToEditMedications}}
+                                        <br />
+                                        <a class="prolia-modal-open-link" onclick={{action "openAssessment" "proliaAesiModal"}}>Record adverse events for Prolia safety</a>
+                                    {{/if}}
+                                {{/if}}
+                            {{/data-grid-column}}
+                            <div class="data-grid-scroll">
+                                {{#data-grid-column field="sig.patientDescription" title="Sig" width="250px" as |medication|}}
+                                    {{dash-if-null medication.sig.patientDescription}}
+                                {{/data-grid-column}}
+                                {{#data-grid-column field="stopDateTime" title="Stop" width="100px" as |medication|}}
+                                    {{#if medication.stopDateTime}}
+                                        {{format-date-time-local medication.stopDateTime format="MM/DD/YY"}}
+                                    {{else}}
+                                        -
+                                    {{/if}}
+                                {{/data-grid-column}}
+                                {{#data-grid-column field="medicationComment" isSortable=false title="Medication Comment"  width="300px"
+                                    shown=showMedicationComments as |medication|}}
+                                    {{#if medication.medicationComment.comment}}
+                                        {{transcript-comment transcriptComment=medication.medicationComment isCollapsible=false}}
+                                    {{else}}
+                                        -
+                                    {{/if}}
+                                {{/data-grid-column}}
+
+                                {{#data-grid-column field="encounterCommentsWithComment" isSortable=false title="Encounter Comments"
+                                    width="300px" shown=showEncounterComments as |medication|}}
+                                    {{transcript-comments items=medication.encounterCommentsWithComment emptyPlaceHolder="-"
+                                        patientPracticeGuid=medication.patientPracticeGuid isCollapsible=false}}
+                                {{/data-grid-column}}
+
+                                {{#data-grid-column field="diagnosis" isSortable=false title="Diagnosis" width="300px"
+                                    shown=showDiagnosis as |medication|}}
+                                    {{#if medication.diagnosis.isPending}}
+                                        ...
+                                    {{else}}
+                                        {{#if medication.diagnosis.description}}
+                                            {{medication.diagnosis.description}}
+                                        {{else}}
+                                            -
+                                        {{/if}}
+                                    {{/if}}
+                                {{/data-grid-column}}
+
+                                {{#data-grid-column field="prescriptions" isSortable=false title="Prescriptions" width="300px"
+                                    shown=showPrescriptions as |medication|}}
+                                    {{prescriptions-list items=medication.prescriptions emptyPlaceHolder="-"}}
+                                {{/data-grid-column}}
+                            </div>
+                        {{/data-grid}}
+                    </div>
+                {{/if}}
+
+                <div class="show-hide-toggle">
+                    <a href="#" {{action "toggleHistoricalMedications"}}>
+                        {{#if historicalMedicationsVisible}}
+                            Hide historical
+                        {{else}}
+                            Show historical ({{historicalPatientMedications.length}})
+                        {{/if}}
+                    </a>
+                </div>
+            {{/if}}
+
+        {{/if}}
+    </div>
+</section>
+
+{{#print-preview-content isVisible=isPrintVisible printTitle=printTitle}}
+    {{print-medications class="chart-print-container" patient=patient showComments=showMedicationComments
+        showEncounterComments=showEncounterComments showScripts=showPrescriptions sortProperty=printSortProperty
+        sortAscending=printSortAscending showHistoricalMeds=showHistoricalMeds showActiveMeds=showActiveMeds}}
+{{/print-preview-content}}

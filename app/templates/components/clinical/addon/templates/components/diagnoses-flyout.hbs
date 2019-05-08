@@ -1,0 +1,13 @@
+<div class="navbar navbar-secondary">
+    <ul class="nav">
+        <li class="{{if favoriteSelected "active"}}" {{action "setCurrentTab" "favorite"}} data-element="diagnoses-tab-my-dx">My Dx list</li>
+        <li class="{{if previousSelected "active"}}" {{action "setCurrentTab" "previous"}} data-element="diagnoses-tab-previous">Previous</li>
+        <li {{action "recordDiagnoses"}} data-element="diagnoses-tab-record">Record</li>
+    </ul>
+</div>
+
+{{#if previousSelected}}
+    {{previous-diagnoses patientGuid=patientGuid transcriptGuid=transcriptGuid refreshChart="refreshChart" closeEncounterTab="closeEncounterTab"}}
+{{else}}
+    {{favorite-diagnoses-toolbox diagnosisSelected="frequentDiagnosisSelected"}}
+{{/if}}

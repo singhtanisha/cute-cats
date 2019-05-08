@@ -1,0 +1,39 @@
+{{#view-spinner class="flex-column type-v2" isLoading=isLoading}}
+    {{#composable-header/tool-bar}}
+        <div class="pull-right">
+            <button class="btn--primary {{unless isEntitledAndAllowedToEditFHH "invisible"}}" data-element="record-new-relative" type="button" onclick={{action "addRelative"}}>Record new relative</button>
+        </div>
+    {{/composable-header/tool-bar}}
+    <div class="flex-grow flex-row bg-color-secondary family-history__container">
+        {{family-history-list
+            disabled=isNotAllowedToEditFHH
+            isLoading=isLoading
+            patientPracticeGuid=patientPracticeGuid
+            relatives=relatives
+            unknownCondition=condition
+            addDiagnosis=(action "addDiagnosis")
+            editDiagnosis=(action "editDiagnosis")
+            editRelative=(action "editRelative")}}
+        {{#if selectedRelative}}
+            {{family-history-relative-detail
+                disabled=isNotAllowedToEditFHH
+                relationshipTypes=sortedRelationshipTypes
+                relative=selectedRelative
+                close=(action "closeRelativeDetails")
+                reload=(perform reload)
+                removeRelative=(action "removeRelative")}}
+        {{/if}}
+        {{#if selectedObservation}}
+            {{family-history-diagnosis-detail
+                disabled=isNotAllowedToEditFHH
+                observation=selectedObservation
+                relatives=relatives
+                close=(action "closeObservationDetails")
+                reload=(perform reload)
+                removeObservation=(action "removeObservation")}}
+        {{/if}}
+        {{#print-preview-content isVisible=isPrintVisible printTitle=printTitle}}
+            {{print-family-health-history class="chart-print-container" patient=patient.patient relatives=relatives}}
+        {{/print-preview-content}}
+    </div>
+{{/view-spinner}}

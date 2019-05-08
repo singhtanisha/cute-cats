@@ -1,0 +1,31 @@
+{{#content-modal
+    modalStyle=3
+    isVisible=isVisible
+    close="cancel" as |section|}}
+    {{section.header title="Download patient immunization record" isCloseByXorOutsideVisible=true}}
+    {{#section.body}}
+        <div class="download-immunization-registry-spacer">
+            <div>Select the registry that will receive this patient's immunization record</div>
+            <div>
+                {{single-select
+                    content=registries
+                    prompt="Select a registry"
+                    optionLabelPath="displayName"
+                    value=selectedRegistry
+                }}
+            </div>
+        </div>
+
+        {{#if selectedRegistry}}
+            <div class="download-immunization-registry-spacer">
+                <div>Registry provider / practice ID (optional)</div>
+                <div>{{text-field maxlength="100" value=selectedRegistry.registryProvider}}</div>
+            </div>
+        {{/if}}
+    {{/section.body}}
+    {{section.footer
+        buttonRightPrimaryText="Download"
+        buttonRightPrimaryAction=(perform downloadFile)
+        buttonLeftText="Cancel"
+        buttonLeftAction=(action "cancel")}}
+{{/content-modal}}

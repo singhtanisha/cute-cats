@@ -1,0 +1,19 @@
+{{#if sortedItems}}
+    {{prescription-item prescription=sortedItems.firstObject}}
+    {{#if filteredItems}}
+        {{#unless isExpanded}}
+            <a href="#" {{action "expand"}}>Show history ({{filteredItems.length}})</a>
+        {{else}}
+            <ul>
+                {{#each filteredItems as |item|}}
+                    <li>{{prescription-item prescription=item}}</li>
+                {{/each}}
+            </ul>
+            <a href="#" {{action "collapse"}}>Hide history</a>
+        {{/unless}}
+    {{/if}}
+{{else}}
+    {{#if emptyPlaceHolder}}
+        {{emptyPlaceHolder}}
+    {{/if}}
+{{/if}}

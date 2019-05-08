@@ -1,0 +1,40 @@
+{{#detail-pane close="cancel" class="side-fixed col-xs-5 summary-details smoking-detail" resizables=resizables resizeOnBreakPoint=true topSpacing=50 isToolBoxVisible=false smallHeaderText="Social history" bigHeaderText="Record smoking status" smokingStatus=smokingStatus as |section|}}
+    {{#detail-pane-body sectionContext=section}}
+        {{#if smokingStatusTypes}}
+            <div class="panel-section">
+                <p class="field-label field-title">Current status</p>
+                {{#each smokingStatusTypes as |statusType index|}}
+                    <div>
+                        {{d-radio-button
+                            id=(concat "smoking-option-" index)
+                            name=(concat "smoking-option-" index)
+                            value=statusType.id
+                            selectedValue=smokingStatus.smokingStatusIdString
+                            disabled=isNotAllowedToEdit
+                        }}
+                        <label for="smoking-option-{{index}}" data-element="smoking-option-label" class="pf-input pf-input--radio-label p is-shorter">
+                            {{statusType.description}}
+                        </label>
+                    </div>
+                {{/each}}
+            </div>
+        {{/if}}
+        <div class="panel-section" data-element="effective-date">
+            <p class="field-label">Effective date</p>
+            {{d-date-picker isLegacy=false value=smokingStatus.formattedDate placeholder="MM/DD/YYYY" startDate="01/01/1900" endDate=maxDate autoCorrectYear=true disabled=isNotAllowedToEdit}}
+        </div>
+    {{/detail-pane-body}}
+    {{#detail-pane-footer sectionContext=section}}
+        <button type="button" class="btn btn-sm" {{action "cancel"}}>Cancel</button>
+        {{#if isAllowedToEdit}}
+            {{#unless smokingStatus.isNew}}
+                {{#popover-confirm action="delete" title="Delete smoking status" popoverContent="This will remove this smoking status record from this patient's record." confirmLabel="Delete" classNames="btn btn-sm"}}
+                    Delete
+                {{/popover-confirm}}
+            {{/unless}}
+            <div class="pull-right">
+                <button type="button" class="btn btn-primary btn-sm" {{action "save"}} disabled={{smokingStatus.saveDisabled}}>Save</button>
+            </div>
+        {{/if}}
+    {{/detail-pane-footer}}
+{{/detail-pane}}

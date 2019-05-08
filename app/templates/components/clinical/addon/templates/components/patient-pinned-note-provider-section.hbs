@@ -1,0 +1,26 @@
+<h3 class="header3a notes">
+    <div class="icon-pushpin"></div>
+    Pinned note
+</h3>
+{{#unless isDisabledOrNewPatient}}
+    <i class="{{if pinnedNote "icon-pencil-record" "icon-add"}} box-padding-Lsm-v2" {{action attrs.editPinnedNote}}></i>
+{{/unless}}
+<div class="box-padding-LRmd-v2 box-padding-Tmd-v2">
+    {{#if pinnedNote}}
+        <div class="box-padding-Bmd-v2" {{action "toggleProperty" "expandedNote"}}>
+            <div class="icon-caret {{if expandedNote "icon-caret-expanded" "icon-caret-collapsed"}}"></div>
+            <div class="provider-name-date-time">
+                <div class="provider-name p-semibold box-padding-Lsm-v2"> Edited by {{provider}} </div>
+                <span class="last-edited-date-time pull-right">{{lastModifiedDate}}</span>
+            </div>
+        </div>
+        {{#if expandedNote}}
+            <div class="pinned-note-body {{if disabled "disabled"}}"> {{{pinnedNote}}}</div>
+        {{/if}}
+        {{#if showViewMoreLink}}
+            <div class="box-padding-Tmd-v2"><a class="view-more-link" {{action attrs.editPinnedNote}}> View and edit all note text </a></div>
+        {{/if}}
+    {{else}}
+        No pinned note for this patient
+    {{/if}}
+</div>

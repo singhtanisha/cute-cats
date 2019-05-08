@@ -1,0 +1,226 @@
+{{#detail-pane config=config
+    close="close"
+    class="device-detail"
+    resizables=resizables
+    resizeOnBreakPoint=true
+    session=session
+    isToolBoxVisible=false
+    isSlideOpenToolBox=false
+    isEditing=isEditing
+    canDelete=canDelete
+    device=device
+    bigHeaderText="Implantable device"
+    as |section|}}
+    {{#detail-pane-body sectionContext=section class="device-details"}}
+        <header class="p-semibold">Enter and verify a Unique Device Identifier to populate data from the Global UDI Database</header>
+        <div class="field-label udi-field-label">
+            <span class="required">Unique Device Identifier</span>
+            {{popover-info
+                classNames="icon-info"
+                data-element="udi-info"
+                popoverContent="A Unique Device Identifier (UDI) is composed of two parts: Device Identifier (DI) and Production Identifier (PI). Entering a UDI will populate data from the Global UDI Database."}}
+        </div>
+        <div class="inline-flex-group">
+            {{#if isUdiPopulated}}
+                <div class="udi-id-display item gutter-xs" data-element="device-udi-display">{{udi}}</div>
+                <div class="item box-fixed-xs gutter-xs udi-clear-icon">
+                    <icon class="item icon-clear" data-element="remove-udi-button" {{action "removeUdiInfo"}}></icon>
+                </div>
+            {{else}}
+                <div class="item gutter-n search-field">
+                    <div class="search-field-container">
+                        {{validated-textfield data-element="device-udi" errorMessage=errors.udi class="udi-text is-shorter" value=udi enter="getUdiInfo"}}
+                    </div>
+                </div>
+                <div class="item box-fixed-xs gutter-n search-field box-margin-Lsm">
+                    <button class="btn btn-sm" {{action "getUdiInfo"}} data-element="get-udi-button">Verify</button>
+                </div>
+            {{/if}}
+        </div>
+        <div class="inline-flex-group">
+            <div class="item box-fixed-md box-fixed-100 gutter-xs">
+                <div class="field-label">Device Active</div>
+                {{#d-check-box checked=device.isActive disabled=disabled smaller=true data-element="device-active"}}
+                    Active
+                {{/d-check-box}}
+            </div>
+            <div class="item gutter-xs">
+                <div class="field-label">Implant date</div>
+                {{d-date-picker isLegacy=false value=device.userEnteredInfo.userEnteredImplantDate placeholder="MM/DD/YYYY" disabled=disabled
+                    autoCorrectYear=true data-element="implant-date-txt" isShorter=true}}
+            </div>
+        </div>
+        {{#if isUdiPopulated}}
+            <section class="device-detail-info">
+                <header class="p-semibold">
+                    Data populated from the Global UDI Database <a href="{{config.implantableDevicesLearnMoreURL}}" class="link" target="_blank">Learn more</a>
+                </header>
+                <div>
+                    <div class="field-label">GMDN PT name</div>
+                    <div data-element="device-gmdn-pt-name-display">{{device.udiInfo.gmdnPtName}}</div>
+                </div>
+                <div>
+                    <div class="field-label">GMDN PT description</div>
+                    <div data-element="device-gmdn-pt-description-display">{{device.udiInfo.gmdnPtDefinition}}</div>
+                </div>
+                <div class="inline-flex-group">
+                    <div class="item gutter-xs box-fixed-md">
+                        <div class="field-label">Expiration date</div>
+                        <div data-element="device-expiration-date-display">{{expirationDateDisplay}}</div>
+                    </div>
+                    <div class="item gutter-xs">
+                        <div class="field-label">Manufacture date</div>
+                        <div data-element="device-manufacture-date-display">{{manufactureDateDisplay}}</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="field-label">What MRI safety information does the labeling contain?</div>
+                    <div data-element="device-mri-safety-display">{{device.udiInfo.mriSafetyStatusDescription}}</div>
+                </div>
+                <div>
+                    <div class="field-label">Device required to be labeled as containing natural rubber latex or dry natural rubber (21 CFR 801.437)</div>
+                    <div data-element="device-material-label-display">{{device.udiInfo.isNaturalRubberLatexInformationOnLabel}}</div>
+                </div>
+                <div>
+                    <div class="field-label">Company name</div>
+                    <div data-element="device-company-name-display">{{device.udiInfo.companyName}}</div>
+                </div>
+                <div>
+                    <div class="field-label">Brand name</div>
+                    <div data-element="device-brand-name-display">{{device.udiInfo.brandName}}</div>
+                </div>
+                <div>
+                    <div class="field-label">Serial number</div>
+                    <div data-element="device-serial-number-display">{{device.udiInfo.deviceSerialNumber}}</div>
+                </div>
+                <div class="inline-flex-group">
+                    <div class="item gutter-xs">
+                        <div class="field-label">Lot/batch</div>
+                        <div data-element="device-lot-number-display">{{device.udiInfo.lotNumber}}</div>
+                    </div>
+                    <div class="item gutter-xs">
+                        <div class="field-label">Version/model number</div>
+                        <div data-element="device-version-model-number-display">{{device.udiInfo.versionModelNumber}}</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="field-label">Device description</div>
+                    <div data-element="device-description-display">{{device.udiInfo.deviceDescription}}</div>
+                </div>
+                <div>
+                    <div class="field-label">Human cell, tissue or cellular or tissue-based product (HCT/P)</div>
+                    <div data-element="device-hctp-display">{{yes-no device.udiInfo.isHumanCellOrTissueProduct}}</div>
+                </div>
+                {{#each device.udiInfo.snomed as |snomed|}}
+                    <div>
+                        <div class="field-label">SNOMED CT Id</div>
+                        <div data-element="device-snomed-id-display">{{snomed.snomedCtCode}}</div>
+                    </div>
+                    <div>
+                        <div class="field-label">SNOMED CT description</div>
+                        <div data-element="device-snomed-description-display">{{snomed.snomedCtDescription}}</div>
+                    </div>
+                {{/each}}
+            </section>
+        {{/if}}
+        <div>
+            <div class="field-label device-notes">Notes</div>
+            <div>
+                {{text-area-counter value=device.userEnteredInfo.userEnteredNotes isDisabled=disabled
+                    maxlength="500" rows="3" dataElement="device-notes" isShorter=true}}
+            </div>
+        </div>
+    {{/detail-pane-body}}
+    {{#detail-pane-footer sectionContext=section}}
+        {{#unless disabled}}
+            <button class="btn btn-sm" data-element= "cancel-btn" {{action "cancel"}}>Cancel</button>
+            {{#if isEditing}}
+                {{#if canDelete}}
+                    <button type="button" class="btn btn-sm box-margin-Lxs" data-element="delete-device-button" onclick={{action "showDelete"}}>Delete</button>
+                {{else}}
+                    <a class="btn btn-sm" data-element= "delete-disabled" disabled=true>Delete</a>
+                {{/if}}
+            {{/if}}
+
+            <div class="pull-right">
+                <button class="btn btn-sm btn-primary" {{action "save"}} disabled={{isSaveDisabled}}>Save</button>
+            </div>
+        {{else}}
+            <div class="pull-right">
+                <button class="btn btn-sm" data-element= "cancel-btn" {{action "cancel"}}>Cancel</button>
+            </div>
+        {{/unless}}
+    {{/detail-pane-footer}}
+{{/detail-pane}}
+{{#content-modal
+    modalStyle=8
+    isVisible=showUdiSuccess
+    isCloseByXorOutsideVisible=true as |section|}}
+    {{#section.header isCloseByXorOutsideVisible=true}}
+            <h4>Unique Device Identifier confirmation</h4>
+    {{/section.header}}
+    {{#section.body}}
+            <div class="fetched-udi-info" data-element="udi-success-message">
+                <div>{{fetchedUdiInfo.uniqueDeviceIdentifier}}</div>
+                <div>{{fetchedUdiInfo.gmdnPtName}}</div>
+            </div>
+            <div>Please confirm the Unique Device Identifier matches this implantable device.</div>
+    {{/section.body}}
+    {{#section.footer}}
+            <div class="pull-left">
+                <button class="btn-sm" type="button" {{action "cancelUdiInfo"}}>Cancel</button>
+            </div>
+            <div class="pull-right" data-element="udi-success-action">
+                <button class="btn-sm btn-primary" type="button" {{action "confirmUdiInfo"}}>Confirm</button>
+            </div>
+    {{/section.footer}}
+{{/content-modal}}
+{{#content-modal
+    modalStyle=7
+    isVisible=showUdiFailure
+    isCloseByXorOutsideVisible=false as |section|}}
+    {{#section.header}}
+            <h4>Unique Device Identifier not found</h4>
+    {{/section.header}}
+    {{#section.body}}
+            <div data-element="udi-failure-message">The Unique Device Identifier you have entered was not found in the Global UDI Database. Please re-enter the Unique Device Identifier.</div>
+    {{/section.body}}
+    {{#section.footer}}
+            <div class="pull-left">
+                <button class="btn-sm" type="button" {{action "cancelUdiInfo"}}>Cancel</button>
+            </div>
+            <div class="pull-right" data-element="udi-failure-action">
+                <button class="btn-sm btn-primary" type="button" {{action "reEnterUdiInfo"}}>Re-enter</button>
+            </div>
+    {{/section.footer}}
+{{/content-modal}}
+{{#content-modal
+    modalStyle=7
+    isVisible=showUdiUniqueFailure
+    isCloseByXorOutsideVisible=false as |section|}}
+    {{#section.header}}
+            <h4>Unique Device Identifier not entered</h4>
+    {{/section.header}}
+    {{#section.body}}
+            <div data-element="udi-failure-message">The Device Identifier you have entered was found in the Global UDI Database, but does not identify a unique device. Please re-enter the Unique Device Identifier to identify the specific device.</div>
+    {{/section.body}}
+    {{#section.footer}}
+            <div class="pull-left">
+                <button class="btn-sm" type="button" {{action "cancelUdiInfo"}}>Cancel</button>
+            </div>
+            <div class="pull-right" data-element="udi-failure-action">
+                <button class="btn-sm btn-primary" type="button" {{action "reEnterUdiInfo"}}>Re-enter</button>
+            </div>
+    {{/section.footer}}
+{{/content-modal}}
+{{#content-modal modalStyle=7 isVisible=showDeleteConfirm as |section|}}
+    {{section.header title="Delete implantable device" isCloseByXorOutsideVisible=true}}
+    {{#section.body}}
+        <div class="content-modal-body" data-element="delete-confirm">This action is final, and will remove this implantable device from this patient&#39;s record.</div>
+    {{/section.body}}
+    {{section.footer
+        buttonLeftText="Cancel"
+        buttonRightPrimaryText="Delete"
+        buttonLeftAction=(action "close")
+        buttonRightPrimaryAction=(action "delete")}}
+{{/content-modal}}

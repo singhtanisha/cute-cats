@@ -1,0 +1,20 @@
+<div class="inline-flex-group-v2">
+    <div class="item gutter-sm box-fixed">
+        <label class="field-label box-margin-Tn">Start Date</label>
+        {{d-date-time-picker class="box-margin-Bn" value=responses.startDateTime tooltipMsg=errors.startDateTimeUtc classNames=tooltipClass
+            errorMessage=errors.startDateTimeUtc validateStrictDate=true clearValueOnError=false isShorter=true disabled=isDisabled
+            data-element="transcript-event-start"}}
+    </div>
+    <div class="item gutter-sm box-fixed">
+        <label class="field-label box-margin-Tn">End Date</label>
+        {{d-date-time-picker class="box-margin-Bn" value=responses.endDateTime tooltipMsg=errors.endDateTimeUtc
+            errorMessage=errors.endDateTimeUtc validateStrictDate=true clearValueOnError=false isShorter=true disabled=isDisabled
+            data-element="transcript-event-end"}}
+    </div>
+</div>
+<div class="inline-flex-group-v2">
+    <div class="item gutter-sm">
+        <label class="field-label box-margin-Tn">Comment</label>
+        {{text-area placeholder="Enter comments" value=responses.comments maxlength="200" disabled=isDisabled data-element="transcript-event-comment"}}
+    </div>
+</div>

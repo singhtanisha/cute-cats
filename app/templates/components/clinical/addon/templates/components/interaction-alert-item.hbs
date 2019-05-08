@@ -1,0 +1,40 @@
+<h4>
+    <i class="icon-triangle {{severityClassName}}"></i>
+    <a data-toggle="collapse" href="#" {{action "toggleShowSummary"}}
+        data-element="drug-allergy-interaction-btn-{{interactionIndex}}-{{drugIndex}}">
+        {{severityText}} {{inteactionTypeText}}: {{drugOrAllergenText}} {{interaction.reactions}}
+    </a>
+    {{#if drug.patientMedication.isHistorical}}
+        <p class="p-666">
+            Stopped {{datetime-formatted datetime=drug.patientMedication.stopDateTime}}, {{interaction.latencyInDays}}  {{pluralize latencyInDays "day" "days"}} latency.
+        </p>
+    {{/if}}
+</h4>
+{{#if showSummary}}
+    <div class="panel-body-interaction">
+        <p>
+            {{interaction.alertText}}
+            <a class="show-more-less-toggle" href="#" {{action "toggleShowDetail"}}
+                data-element="drug-allergy-interaction-show-more-btn-{{interactionIndex}}-{{drugIndex}}">
+                {{#if showDetail}}
+                    Show less...
+                {{else}}
+                    Show more...
+                {{/if}}
+            </a>
+        </p>
+        {{#if showDetail}}
+            <div>
+                {{monograph-parser xmlData=interaction.monograph}}
+                <a class="show-more-less-toggle" href="#" {{action "toggleShowDetail"}}
+                    data-element="drug-allergy-interaction-show-more-btn-{{interactionIndex}}-{{drugIndex}}">
+                    {{#if showDetail}}
+                        Show less...
+                    {{else}}
+                        Show more...
+                    {{/if}}
+                </a>
+            </div>
+        {{/if}}
+    </div>
+{{/if}}

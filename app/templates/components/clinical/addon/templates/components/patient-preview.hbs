@@ -1,0 +1,20 @@
+<header>
+    <div class="pull-right">
+        {{#if isAbnormal}}
+            <i class="icon-disk" data-element="preview-abnormal"></i>
+        {{/if}}
+        {{#if isLocked}}
+            <i class="icon-lock" data-element="preview-lock"></i>
+        {{/if}}
+        <a class="icon-go-away" data-dismiss="modal" data-element="preview-close" aria-hidden="true" {{action "closePreviews"}}></a>
+    </div>
+    <div class="title" data-element="preview-header-title">{{headerTitle}}</div>
+</header>
+
+{{#if errorMessage}}
+    <div class="error-message" data-element="preview-error-message">{{errorMessage}}</div>
+{{else}}
+    <div class="preview-pane-container">
+        {{component previewContext.componentName previewContext=previewContext openPreview=(action "openPreview")}}
+    </div>
+{{/if}}

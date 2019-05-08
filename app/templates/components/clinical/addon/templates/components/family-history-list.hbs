@@ -1,0 +1,10 @@
+{{#each relatives as |relative|}}
+    {{family-history-relative-card
+        disabled=disabled
+        relative=relative
+        addDiagnosis=(action addDiagnosis)
+        editDiagnosis=(action editDiagnosis)
+        editRelative=(action editRelative)}}
+{{else unless isLoading}}
+    {{#check-box checked=unknownCondition.value disabled=disabled onChecked=(action "unknownConditionChecked")}}Unknown family health history{{/check-box}}
+{{/each}}

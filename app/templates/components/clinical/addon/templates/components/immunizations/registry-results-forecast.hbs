@@ -1,0 +1,35 @@
+{{#data-table-v2
+    content=model
+    classNames="vaccine-data-table non-zebra-striped is-hoverable"
+    classNameBindings="hasNoResults:flex-no-shrink:flex-stretch"
+    data-element="table-results-history" as |table|
+}}
+    {{#table.header as |header|}}
+        {{header.column field="vaccineGroup" title="Vaccine Group"}}
+        {{header.column field="dueDate" title="Due date"}}
+        {{header.column field="earliestDateToGive" title="Earliest date to give"}}
+        {{header.column field="latestDateToGive" title="Latest date to give"}}
+    {{/table.header}}
+    {{#table.body as |body|}}
+        {{#each table.content as |vaccineGroup vaccineGroupIndex|}}
+            {{#body.row content=vaccineGroup data-element=(concat "vaccine-" vaccineGroupIndex) as |row|}}
+                {{#row.cell field="vaccineGroup" as |vaccineGroup|}}
+                    <div class="pull-left">{{vaccineGroup.vaccineGroup}}</div>
+                {{/row.cell}}
+                {{#row.cell field="dueDate" as |vaccineGroup|}}
+                    <div class="pull-left">{{format-date-time-utc vaccineGroup.dueDate 'MM/DD/YYYY'}}</div>
+                {{/row.cell}}
+                {{#row.cell field="dueDate" as |vaccineGroup|}}
+                    <div class="pull-left">{{format-date-time-utc vaccineGroup.earliestDateToGive 'MM/DD/YYYY'}}</div>
+                {{/row.cell}}
+                {{#row.cell field="dueDate" as |vaccineGroup|}}
+                    <div class="pull-left">{{format-date-time-utc vaccineGroup.latestDateToGive 'MM/DD/YYYY'}}</div>
+                {{/row.cell}}
+            {{/body.row}}
+        {{/each}}
+    {{/table.body}}
+{{/data-table-v2}}
+
+{{#if hasNoResults}}
+    <h4>No results found</h4>
+{{/if}}

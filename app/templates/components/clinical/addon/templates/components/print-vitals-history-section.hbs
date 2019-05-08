@@ -1,0 +1,30 @@
+{{#print-chart-section patientSummary=patient chartNote=chartNote title=title includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+    <div class="table-content vitals-history">
+        {{#each historyTables as |table|}}
+            <div class="table with-cell-borders">
+                <div class="row">
+                    {{#each table.headers as |header|}}
+                        <div class="stacked-column col-xs-2">
+                            <div class="stacked-cell">
+                                {{#each header as |line|}}
+                                    <div>{{line}}</div>
+                                {{/each}}
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+                <div class="row">
+                    {{#each table.columns as |column|}}
+                        <div class="stacked-column col-xs-2">
+                            {{#each column as |cell|}}
+                                <div class="stacked-cell">
+                                    {{cell}}
+                                </div>
+                            {{/each}}
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        {{/each}}
+    </div>
+{{/print-chart-section}}

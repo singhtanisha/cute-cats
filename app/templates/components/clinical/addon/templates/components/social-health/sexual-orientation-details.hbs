@@ -1,0 +1,18 @@
+{{#field-set as |fieldset|}}
+    {{#fieldset.legend as |legend|}}
+        {{legend.label text="Sexual orientation"}}
+        {{#if content.showUndo}}
+            <a role="link" data-element="undo-button" class="box-margin-Lmd-v2" onclick={{action undo content}}>Undo</a>
+        {{/if}}
+    {{/fieldset.legend}}
+    {{#fieldset.radio-button-group name="sexualOrientation" selectedValue=content.optionGuid disabled=isNotAllowedToEdit as |group|}}
+        {{#each demographicOptions.sexualOrientationOptions as |option index|}}
+            {{group.radio-button value=option.optionGuid label=option.description 
+                onChecked=(action attrs.onSelectOption option) data-element=(concat "social-health-option-" index)}}
+        {{/each}}
+    {{/fieldset.radio-button-group}}
+{{/field-set}}
+<div class="box-padding-Tmd-v2">
+    <label class="field-label">Notes</label>
+    {{text-field value=content.notes disabled=isNotesDisabled data-element="txt-social-health-notes"}}
+</div>

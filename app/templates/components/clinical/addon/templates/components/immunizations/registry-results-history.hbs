@@ -1,0 +1,49 @@
+{{#data-table-v2
+    content=model
+    classNames="vaccine-data-table non-zebra-striped is-hoverable"
+    classNameBindings="hasNoResults:flex-no-shrink:flex-stretch"
+    data-element="table-results-history" as |table|
+}}
+    {{#table.header as |header|}}
+        {{header.column field="vaccineAdministered" title="Vaccine Group"}}
+        {{header.column field="dateAdministered" title="Date Administered"}}
+        {{header.column field="ageValue" title="Age"}}
+        {{header.column field="isValidDose" title="Valid dose"}}
+        {{header.column field="completionStatus" title="Status"}}
+    {{/table.header}}
+    {{#each table.content as |vaccineGroup vaccineGroupIndex|}}
+        {{#table.body data-element=(concat "immunization-group-" vaccineGroupIndex) as |body|}}
+            <tr class="table-group-header">
+                <td colspan="5">{{vaccineGroup.name}}</td>
+            </tr>
+            {{#each vaccineGroup.vaccines as |vaccine index|}}
+                {{#body.row content=vaccine data-element=(concat "vaccine-" index) as |row|}}
+                    {{#row.cell field="vaccineAdministered" as |vaccine|}}
+                        <div class="pull-left">{{vaccine.vaccineAdministered}}</div>
+                    {{/row.cell}}
+                    {{#row.cell field="dateAdministered" as |vaccine|}}
+                        <div class="pull-left">{{format-date-time-utc vaccine.dateAdministered 'MM/DD/YYYY'}}</div>
+                    {{/row.cell}}
+                    {{#row.cell field="ageValue" as |vaccine|}}
+                        <div data-element="vaccination-age" class="vaccine--no-wrap">
+                            {{age-on-date patient.birthDate vaccine.dateAdministered}}
+                        </div>
+                    {{/row.cell}}
+                    {{#row.cell field="isValidDose" as |vaccine|}}
+                        <div class="pull-left">
+                            <div>{{vaccine.isValidDose}}</div>
+                            <div>{{vaccine.validityReason}}</div>
+                        </div>
+                    {{/row.cell}}
+                    {{#row.cell field="completionStatus" as |vaccine|}}
+                        <div class="pull-left">{{vaccine.completionStatus}}</div>
+                    {{/row.cell}}
+                {{/body.row}}
+            {{/each}}
+        {{/table.body}}
+    {{/each}}
+{{/data-table-v2}}
+
+{{#if hasNoResults}}
+    <h4>No results found</h4>
+{{/if}}

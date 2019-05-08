@@ -1,0 +1,26 @@
+{{data-tunnel name="advance-directive" onDataReceived=(action "refresh")}}
+{{#composable-card as |card|}}
+    {{#card.header as |header|}}
+        {{#header.title}}
+            Advance directives
+            {{#if isAllowedToEditSummary}}
+                <a class="icon-pencil-record icon--md text-color-placeholder box-margin-Lmd-v2" onclick={{action "edit" null}} data-element="advanced-directive-pencil-button" role="link"></a>
+            {{/if}}
+            <a class="icon-printer icon--md text-color-placeholder box-margin-Lmd-v2" onclick={{action "print"}} data-element="print-advanced-directive-button" role="link"></a>
+        {{/header.title}}
+    {{/card.header}}
+    {{#card.content}}
+        <ul class="list {{if isAllowedToEditSummary "list--hover" "list--default"}} {{unless advanceDirectives "hidden"}}">
+            {{#each advanceDirectives as |advancedDirective|}}
+                <li onclick={{if isAllowedToEditSummary (action "edit" advancedDirective)}}>
+                    <a class="text-wrap" data-element="advanced-directive-comments">{{preserve-linebreak advancedDirective.comments}}</a>
+                    <p class="box-margin-Bn" data-element="advanced-directive-recorded-date">Recorded {{format-date-time-utc advancedDirective.dateOfService}}</p>
+                </li>
+            {{/each}}
+        </ul>
+        <p class="text-color-placeholder box-margin-Bn {{if advanceDirectives "hidden"}}">{{defaultMessage}}</p>
+    {{/card.content}}
+{{/composable-card}}
+{{#print-preview-content printTitle=printTitle isVisible=isPrintPreviewVisible}}
+    {{print-advanced-directives-section content=advanceDirectives patient=patient class="pmh-print chart-print-container" title=printTitle}}
+{{/print-preview-content}}

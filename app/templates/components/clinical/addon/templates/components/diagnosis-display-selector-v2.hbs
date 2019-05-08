@@ -1,0 +1,8 @@
+{{#composable-select
+    data-element="diagnosis-display-select"
+    content=diagnosisDescriptionDisplayOptions
+    onSelect=(action "selectOption")
+    optionLabelPath="label" as |options|}}
+    {{options.dropdown prompt=promptValue}}
+    {{options.dropdown-menu}}
+{{/composable-select}}

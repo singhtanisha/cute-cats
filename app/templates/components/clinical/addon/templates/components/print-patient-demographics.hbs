@@ -1,0 +1,77 @@
+{{#print-chart-section patientSummary=patientSummary title=printTitle chartNote=chartNote includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+    <div class="table-content">
+        <div class="table compact-table">
+            <div class="row header-row">
+                <div class="col-xs-12"><h2>Patient identifying details and demographics</h2></div>
+            </div>
+            <div class="row no-stripe">
+                <div class="col-xs-4">
+                    {{print-patient-row title="First name" value=patient.firstName}}
+                    {{print-patient-row title="Middle name" value=patient.middleName}}
+                    {{print-patient-row title="Last name" value=patient.lastName}}
+                    {{print-patient-row title="SSN" value=patient.socialSecurityNumber}}
+                </div>
+                <div class="col-xs-4">
+                    <span data-element="print-patient-demographics-birth-sex">
+                        {{print-patient-row title="Sex" value=patientSummary.genderDescription}}
+                    </span>
+                    {{print-patient-row title="Date of birth" dateValue=patient.birthDate}}
+                    {{print-patient-row title="Date of death" dateValue=patient.deathDate}}
+                    {{print-patient-row title="PRN" value=patient.patientRecordNumber}}
+                </div>
+                <div class="col-xs-4">
+                    <span data-element="print-patient-demographics-ethnicity">
+                        {{print-patient-row title="Ethnicity" value=ethnicity}}
+                    </span>
+                    {{print-patient-row title="Pref. language" value=language}}
+                    <span data-element="print-patient-demographics-race">
+                        {{print-patient-row title="Race" value=race}}
+                    </span>
+                    {{print-patient-row title="Status" value=status}}
+                </div>
+            </div>
+            <div class="row header-row">
+                <div class="col-xs-12">Contact information</div>
+            </div>
+            <div class="row no-stripe">
+                <div class="col-xs-4">
+                    {{print-patient-row title="Address line 1" value=patient.streetAddress1}}
+                    {{print-patient-row title="Address line 2" value=patient.streetAddress2}}
+                    {{print-patient-row title="City" value=patient.city}}
+                    {{print-patient-row title="State" value=patient.state}}
+                    {{print-patient-row title="ZIP code" value=patient.postalCode}}
+                </div>
+                <div class="col-xs-4">
+                    {{print-patient-row title="Contact by" value=patient.preferredMethodOfCommunication}}
+                    {{print-patient-row title="Email" value=patient.emailAddress}}
+                    {{print-patient-row title="Home phone" value=patient.homePhone}}
+                    {{print-patient-row title="Mobile phone" value=mobile}}
+                    {{print-patient-row title="Office phone" value=patient.officePhone}}
+                    {{print-patient-row title="Office extension" value=patient.officePhoneExtension}}
+                </div>
+            </div>
+            <div class="row header-row">
+                <div class="col-xs-12">Family information</div>
+            </div>
+            <div class="row no-stripe">
+                <div class="col-xs-6">
+                    {{print-patient-row title="Next of kin" value=nextOfKin}}
+                    {{print-patient-row title="Relation to patient" value=nokRelationship}}
+                    {{print-patient-row title="Phone" value=patient.nokPhoneNumber}}
+                    {{print-patient-row title="Address" value=nokAddress}}
+                </div>
+                <div class="col-xs-6">
+                    {{print-patient-row title="Patient's mother's maiden name" value=patient.mothersMaidenName}}
+                </div>
+            </div>
+            {{#if patient.notes}}
+                <div class="row header-row">
+                    <div class="col-xs-12">Patient Notes</div>
+                </div>
+                <div class="row no-stripe">
+                    <div class="col-xs-12">{{patient.notes}}</div>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+{{/print-chart-section}}

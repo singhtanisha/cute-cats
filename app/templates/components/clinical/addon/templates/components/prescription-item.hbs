@@ -1,0 +1,23 @@
+<span class="hint-text">{{prescription.prescriptionType}}{{prescriptionStatusDisplay}}:</span>
+{{datetime-formatted datetime=prescription.prescriptionDate isSourceInUtc=false}}
+{{#if providerName}}
+    <span class="hint-text">Prescriber:</span>
+    <span>{{providerName}}</span>
+{{/if}}
+
+<span class="hint-text">Refills:</span>
+{{#if prescription.refillAsNeeded}}
+    <span>PRN</span>
+{{else}}
+    <span>{{prescription.refills}}</span>
+{{/if}}
+
+{{#if prescription.quantity}}
+    <span class="hint-text">Quantity:</span>
+    <span>{{prescription.quantity}}</span>
+{{/if}}
+
+{{!-- {{#if prescription.prescriptionUnit}}
+    <span class="hint-text13">Unit:</span>
+    <span>{{prescription.prescriptionUnit}}</span>
+{{/if}} --}}

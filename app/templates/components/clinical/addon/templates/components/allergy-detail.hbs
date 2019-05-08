@@ -1,0 +1,69 @@
+{{#allergy-details-pane isAllowedToEditAllegies=isAllowedToEditAllegies bigHeaderText=title cancel="cancel" delete="delete" isDeleteDisabled=isLoading isDoneDisabled=isDoneDisabled isToolBoxVisible=false resizeOnBreakPoint=true save="save" showDeleteButton=showDeleteButton smallHeaderText="Allergies" topSpacing=86 classBinding="isDisabled:disabled" showAddAnotherButton=showAddAnotherButton addAnother="addAnother" as |section|}}
+    {{#detail-pane-body sectionContext=section}}
+        {{#if allergy}}
+            <p class="title">{{allergy.allergenText}}</p>
+        {{else}}
+            {{deprecated/allergy-free-text-message patientPracticeGuid=patientPracticeGuid canRecord=false canShowLater=true
+                scrollableContainer=".allergy-details .detail-pane-body-wrapper"}}
+
+            <div class="field-label">Select allergen</div>
+            {{d-button-group disabled=isNotAllowedToEditAllegies options=allergenTypes isShorter=true optionLabelPath="label" optionValuePath="id" value=allergenType defaultValue="drug"}}
+            {{#if isDrug}}
+                {{allergen-search
+                    disabled=isNotAllowedToEditAllegies
+                    query=allergenQuery
+                    selection=allergenSelection
+                    tooltipMsg=errors.allergenSelection
+                    data-element="drug-allergen-search"
+                    searchDataElement="drug-allergen-search-input"}}
+            {{else}}
+                {{allergy-select
+                    disabled=isNotAllowedToEditAllegies
+                    content=substances
+                    selection=allergenSelection
+                    tooltipMsg=errors.allergenSelection
+                    addItem="addCustomAllergy"
+                    data-element="other-allergen-search"
+                    query=allergenQuery}}
+            {{/if}}
+        {{/if}}
+
+        <div class="field-label required">Severity</div>
+        {{#if isDisabled}}
+            <div class="severity">
+                <i class="icon-triangle icon--md {{allergy.severityClass}} box-margin-Rsm-v2"></i>
+                {{allergySeverity}}
+            </div>
+        {{else}}
+            {{d-button-group options=severityOptions isShorter=true optionLabelPath="label" optionValuePath="id" value=allergySeverity classBinding="errors.allergySeverity:error" data-element="allergy-severity-button-group"}}
+        {{/if}}
+        <div class="field-label">Reaction</div>
+        {{#if isDisabled}}
+            <p>{{allergy.reactionsText}}</p>
+        {{else}}
+            {{multi-select content=allReactions prompt="Enter patient reaction" optionLabelPath="title" optionValuePath=reactionsValuePath selections=allergyReactions data-element="allergy-reactions-select"}}
+        {{/if}}
+        <div class="field-label">Onset</div>
+        {{#if isDisabled}}
+            <p>{{allergy.onsetText}}</p>
+        {{else}}
+            <div class="onset-section">
+                {{d-button-group options=onsetTypes isShorter=true optionLabelPath="label" optionValuePath="id" value=onsetType}}
+                {{d-date-picker isLegacy=false value=formattedOnsetDate placeholder="MM/DD/YYYY" isValid=isOnsetDateValid autoCorrectYear=true}}
+                <button class="btn" {{action "setOnsetToday"}}>Today</button>
+            </div>
+        {{/if}}
+        <div class="field-label">Comment</div>
+        {{#if isDisabled}}
+            <p>{{#if comments}}{{comments}}{{else}}No comment recorded{{/if}}</p>
+        {{else}}
+            {{d-text-area autosize=true value=comments placeholderText="Enter a comment about this allergy" maxlength=500 data-element="allergy-comment"}}
+        {{/if}}
+        <div class="field-label">Status</div>
+        {{#if isDisabled}}
+            <p>{{#if isActive}}Active{{else}}Inactive{{/if}}</p>
+        {{else}}
+            {{d-toggle-switch checked=isActive isShorter="true" onText="Active" offText="Inactive" disabled=isDisabled}}
+        {{/if}}
+    {{/detail-pane-body}}
+{{/allergy-details-pane}}

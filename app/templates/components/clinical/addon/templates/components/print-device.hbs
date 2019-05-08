@@ -1,0 +1,81 @@
+<div class="row header-row">
+    <div class="col-xs-12" data-element="print-device-title">{{device.userEnteredInfo.userEnteredDeviceTypeName}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">Unique Device Identifier</div>
+    <div class="col-xs-9">{{device.udiInfo.uniqueDeviceIdentifier}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">GMDN PT name</div>
+    <div class="col-xs-9">{{device.udiInfo.gmdnPtName}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">GMDN PT description</div>
+    <div class="col-xs-9">{{device.udiInfo.gmdnPtDefinition}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">Expiration date</div>
+    <div class="col-xs-9">{{expirationDateDisplay}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">Manufacture date</div>
+    <div class="col-xs-9">{{manufactureDateDisplay}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">What MRI safety information does the labeling contain?</div>
+    <div class="col-xs-9">{{device.udiInfo.mriSafetyStatusDescription}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">Device required to be labeled as containing natural rubber latex or dry natural rubber (21 CFR 801.437)</div>
+    <div class="col-xs-9">{{device.udiInfo.isNaturalRubberLatexInformationOnLabel}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">Company name</div>
+    <div class="col-xs-9">{{device.udiInfo.companyName}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">Brand name</div>
+    <div class="col-xs-9">{{device.udiInfo.brandName}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">Serial number</div>
+    <div class="col-xs-9">{{device.udiInfo.deviceSerialNumber}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">Lot/batch</div>
+    <div class="col-xs-9">{{device.udiInfo.lotNumber}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">Version/model number</div>
+    <div class="col-xs-9">{{device.udiInfo.versionModelNumber}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">Device description</div>
+    <div class="col-xs-9">{{device.udiInfo.deviceDescription}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">Human cell, tissue or cellular or tissue-based product (HCT/P)</div>
+    <div class="col-xs-9">{{yes-no device.udiInfo.isHumanCellOrTissueProduct}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">Device Active</div>
+    <div class="col-xs-9" data-element="print-device-isactive">{{activeDisplay}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">Implant date</div>
+    <div class="col-xs-9" data-element="print-device-implant-date">{{implantDateDisplay}}</div>
+</div>
+<div class="row no-stripe no-borders">
+    <div class="col-xs-3 field-label">Notes</div>
+    <div class="col-xs-9">{{notesDisplay}}</div>
+</div>
+{{#each device.udiInfo.snomed as |snomedItem|}}
+    <div class="row no-stripe no-borders">
+        <div class="col-xs-3 field-label">SNOMED CT Id</div>
+        <div class="col-xs-9">{{snomedItem.snomedCtCode}}</div>
+    </div>
+    <div class="row no-stripe no-borders">
+        <div class="col-xs-3 field-label">SNOMED CT description</div>
+        <div class="col-xs-9">{{snomedItem.snomedCtDescription}}</div>
+    </div>
+{{/each}}

@@ -1,0 +1,57 @@
+{{#unless isIcd10Display}}
+    <header><h3 class="h3">{{title}} diagnoses</h3></header>
+{{/unless}}
+{{#if sortedChronicActiveDiagnoses}}
+    <div class="box-margin-Txs-v2">
+        <h4 class="h4">Chronic</h4>
+        <ul class="list list--selectable list--hover">
+            {{#each sortedChronicActiveDiagnoses as |diagnosis index|}}
+                {{diagnoses-summary-list-item data-element=(concat "chronic-dx-list-" index) title=title editDiagnosis=(action editDiagnosis) isIcd10Display=isIcd10Display diagnosis=diagnosis selectedDiagnosisGuid=selectedDiagnosisGuid diagnosisDescriptionDisplay=diagnosisDescriptionDisplay}}
+            {{/each}}
+        </ul>
+    </div>
+{{/if}}
+{{#if sortedAcuteActiveDiagnoses}}
+    <div class="box-margin-Txs-v2">
+        <h4 class="h4">Acute</h4>
+        <ul class="list list--selectable list--hover">
+            {{#each sortedAcuteActiveDiagnoses as |diagnosis index|}}
+                {{diagnoses-summary-list-item data-element=(concat "acute-dx-list-" index) title=title editDiagnosis=(action editDiagnosis) isIcd10Display=isIcd10Display diagnosis=diagnosis selectedDiagnosisGuid=selectedDiagnosisGuid diagnosisDescriptionDisplay=diagnosisDescriptionDisplay}}
+            {{/each}}
+        </ul>
+    </div>
+{{/if}}
+{{#if sortedUnspecifiedActiveDiagnoses}}
+    <div class="box-margin-Txs-v2">
+        <h4 class="h4">Undefined</h4>
+        <ul class="list list--selectable list--hover">
+            {{#each sortedUnspecifiedActiveDiagnoses as |diagnosis index|}}
+                {{diagnoses-summary-list-item data-element=(concat "undefined-dx-list-" index) title=title editDiagnosis=(action editDiagnosis) isIcd10Display=isIcd10Display diagnosis=diagnosis selectedDiagnosisGuid=selectedDiagnosisGuid diagnosisDescriptionDisplay=diagnosisDescriptionDisplay}}
+            {{/each}}
+        </ul>
+    </div>
+{{/if}}
+{{#unless allActiveDiagnoses}}
+    <p class="text-color-placeholder">No active <span class="lowercase">{{title}}</span>diagnoses.</p>
+{{/unless}}
+{{#if historicalDiagnosesVisible}}
+    <div class="box-margin-Txs-v2">
+        <h4 class="h4">Historical</h4>
+        <ul class="list list--selectable list--hover">
+            {{#each historicalDiagnoses as |diagnosis index|}}
+                {{diagnoses-summary-list-item data-element=(concat "historical-dx-list-" index) title=title editDiagnosis=(action editDiagnosis) isIcd10Display=isIcd10Display diagnosis=diagnosis selectedDiagnosisGuid=selectedDiagnosisGuid  diagnosisDescriptionDisplay=diagnosisDescriptionDisplay}}
+            {{/each}}
+        </ul>
+    </div>
+{{/if}}
+{{#if historicalDiagnoses}}
+    <div class="box-margin-Txs-v2">
+        <a data-element={{title}} onclick={{action 'toggleProperty'  'historicalDiagnosesVisible'}}>
+            {{#if historicalDiagnosesVisible}}
+                Hide historical
+            {{else}}
+                Show historical ({{historicalDiagnoses.length}})
+            {{/if}}
+        </a>
+    </div>
+{{/if}}

@@ -1,0 +1,18 @@
+{{#composable-card as |card|}}
+    {{#card.header as |header|}}
+        {{#header.title}}{{title}}{{/header.title}}
+        {{#header.utilities}}
+            <a class="icon-edit icon--labeled" data-element="edit-relative" onclick={{action editRelative relative}}>{{if disabled "View" "Edit"}}</a>
+        {{/header.utilities}}
+    {{/card.header}}
+    {{#card.content}}
+        <ul class="list list--hoverable list--selectable box-margin-Bsm-v2">
+            {{#each relative.observations as |observation|}}
+                <li data-element="edit-diagnosis" data-guid="{{observation.observationGuid}}" onclick={{action editDiagnosis observation}}>{{observation.diagnosis.description}}</li>
+            {{/each}}
+        </ul>
+        {{#unless disabled}}
+            <a class="icon-add icon--labeled" data-element="add-diagnosis" onclick={{action addDiagnosis relative}}>Add diagnosis</a>
+        {{/unless}}
+    {{/card.content}}
+{{/composable-card}}

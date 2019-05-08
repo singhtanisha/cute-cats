@@ -1,0 +1,312 @@
+<div id="medPane">
+    {{#detail-pane-v2 classNames="medication-detail" as |section|}}
+        {{#section.toolbox isToolboxVisible=isToolboxVisible isSlideOpenToolBox=isFrequentMedsOpen as |toolbox|}}
+            {{partial "medication-detail-pane-toolbox"}}
+        {{/section.toolbox}}
+        {{#section.right-module as |right-module|}}
+            {{right-module.header bigHeaderText=bigHeaderText smallHeaderText=smallHeaderText
+                closeDetailPane=(action "close")}}
+            {{#right-module.body as |body|}}
+                <div id="medPane-content">
+                    {{#if shouldShowDuplicateWarning}}
+                        {{medication-detail-duplicates isEntitledToEditMedications=isEntitledToEditMedications newMedicationFromSearchResult=newMedicationFromSearchResult isEditing=isEditing
+                            discontinueDuplicate=(action "discontinueDuplicate") editMedication=(action "editMedication")
+                            doStopDateTimeToToday=(action "doStopDateTimeToToday")}}
+                    {{/if}}
+                    {{#unless isEditing}}
+                        {{#if isMedicationDeprecated}}
+                            <div data-element="deprecation-choosenew-message">
+                                Choose replacement medication for "{{deprecatedMedication.drugName}}"
+                            </div>
+                            <div class="field-label">Medication</div>
+                        {{/if}}
+                        <div class="search-item form-group medication-search">
+                            {{medication-select
+                                isShorter=true
+                                select="newMedicationSelected"
+                                clearSearchOnFocus=false
+                                clearSearchOnSelect=true
+                                query=searchText
+                                addCustomItemTemplateText="Add custom med for \"%@\""
+                                selectedLabel=searchText
+                                addItem="addCustomMedication"
+                                data-element="medications-search"}}
+                        </div>
+                    {{/unless}}
+                    {{#if loadMedicationFailed}}
+                        <p class="p-666">Can't load medication. Please
+                            <a href="#" {{action "loadMedication"}}>try again.</a>
+                        </p>
+                    {{/if}}
+                    <div class="favorites">
+                        {{#if newMedicationFromSearchResult}}
+                            <div>
+                                <div class="header14" data-element="medication-detail-drug-name">
+                                    {{newMedicationFromSearchResult.drugName}}
+                                </div>
+                                {{#if controlledSubstanceSchedule}}
+                                    <div>
+                                        <span class="header14 lead-red" data-test> (Schedule {{controlledSubstanceSchedule}} drug)</span>
+                                    </div>
+                                {{/if}}
+                                {{interaction-alerts patientGuid=patientGuid medication=newMedicationFromSearchResult}}
+                            </div>
+                            {{#if isEditing}}
+                                <div>
+                                    <div class="field-label">RECORDED</div>
+                                    <div>
+                                        {{recordedText}} &nbsp; {{recordedProvider.providerName}}
+                                    </div>
+                                </div>
+                            {{else if showProliaPanel}}
+                                {{#unless newMedicationAssessmentCardModel.isDismissed}}
+                                    <div class="panel-container">
+                                        {{new-medication-assessment-card
+                                            openAssessment=(action "openAssessment")
+                                            patientPracticeGuid=patientGuid
+                                            recorded="newMedicationAssessmentCardRecorded"
+                                            reopenAssessment=(action "reopenAssessment")
+                                            token=newMedicationAssessmentCardToken}}
+                                    </div>
+                                {{/unless}}
+                            {{/if}}
+                        {{/if}}
+                    </div>
+
+                    {{#if newMedicationFromSearchResult}}
+                        <div class="sigSearch">
+                            <div class="field-label">SIG</div>
+                            {{#if isEntitledToEditMedications}}
+                                <div class="search-item form-group">
+                                    {{medication-sig-typeahead
+                                        content=sigResults
+                                        data-element="sig-search"
+                                        disabled=disabled
+                                        select="sigSelected"}}
+                                </div>
+                                <div class="sig-text form-group box-margin-Bsm">
+                                    {{text-area-counter
+                                        dataElement="sig-txt"
+                                        errorMessage=errors.sigText
+                                        isDisabled=disabled
+                                        isErrorHighlightingAutomatic=true
+                                        isShorter=true
+                                        maxlength="140"
+                                        placeholderText="Enter a sig for this medication"
+                                        rows="3"
+                                        value=sigText}}
+                                </div>
+                            {{else}}
+                                {{text-with-empty-state text=sigText title="sig"}}
+                            {{/if}}
+                        </div>
+
+                        {{#if isEntitledToEditMedications}}
+                            <div class="inline-flex-group">
+                                {{#composable-popover classNames="item gutter-sm dismissible-help-message" as |options|}}
+                                    <label class="field-label box-margin-TBn">Dispense</label>
+                                    {{options.popover-target tagName="i" classNames="icon-info icon-slate-dark"}}
+                                    {{#options.popover popoverClass="popover-prescription-benefits"}}
+                                        <header>
+                                            <a class="icon-go-away pull-right" onclick={{action options.hidePopover}}></a>
+                                            <i class="icon-info icon-slate-dark box-margin-Rxs"></i>
+                                            <span class="title">Enter quantity to see patient cost</span>
+                                        </header>
+                                        <div class="popover-content">
+                                            Dispense, unit, and days supply must be entered to see real-time patient cost and cost-saving alternatives based on patient's coverage.
+                                        </div>
+                                    {{/options.popover}}
+                                    {{erx-numeric-text-field value=quantity placeholderText="Quantity"
+                                        classNames="numeric quantity" isShorter=true
+                                        maxlength="11" data-element="quantity-txt"}}
+                                {{/composable-popover}}
+                                <div class="item gutter-sm">
+                                    <label class="field-label box-margin-TBn">Unit</label>
+                                    {{rx-unit-select prompt="Select Unit" optionLabelPath="name"
+                                        optionValuePath="ncitCode" selectType="typeahead" query=prescriptionUnitQuery
+                                        content=prescriptionUnits selection=selectedPrescriptionUnit
+                                        clearSearchOnSelect=false clearSearchOnFocus=true openOnFocus=true
+                                        classNameBindings="errors.selectedPrescriptionUnit:error"
+                                        tooltipMsg=errors.selectedPrescriptionUnit
+                                        classNames="rx-units" data-element="doseForm-search" isShorter=true}}
+                                </div>
+                                <div class="item gutter-sm">
+                                    <label class="field-label box-margin-TBn">Days Supply</label>
+                                    {{erx-numeric-text-field value=daysSupply allowDecimals=false isShorter=true
+                                        classNames="numeric" maxlength="3" data-element="daysSupply-txt"}}
+                                </div>
+                            </div>
+                        {{/if}}
+                        <div class="sigAssociatedDiagnosis" data-element="sigAssociatedDiagnosis">
+                            <div class="field-label">ASSOCIATED DIAGNOSIS</div>
+
+                            {{#if selectedDiagnosis}}
+                                <div class="d-complex-list-container">
+                                    <div class="item">
+                                        <span class="long-word">{{selectedDiagnosisText}}</span>
+                                        {{#if isEntitledToEditMedications}}
+                                            <div class="close-box" {{action "removeAssociatedDiagnosis"}}></div>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            {{else if isEntitledToEditMedications}}
+                                <div class="search-item form-group" data-element="associated-diagnosis">
+                                    {{single-select
+                                        content=patientAssociatedDiagnoses
+                                        data-element="diagnosis-search"
+                                        disabled=disabled
+                                        includeSearchIcon=true
+                                        isShorter=true
+                                        openOnFocus=true
+                                        optionLabelPath="name"
+                                        optionValuePath="diagnosisGuid"
+                                        placeholder="Search existing diagnoses for this patient"
+                                        select="selectedAssociatedDiag"
+                                        selectType="typeahead"}}
+                                </div>
+                            {{else}}
+                                <div>No associated diagnosis</div>
+                            {{/if}}
+                        </div>
+
+                        <div id="start-dates" class="encounter-date">
+                            <div class="field-label">START DATE</div>
+                            {{#if isEntitledToEditMedications}}
+                                {{d-date-picker isLegacy=false value=startDateTime placeholder="MM/DD/YYYY" disabled=disabled
+                                    isValid=startDateIsValid autoCorrectYear=true data-element="start-date-txt" isShorter=true}}
+                                <button type="button" class="btn btn-sm" data-element="start-date-btn" {{action "doStartDateTimeToToday"}}
+                                    disabled={{disabled}}>Today</button>
+                            {{else}}
+                                {{text-with-empty-state text=startDateTime title="start date"}}
+                            {{/if}}
+                        </div>
+                        <div id="start-stop" class="encounter-date stop-date">
+                            <div class="field-label">STOP DATE</div>
+                            {{#if isEntitledToEditMedications}}
+                                {{d-date-picker isLegacy=false value=stopDateTime placeholder="MM/DD/YYYY" disabled=disabled
+                                    isValid=stopDateIsValid autoCorrectYear=true  data-element="stop-date-txt" isShorter=true}}
+                                <button type="button" class="btn btn-sm" data-element="restart-btn" {{action "restartMedication"}}
+                                    disabled={{disabled}}>{{restartStopLabel}}</button>
+                            {{else}}
+                                {{text-with-empty-state text=stopDateTime title="stop date" class="box-margin-Txs"}}
+                            {{/if}}
+                        </div>
+                        {{#if stopDateTime}}
+                            {{#if showDiscontinuedWarning}}
+                                <div class="inline-flex-group box-margin-Tmd-v2">
+                                    <i class="icon icon-info" />
+                                    <div class="flex-grow box-padding-Lsm-v2" data-element="discontinue-warning">
+                                        <span class="h4">This action will not cancel associated prescriptions.</span>
+                                        <a href="https://help.practicefusion.com/s/article/How-do-I-cancel-an-eRx-request" target="_blank">Learn more about cancelling Rx</a>
+                                    </div>
+                                </div>
+                            {{/if}}
+                            <div id="start-stop" class="form-group encounter-date">
+                                <div class="field-label">DISCONTINUE REASON</div>
+                                {{#if isEntitledToEditMedications}}
+                                    {{single-select
+                                        class="dropup full-width"
+                                        content=medicationDiscontinuedReasons
+                                        data-element="medication-discontinued-reason-search"
+                                        disabled=disabled
+                                        optionLabelPath="description"
+                                        selection=selectedMedicationDiscontinuedReason}}
+                                {{else}}
+                                    <div>{{selectedMedicationDiscontinuedReason}}</div>
+                                {{/if}}
+                            </div>
+                        {{/if}}
+
+                        <div>
+                            <div class="field-label">MEDICATION COMMENT</div>
+                            {{#if isEntitledToEditMedications}}
+                                <div class="sig-text form-group">
+                                    {{text-area-counter
+                                        dataElement="medication-comment-txt"
+                                        errorMessage=errors.medicationComment
+                                        isDisabled=disabled
+                                        isErrorHighlightingAutomatic=true
+                                        isShorter=true
+                                        maxlength="500"
+                                        placeholderText="Enter a comment about this medication"
+                                        rows="3"
+                                        value=medicationComment}}
+                                </div>
+                            {{else}}
+                                {{text-with-empty-state text=medicationComment title="medication comment" class="box-margin-Bsm"}}
+                            {{/if}}
+                        </div>
+                        {{#if canToggleAttachToEncounter}}
+                            {{#d-check-box checked=attachToEncounter disabled=disabledOrNotEntitled data-element="attachToEncounter-ck"}}
+                                Attach medication to this encounter
+                            {{/d-check-box}}
+                        {{/if}}
+
+                        {{#if attachToEncounter}}
+                            <div>
+                                <div class="field-label">COMMENT FOR THIS ENCOUNTER</div>
+                                {{#if isEntitledToEditMedications}}
+                                    <div class="sig-text form-group">
+                                        {{text-area-counter value=encounterComment
+                                            placeholderText="Enter a comment about this medication for the current encounter"
+                                            maxlength="500" rows="3" isDisabled=disabled dataElement="encounter-comment-txt" isShorter=true}}
+                                    </div>
+                                {{else}}
+                                    {{text-with-empty-state text=encounterComment title="comment for this encounter"}}
+                                {{/if}}
+                            </div>
+                        {{/if}}
+
+                        {{#if newMedicationFromSearchResult.encounterCommentsWithComment}}
+                            <div class="d-complex-list-container">
+                                <div class="field-label">ENCOUNTER COMMENTS</div>
+                                {{#each newMedicationFromSearchResult.encounterCommentsWithComment as |transcriptComment|}}
+                                    <div class="item">
+                                        {{transcript-comment transcriptComment=transcriptComment patientPracticeGuid=patientGuid}}
+                                    </div>
+                                {{/each}}
+                            </div>
+                        {{/if}}
+
+                        {{#if sortedPrescriptions}}
+                            <div class="d-complex-list-container">
+                                <div class="field-label">PRESCRIPTIONS</div>
+                                {{#each sortedPrescriptions as |prescription|}}
+                                    <div class="item" {{action "goToPrescriptionDetails" prescription}}>
+                                        {{prescription-item prescription=prescription erxProviders=erxProviders}}
+                                    </div>
+                                {{/each}}
+                            </div>
+                        {{/if}}
+
+                        <div class="patientEducation d-complex-list-container" data-element="resources-section">
+                            <div class="field-label">RESOURCES</div>
+                                {{#if newMedicationFromSearchResult.ndc}}
+                                    <div class="item">
+                                        {{patient-education-link code=newMedicationFromSearchResult.ndc
+                                            searchString=newMedicationFromSearchResult.tradeName patientPracticeGuid=patientGuid}}
+                                    </div>
+                                {{/if}}
+                        </div>
+                    {{/if}}
+                </div>
+            {{/right-module.body}}
+            {{#right-module.footer as |footer|}}
+                {{partial "medication-detail-pane-footer"}}
+            {{/right-module.footer}}
+        {{/section.right-module}}
+    {{/detail-pane-v2}}
+</div>
+
+{{#content-modal modalStyle=7 isVisible=showDeprecatedMedicationWarning isCloseByXorOutsideVisible=true as |section|}}
+    {{section.header title="Medication not available" notifyCloseByX=(action "closeDeprecatedMedicationWarning")}}
+    {{#section.body}}
+        <p>The medication you selected is outdated or no longer available. Please select a new medication to continue.</p>
+        <a class="deprecation-popup-link" href={{config.erxDeprecationHelpUrl}} target="_blank">Why am I seeing this?</a>
+    {{/section.body}}
+    {{section.footer
+        buttonRightSecondaryText="Cancel"
+        buttonRightPrimaryText="Choose new"
+        buttonRightSecondaryAction=(action "closeDeprecatedMedicationWarning")
+        buttonRightPrimaryAction=(action "chooseNewMedication")}}
+{{/content-modal}}

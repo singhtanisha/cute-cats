@@ -1,0 +1,33 @@
+{{data-tunnel name="allergies-list" onDataReceived=(action "updateAllergies")}}
+{{#composable-card as |card|}}
+    {{#card.header as |header|}}
+        {{#header.title}}
+            Allergies
+            {{#unless hideEditControls}}
+                {{#if isAllowedToEditAllegies}}
+                    <a class="icon-add icon--md text-color-placeholder box-margin-Lmd-v2" onclick={{action "createAllergy"}} data-element="add-allergy-button"></a>
+                {{/if}}
+                <a class="icon-printer icon--md text-color-placeholder box-margin-Lmd-v2" onclick={{action "print"}} data-element="print-allergies-button"></a>
+            {{/unless}}
+        {{/header.title}}
+    {{/card.header}}
+    {{#card.content}}
+        {{allergy-free-text-message isAllowedToEditAllegies=isAllowedToEditAllegies patientPracticeGuid=patientPracticeGuid canRecord=true canShowLater=false createAllergy="createAllergy"}}
+        <p class="text-color-placeholder box-margin-Bn {{unless isLoading "hidden"}}">Loading allergies...</p>
+        <p class="text-color-placeholder box-margin-Bn {{unless allergiesError "hidden"}}">
+            Failed to load allergies. Please <a href="#" onclick={{action "reloadAllergies"}}>try again.</a>
+        </p>
+        <div class="{{if isLoadingOrIsError "hidden"}}">
+            {{allergies-list-section class="box-margin-Bxs-v2" isAllowedToEditAllegies=isAllowedToEditAllegies data=drugAllergies editAllergy=(action "editAllergy") isNoKnownChecked=isNoKnownChecked isLoadingNoKnown=isLoadingNoKnown selectedAllergy=selectedAllergy title="Drug"}}
+            {{allergies-list-section class="box-margin-Bxs-v2"  isAllowedToEditAllegies=isAllowedToEditAllegies data=foodAllergies editAllergy=(action "editAllergy") selectedAllergy=selectedAllergy  title="Food"}}
+            {{allergies-list-section classNameBindings="inactiveAllergies:box-margin-Bxs-v2" isAllowedToEditAllegies=isAllowedToEditAllegies data=environmentalAllergies editAllergy=(action "editAllergy") selectedAllergy=selectedAllergy  title="Environmental"}}
+            {{#if inactiveAllergies}}
+                {{allergies-list-section isAllowedToEditAllegies=isAllowedToEditAllegies data=inactiveAllergies editAllergy=(action "editAllergy") selectedAllergy=selectedAllergy  title="Inactive"}}
+            {{/if}}
+        </div>
+    {{/card.content}}
+{{/composable-card}}
+
+{{#print-preview-content isVisible=isPrintVisible printTitle=printTitle}}
+    {{print-allergies class="chart-print-container" patient=patient}}
+{{/print-preview-content}}

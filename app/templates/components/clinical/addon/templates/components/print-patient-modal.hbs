@@ -1,0 +1,463 @@
+{{#content-modal isVisible=isVisible modalStyle=4 as |section|}}
+    {{section.header title=modalTitle isCloseByXorOutsideVisible=true}}
+    {{#section.body}}
+        <div class="print-patient-modal-selection">
+            <label class="field-label">Select patient information to print</label>
+            <p class="p-666">
+                <span>Select: </span>
+                <a href="#" {{action "selectAll"}} data-element="print-modal-select-all">all</a>
+                <span> | </span>
+                <a href="#" {{action "selectNone"}} data-element="print-modal-select-none">none</a>
+            </p>
+        </div>
+        {{#unless isLoading}}
+            <div class="row print-chart-options">
+                {{#if chartNote}}
+                    {{#check-box checked=isChiefComplaintChecked class="checkbox-row"}}
+                        Chief complaint
+                    {{/check-box}}
+                {{/if}}
+                {{#check-box checked=isDemographicsChecked class="checkbox-row"}}
+                    Patient demographics
+                {{/check-box}}
+                <div class="checkbox-row dropdown-print-row" data-element="print-insurance-options">
+                    {{#check-box checked=isInsuranceChecked}}Patient insurance{{/check-box}}
+                    {{print-options-dropdown class="theme-borderless" content=insuranceOptions selectedValue=selectedInsuranceOption dataValueField="key" dataLabelField="label" dataSelectedLabelField="selectedLabel"}}
+                </div>
+                {{#if chartNote}}
+                    {{#check-box checked=isEncounterVitalsChecked class="checkbox-row"}}
+                        Vitals for this encounter
+                    {{/check-box}}
+                {{/if}}
+                {{#each sortedFlowsheets as |flowsheet|}}
+                    <div class="checkbox-row flowsheet-print-row">
+                        {{#check-box checked=flowsheet.isSelected}}{{flowsheet.flowsheetDefinition.flowsheetName}} flowsheet{{/check-box}}
+                        {{flowsheet-print-range-select range=flowsheet}}
+                    </div>
+                {{/each}}
+                {{select-all-checkbox-dropdown menuLabel="growth charts" includeNumSelected=true dropdownItems=growthChartsOptions selections=selectedGrowthCharts class="checkbox-row"}}
+                {{#check-box checked=isDiagnosesChecked class="checkbox-row"}}
+                    Diagnoses
+                {{/check-box}}
+                {{#check-box checked=isAllergiesChecked class="checkbox-row"}}
+                    Allergies
+                {{/check-box}}
+                <div class="checkbox-row dropdown-print-row" data-element="print-medications-options">
+                    {{#check-box checked=isMedicationsChecked}}Medications {{/check-box}}
+                    {{print-options-dropdown class="theme-borderless" content=medicationOptions selectedValue=selectedMedicationOption dataValueField="key" dataLabelField="label" dataSelectedLabelField="selectedLabel"}}
+                </div>
+
+                {{#if _loadAdherenceMaterials.isRunning}}
+                    <div class="option-row p-666">Loading adherence materials...</div>
+                {{else if _loadAdherenceMaterials.isError}}
+                    <div class="option-row  p-666">Couldn't load adherence materials. <a href="#" {{action "loadAdherenceMaterials"}}>Please try again.</a></div>
+                {{else}}
+                    {{#if adherenceMaterials}}
+                        {{select-all-checkbox-dropdown menuLabel="adherence materials" includeNumSelected=true
+                            dropdownItems=sortedAdherenceMaterials.arrangedContent selections=selectedAdherenceMaterials class="checkbox-row"}}
+                    {{else}}
+                        {{#check-box disabled=true class="checkbox-row"}}No adherence materials available{{/check-box}}
+                    {{/if}}
+                {{/if}}
+
+                {{#check-box checked=isImmunizationsChecked class="checkbox-row"}}
+                    Immunizations
+                {{/check-box}}
+                {{#check-box checked=isSocialChecked class="checkbox-row"}}
+                    Social history
+                {{/check-box}}
+                {{#check-box checked=isPmhChecked class="checkbox-row"}}
+                    Past medical history
+                {{/check-box}}
+                {{#check-box checked=isFamilyHistoryChecked class="checkbox-row"}}
+                    Family history
+                {{/check-box}}
+                {{#check-box checked=isAdvancedDirectivesChecked class="checkbox-row"}}
+                    Advance directives
+                {{/check-box}}
+                {{#check-box checked=isImplantableDevicesChecked class="checkbox-row"}}
+                    Implantable devices
+                {{/check-box}}
+                <div class="checkbox-row dropdown-print-row" data-element="print-health-concerns-options">
+                    {{#check-box checked=isHealthConcernsChecked}}Health concerns{{/check-box}}
+                    {{print-options-dropdown class="theme-borderless" content=healthConcernsOptions selectedValue=selectedHealthConcernsOption dataValueField="key" dataLabelField="label" dataSelectedLabelField="selectedLabel"}}
+                </div>
+                <div class="checkbox-row dropdown-print-row" data-element="print-goal-options">
+                    {{#check-box checked=isGoalsChecked}}Goals {{/check-box}}
+                    {{print-options-dropdown class="theme-borderless" content=goalOptions selectedValue=selectedGoalOption dataValueField="key" dataLabelField="label" dataSelectedLabelField="selectedLabel"}}
+                </div>
+
+                {{#if chartNote}}
+                    {{#if isSoapNote}}
+                        {{#check-box checked=isSubjectiveChecked class="checkbox-row"}}
+                            Subjective
+                        {{/check-box}}
+                        {{#check-box checked=isObjectiveChecked class="checkbox-row"}}
+                            Objective
+                        {{/check-box}}
+                        {{#check-box checked=isAssessmentChecked class="checkbox-row"}}
+                            Assessment
+                        {{/check-box}}
+                        {{#check-box checked=isPlanChecked class="checkbox-row"}}
+                            Plan
+                        {{/check-box}}
+                    {{else}}
+                        {{#check-box checked=isSimpleNoteChecked class="checkbox-row"}}
+                            {{noteTypeHeading}}
+                        {{/check-box}}
+                    {{/if}}
+                    {{#check-box checked=isOrdersChecked class="checkbox-row"}}
+                        Orders
+                    {{/check-box}}
+                    {{#check-box checked=isSIAChecked class="checkbox-row"}}
+                        Screenings/ Interventions/ Assessments
+                    {{/check-box}}
+                    {{#check-box checked=isObservationsChecked class="checkbox-row"}}
+                        Observations
+                    {{/check-box}}
+                    {{#check-box checked=isQualityOfCareChecked class="checkbox-row"}}
+                        Quality of care
+                    {{/check-box}}
+                    {{#check-box checked=isCarePlanChecked class="checkbox-row"}}
+                        Care plan
+                    {{/check-box}}
+                    {{#check-box checked=isAddendaChecked class="checkbox-row"}}
+                        Addenda
+                    {{/check-box}}
+                {{else}}
+                    {{#check-box checked=isSummarySiaChecked class="checkbox-row"}}
+                        Screenings/ Interventions/ Assessments
+                    {{/check-box}}
+                    {{select-all-checkbox-dropdown menuLabel="notes" includeNumSelected=true dropdownItems=encounterOptions selections=selectedEncounterOptions class="checkbox-row" data-element="print-chart-notes-dropdown"}}
+                {{/if}}
+                {{#if canPrintPHR}}
+                    {{#check-box checked=isPHRChecked class="checkbox-row"}}
+                        Patient health record (Patient Fusion)
+                    {{/check-box}}
+                {{/if}}
+            </div>
+        {{/unless}}
+    {{/section.body}}
+    {{section.footer
+        buttonRightPrimaryText="Print"
+        buttonRightPrimaryAction=(action "print")
+        buttonRightSecondaryAction=(action "close")
+        buttonRightSecondaryText="Cancel"}}
+{{/content-modal}}
+
+{{#if isPrintVisible}}
+    <div class="chart-print-container" id={{printContentId}}>
+        {{#unless isOnlyPrintingEncounters}}
+            <div class="container-fluid">
+                {{!-- TODO: dry --}}
+                <div class="row">
+                    {{print-patient-header patientSummary=patientSummary patientSnapshot=patientSnapshot showZip=showZip}}
+                    {{print-facility-header  facilityGuid=chartNote.facilityGuid facilitySnapshot=facilitySnapshot}}
+                    {{#if chartNote}}
+                        {{print-encounter-header chartNote=chartNote chartNotePrintInfo=chartNotePrintInfo encounterType=encounterType
+                            patient=patientSummary}}
+                    {{/if}}
+                    {{#if superbill}}
+                        {{print-bill-header superbill=superbill }}
+                    {{/if}}
+                </div>
+                {{#if chartNote}}
+                    {{#if isChiefComplaintChecked}}
+                        <header>
+                            <h2>Chief complaint</h2>
+                            {{text-with-empty-state text=chartNote.chiefComplaint title="chief complaint" tagName="p" class="formatted-text"}}
+                        </header>
+                    {{/if}}
+                {{/if}}
+            </div>
+        {{/unless}}
+
+        {{#if isDemographicsChecked}}
+            {{print-patient-demographics patient=patient patientSummary=patientSummary chartNote=chartNote chartNotePrintInfo=chartNotePrintInfo
+            includeHeaderAndFooter=includeHeaderAndFooter}}
+        {{/if}}
+        {{#if isInsuranceChecked}}
+            {{print-insurance chartNote=chartNote chartNotePrintInfo=chartNotePrintInfo billingInformation=billingInformation insurancePlans=insurancePlans patient=patientSummary includeHeaderAndFooter=includeHeaderAndFooter showActiveInsurances=includeActiveInsurances showInactiveInsurances=includeInactiveInsurances}}
+        {{/if}}
+        {{#if chartNote}}
+            {{#if isEncounterVitalsChecked}}
+                {{print-encounter-vitals class="container-fluid" vitalsFlowsheet=printVitalsFlowsheet}}
+            {{/if}}
+        {{/if}}
+        {{#each selectedFlowsheets as |flowsheet|}}
+            {{print-flowsheet-section chartNote=chartNote columns=flowsheet.printColumns patient=patientSummary
+                seriesDefinitions=flowsheet.sortedSeriesDefinitions
+                flowsheetName=flowsheet.flowsheetDefinition.flowsheetName
+                includeHeaderAndFooter=includeHeaderAndFooter
+                chartNotePrintInfo=chartNotePrintInfo}}
+        {{/each}}
+        {{#if anyGrowthChartsChecked}}
+            {{print-growth-charts-section class="growth-charts-print print-section" chartNote=chartNote chartNotePrintInfo=chartNotePrintInfo
+             history=sortedVitalsHistory patient=patientController  printLengthWeight=isLengthWeightChecked printHeadCirc=isHeadCircChecked printHeightWeight=isHeightWeightChecked printBmi=isBMIChecked includeHeaderAndFooter=includeHeaderAndFooter}}
+        {{/if}}
+        {{#if isDiagnosesChecked}}
+            {{print-diagnoses class="chart-print-container" chartNote=chartNote chartNotePrintInfo=chartNotePrintInfo
+            patient=patientSummary activeDiagnoses=allActiveDiagnoses historicalDiagnoses=allHistoricalDiagnoses
+            chronicActiveDiagnoses=chronicActiveDiagnoses chronicHistoricalDiagnoses=chronicHistoricalDiagnoses acuteActiveDiagnoses=acuteActiveDiagnoses acuteHistoricalDiagnoses=acuteHistoricalDiagnoses  chartNote=chartNote showDiagnosisComment=true showEncounterComment=true showMedication=true includeHeaderAndFooter=includeHeaderAndFooter}}
+        {{/if}}
+        {{#if isAllergiesChecked}}
+            {{print-allergies chartNote=chartNote patient=patientSummary  visibleComments=visibleAllergiesComments
+            includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+        {{/if}}
+        {{#if isMedicationsChecked}}
+            {{print-medications chartNote=chartNote patient=patientSummary sortProperty="fullGenericName" sortAscending=true showComments=true showEncounterComments=true showScripts=true includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo showHistoricalMeds=showMedicationsHistorical showActiveMeds=showMedicationsActive}}
+        {{/if}}
+
+        {{#if isImmunizationsChecked}}
+            {{print-immunizations-section chartNote=chartNote content=immunizations patient=patientSummary  class="immu-print print-section" showComments=true title=immunizationsTitle
+            includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+        {{/if}}
+        {{#if isSocialChecked}}
+            {{print-social-behavioral-health-section chartNote=chartNote content=socialBehavioralHistoryInfo patient=patientSummary
+                includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+        {{/if}}
+        {{#if isPmhChecked}}
+            {{print-pmh-section chartNote=chartNote content=pmhSections patient=patientSummary
+            includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+        {{/if}}
+        {{#if isFamilyHistoryChecked}}
+            {{print-family-health-history chartNote=chartNote patient=patientSummary relatives=familyHistory
+            includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+        {{/if}}
+        {{#if isAdvancedDirectivesChecked}}
+            {{print-advanced-directives-section chartNote=chartNote content=advancedDirectives patient=patientSummary
+            includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+        {{/if}}
+        {{#if isImplantableDevicesChecked}}
+            {{print-devices-section data=devices noDevices=noImplantableDevices users=practiceUsers title="Implantable devices"
+            includeHeaderAndFooter=includeHeaderAndFooter}}
+        {{/if}}
+        {{#if isHealthConcernsChecked}}
+            {{print-health-concerns healthConcerns=healthConcerns includeHeaderAndFooter=includeHeaderAndFooter noKnownHealthConcerns=noKnownHealthConcerns showActiveHealthConcerns=includeActiveHealthConcerns showInactiveHealthConcerns=includeInactiveHealthConcerns}}
+        {{/if}}
+        {{#if isGoalsChecked}}
+            {{print-goals activeGoals=activeGoals inactiveGoals=inactiveGoals includeHeaderAndFooter=includeHeaderAndFooter
+            showActiveGoals=showActiveGoals showInactiveGoals=showInactiveGoals}}
+        {{/if}}
+
+        {{#if chartNote}}
+            {{#if isAnyEncounterDataChecked}}
+                <div class="container-fluid table-content">
+                    <div class="table">
+                        {{#if isSoapNote}}
+                            {{#if isSubjectiveChecked}}
+                                <div class="row header-row"><div class="col-xs-12"><h2>Subjective</h2></div></div>
+                                <div class="row no-stripe">
+                                    <div class="col-xs-12">
+                                        {{rich-text-with-empty-state title="subjective" value=chartNote.subjective isEmptyStateDisabled=true}}
+                                    </div>
+                                </div>
+                            {{/if}}
+                            {{#if isObjectiveChecked}}
+                                <div class="row header-row"><div class="col-xs-12"><h2>Objective</h2></div></div>
+                                <div class="row no-stripe">
+                                    <div class="col-xs-12">
+                                        {{rich-text-with-empty-state title="objective" value=chartNote.objective isEmptyStateDisabled=true}}
+                                    </div>
+                                </div>
+                            {{/if}}
+                            {{#if isAssessmentChecked}}
+                                <div class="row header-row"><div class="col-xs-12"><h2>Assessment</h2></div></div>
+                                <div class="row no-stripe">
+                                    <div class="col-xs-12">
+                                        {{rich-text-with-empty-state title="assessment" value=chartNote.assessment isEmptyStateDisabled=true}}
+                                        {{diagnoses-assessment-list-read-only patientGuid=patient.id transcriptGuid=chartNote.transcriptGuid isExpanded=true hideCollapseLink=true oneline=false firstCommentOneLine=false chartNoteDiagnoses=chartNote.diagnoses isSigned=isSigned}}
+                                    </div>
+                                </div>
+                            {{/if}}
+                            {{#if isPlanChecked}}
+                                <div class="row header-row"><div class="col-xs-12"><h2>Plan</h2></div></div>
+                                <div class="row no-stripe">
+                                    <div class="col-xs-12">
+                                        {{rich-text-with-empty-state title="plan" value=chartNote.plan isEmptyStateDisabled=true}}
+                                        {{medications-plan-list-read-only patientGuid=patient.id transcriptGuid=chartNote.transcriptGuid
+                                        chartNoteMedications=chartNote.medications isSigned=isSigned
+                                        isExpanded=true hideCollapseLink=true oneline=false firstCommentOneLine=false
+                                        showWarningOnDuplicateMedications=false}}
+                                    </div>
+                                </div>
+                            {{/if}}
+                        {{else}}
+                            {{#if isSimpleNoteChecked}}
+                                <div class="row header-row"><div class="col-xs-12"><h2>{{noteTypeHeading}}</h2></div></div>
+                                <div class="row no-stripe">
+                                    {{rich-text-with-empty-state title=noteTypeHeading value=chartNote.subjective class="col-xs-12" isEmptyStateDisabled=true}}
+                                </div>
+                            {{/if}}
+                        {{/if}}
+                    </div>
+                    {{#if isOrdersChecked}}
+                        <div class="table">
+                            <div class="row header-row">
+                                <div class="col-xs-10">
+                                    <h2>Orders</h2>
+                                </div>
+                            </div>
+                            <div class="row header-row">
+                                <div class="col-xs-10 print-order-type-title">LAB ORDERS</div>
+                            </div>
+                                {{print-order-attached-to-encounter-section orders=diagnosticOrders}}
+                            <div class="row header-row">
+                                <div class="col-xs-10 print-order-type-title">IMAGING ORDERS</div>
+                            </div>
+                                {{print-order-attached-to-encounter-section orders=imagingOrders}}
+                        </div>
+                    {{/if}}
+
+                    {{#if isSIAChecked}}
+                        <div class="table">
+                            <div class="row header-row"><div class="col-xs-12"><h2 data-element="print-sia-header">Screenings/ Interventions/ Assessments</h2></div></div>
+                            {{#if events.eventItems}}
+                                <div class="row header-row">
+                                    <div class="col-xs-4">Category</div>
+                                    <div class="col-xs-6">Name</div>
+                                    <div class="col-xs-2">Status</div>
+                                </div>
+                                {{#each events.eventItems as |item|}}
+                                    <div class="row no-stripe">
+                                        <div class="col-xs-4">{{item.eventType.category}}</div>
+                                        <div class="col-xs-6">
+                                            <p data-element="print-sia-display-name">{{item.eventType.displayName}}</p>
+                                            {{#if item.children}}
+                                                <p class="field-label">Follow-up plan</p>
+                                                <ul class="list">
+                                                    {{#each item.children as |child|}}
+                                                        <li>{{child.eventType.category}}: <span data-element="print-sia-child-item"> {{child.eventType.displayName}} </span> - {{child.selectedStatus}}</li>
+                                                    {{/each}}
+                                                </ul>
+                                            {{/if}}
+                                        </div>
+                                        <div class="col-xs-2">{{item.selectedStatus}}</div>
+                                    </div>
+                                {{/each}}
+                            {{else}}
+                                <p class="formatted-text">No screenings/interventions/assessments recorded.</p>
+                            {{/if}}
+                        </div>
+                    {{/if}}
+
+                    {{#if isObservationsChecked}}
+                        <div class="table">
+                            <div class="row header-row"><div class="col-xs-12"><h2>Observations</h2></div></div>
+                            {{#if showStructuredObservations}}
+                                {{#if hasNoStructuredObservations}}
+                                    <p class="formatted-text" data-element="print-observations-empty-text">No observations recorded.</p>
+                                {{else}}
+                                    <div class="row header-row">
+                                        <div class="col-xs-4">Category</div>
+                                        <div class="col-xs-6">Name</div>
+                                        <div class="col-xs-2">Date</div>
+                                    </div>
+                                    {{#each functionalStatuses as |func|}}
+                                        <div class="row no-stripe">
+                                            <div class="col-xs-4 formatted-text" >Functional status</div>
+                                            <div class="col-xs-6 formatted-text" data-element="print-functional-status-text">{{func.eventType.displayName}}</div>
+                                            <div class="col-xs-2 formatted-text" data-element="print-functional-status-date">{{format-date-time-utc func.startDateTimeUtc}}</div>
+                                        </div>
+                                    {{/each}}
+                                    {{#each cognitiveStatuses as |cog|}}
+                                        <div class="row no-stripe">
+                                            <div class="col-xs-4 formatted-text">Cognitive status</div>
+                                            <div class="col-xs-6 formatted-text" data-element="print-cognitive-status-text">{{cog.eventType.displayName}}</div>
+                                            <div class="col-xs-2 formatted-text" data-element="print-cognitive-status-date">{{format-date-time-utc cog.startDateTimeUtc}}</div>
+                                        </div>
+                                    {{/each}}
+                                {{/if}}
+                            {{else}}
+                                {{#each observations.eventItems as |item|}}
+                                    <div class="row header-row">
+                                        <div class="col-xs-12">{{item.eventType.displayName}}</div>
+                                    </div>
+                                    <div class="row no-stripe">
+                                        {{#if (compare item.resultCode.codeValue observations.nullResult.codeValue)}}
+                                            <div class="col-xs-12 formatted-text" data-element="print-observation-no-impairment-text">No impairment.</div>
+                                        {{/if}}
+                                        <div class="col-xs-12 formatted-text" data-element="print-observation-text">{{item.comments}}</div>
+                                    </div>
+                                {{else}}
+                                    <p class="formatted-text" data-element="print-observation-no-observations-text">No observations recorded.</p>
+                                {{/each}}
+                            {{/if}}
+                        </div>
+                    {{/if}}
+
+                    {{#if isQualityOfCareChecked}}
+                        <div class="table">
+                            <div class="row header-row"><div class="col-xs-12"><h2>Quality of care</h2></div></div>
+                            {{#each careQuality.selectedEvents as |item|}}
+                                <div class="row no-stripe">
+                                    <div class="col-xs-12" data-element="print-encounter-quality-of-care">{{item.eventType.displayName}}</div>
+                                </div>
+                            {{else}}
+                                <p class="formatted-text">No quality of care events recorded.</p>
+                            {{/each}}
+                        </div>
+                    {{/if}}
+
+                    {{#if isCarePlanChecked}}
+                        <div class="table">
+                            <div class="row header-row"><div class="col-xs-12"><h2>Care plan</h2></div></div>
+                            {{#each carePlan.eventItems as |item|}}
+                                <div class="row no-stripe">
+                                    <div class="col-xs-12 formatted-text">{{item.comments}}</div>
+                                </div>
+                            {{else}}
+                                <p class="formatted-text">No care plan recorded.</p>
+                            {{/each}}
+                        </div>
+                    {{/if}}
+
+                    {{#if isAddendaChecked}}
+                        {{#if amendments}}
+                            <div class="table">
+                                <div class="row header-row"><div class="col-xs-12"><h2>Addenda</h2></div></div>
+                                <div class="row header-row">
+                                    <div class="col-xs-4">Addendum</div>
+                                    <div class="col-xs-3">Status</div>
+                                    <div class="col-xs-2">Source</div>
+                                    <div class="col-xs-3">Date/Time</div>
+                                </div>
+                                {{#each amendments as |am|}}
+                                    <div class="row no-stripe">
+                                        <div class="col-xs-4 formatted-text" data-element="print-patient-am-note">{{am.note}}</div>
+                                        <div class="col-xs-3" data-element="print-patient-am-status-name">{{am.status}} by {{am.providerName}}</div>
+                                        <div class="col-xs-2">{{am.source}}</div>
+                                        <div class="col-xs-3">{{format-date-time-local am.lastModifiedDateTimeUtc format="MM/DD/YYYY hh:mm a" defaultText="n/a"}}</div>
+                                    </div>
+                                {{/each}}
+                            </div>
+                        {{/if}}
+                    {{/if}}
+                </div>
+            {{/if}}
+            <div class="col-logo">{{pf-logo width="150"}}</div>
+        {{else}}
+            {{#each sortedEncounters as |encounter|}}
+                {{print-encounter-section amendments=encounter.addenda careQuality=encounter.careQuality
+                    carePlan=encounter.carePlan chartNote=encounter events=encounter.events observations=encounter.observations
+                    patient=patientSummary transcriptGuid=encounter.id vitals=encounter.vitals includeAllSections=true
+                    encounterType=encounter.encounterType isSigned=encounter.isSigned vitalsFlowsheet=encounter.vitalsFlowsheet
+                    includeHeaderAndFooter=true chartNotePrintInfo=encounter.chartNotePrintInfo patientSnapshot=encounter.patientSnapshot
+                    facilitySnapshot=encounter.facilitySnapshot showFooter=false}}
+            {{/each}}
+            {{#if isSummarySiaChecked}}
+                {{print-patient-sia-section printSummarySIAs=printSummarySIAs patient=patientSummary includeHeaderAndFooter=includeHeaderAndFooter}}
+            {{/if}}
+            <div class="col-logo">{{pf-logo width="150"}}</div>
+        {{/if}}
+        {{#if canPrintPHR}}
+            {{#if isPHRChecked}}
+                TODO: PHR print goes here
+            {{/if}}
+        {{/if}}
+
+        {{#each selectedAdherenceMaterials as |adherenceMaterial|}}
+            {{print-external-document patient=patientSummary documentUrl=adherenceMaterial.documentUrl}}
+        {{/each}}
+    </div>
+{{/if}}

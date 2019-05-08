@@ -1,0 +1,50 @@
+{{#detail-pane
+    classNames="side-fixed col-xs-5 summary-details goal-detail"
+    resizables=resizables
+    resizeOnBreakPoint=true
+    isToolBoxVisible=false
+    close="save"
+    isSlideOpenToolBox=false
+    bigHeaderText="Goals"
+    as |section|}}
+    {{#detail-pane-body sectionContext=section}}
+        <div class="panel-section">
+            <div class="field-label box-margin-An required">Goal</div>
+            {{text-area
+                autosize=true
+                value=goal.description
+                placeholderText=placeholderText
+                tooltipMsg=errors.description
+                isErrorHighlightingAutomatic=true
+                maxlength="1024" rows="3" }}
+            <div class="inline-flex-group">
+                <div class="item gutter-xs active-checkbox">
+                    {{#d-check-box checked=goal.isActive smaller=true}}
+                        Active goal
+                    {{/d-check-box}}
+                </div>
+            </div>
+            <div class="inline-flex-group">
+                <div class="item gutter-xs date">
+                    <div class="field-label box-margin-An required">Start Date</div>
+                    {{d-date-picker value=goal.effectiveDate errorMessage=errors.effectiveDate isLegacy=false placeholder="MM/DD/YYYY"
+                        autoCorrectYear=true data-element="goal-effective-date" isShorter=true}}
+                </div>
+            </div>
+        </div>
+    {{/detail-pane-body}}
+    {{#detail-pane-footer sectionContext=section}}
+        <div class="pull-left">
+            <button class="btn btn-sm" onclick={{action "cancel"}} data-element="btn-cancel">Cancel</button>
+            {{#unless addingNewGoal}}
+                <button class="btn btn-sm" onclick={{action "delete"}} data-element="btn-delete">Delete</button>
+            {{/unless}}
+        </div>
+        <div class="pull-right">
+            {{#if addingNewGoal}}
+                <button class="btn btn-sm" onclick={{action "save" true}} data-element="btn-save-add-another">Save & add another</button>
+            {{/if}}
+            <button class="btn btn-sm btn-primary" {{action "save"}} data-element="btn-save">Save</button>
+        </div>
+    {{/detail-pane-footer}}
+{{/detail-pane}}

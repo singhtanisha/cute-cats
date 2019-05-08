@@ -1,0 +1,88 @@
+{{#if patient}}
+    <div class="patient-photo {{unless isEntitledToEditHeader "disabled"}}" {{action "addPhoto"}}>
+        {{patient-image hasPatientImage=patient.hasPatientImage patientPracticeGuid=patient.patientPracticeGuid}}
+        {{#unless patientImageExists}}
+            <div class="photo-overlay">
+                <i class="icon-add"></i>
+                <span>Add Photo</span>
+            </div>
+        {{/unless}}
+    </div>
+
+    <div class="patient-name-column patient-info-column with-right-border">
+        <span class="patient-name" data-element="patient-ribbon-patient-name">
+            {{patient.displayName}}{{#if patient.nickname}} ({{patient.nickname}}) {{/if}}
+        </span>
+    </div>
+    <div class="flex-grow patient-details-container">
+        <div class="patient-details">
+            <div class="flex-row">
+                <div class="patient-info-column with-right-border flex-no-shrink">
+                    <span class="bold">PRN:</span>
+                    <span data-element="patient-ribbon-prn">
+                        {{#if patient.patientRecordNumber}}
+                            {{patient.patientRecordNumber}}
+                        {{else}}
+                            n/a
+                        {{/if}}
+                    </span>
+                </div>
+                <div class="patient-info-column with-right-border flex-no-shrink" data-element="patient-ribbon-age-gender">{{patient.age}} {{gender}}</div>
+                {{#if isPhrStatusVisible}}
+                    <div class="patient-info-column with-right-border component-phr-enrollment flex-shrink">
+                        {{phr-status patientPracticeGuid=patient.patientPracticeGuid openPhrEnrollment="openPhrEnrollment" hide=(action "hidePhrStatus")}}
+                    </div>
+                {{/if}}
+                {{#if patient.primaryInsurancePlan.planName}}
+                    {{patient-header-insurance-info patient=patient class="patient-info-column with-right-border hidden-sm hidden-xs flex-shrink"}}
+                {{/if}}
+                <div class="patient-info-column with-right-border visible-xl flex-no-shrink">
+                    <span class="bold">DOB:</span>
+                    <span data-element="patient-ribbon-dob">{{format-date-time-utc patient.birthDate}}</span>
+                </div>
+                {{#if patient.mobilePhone}}
+                    {{patient-header-phone-column phoneNumber=patient.mobilePhone type="M" class="visible-xl flex-no-shrink" data-element="patient-ribbon-mobile-phone"}}
+                {{/if}}
+                <div class="patient-info-column ellipsis-column flex-no-shrink"><i {{action "toggleIsExpanded"}} class="icon-ellipsis" data-element="patient-ribbon-ellipsis"></i></div>
+            </div>
+            {{#if isExpanded}}
+                <div class="flex-row" data-element="patient-ribbon-second-row">
+                    {{#if patient.primaryInsurancePlan.planName}}
+                        {{patient-header-insurance-info patient=patient class="patient-info-column with-right-border hidden-md hidden-lg flex-shrink"}}
+                    {{/if}}
+                    <div class="patient-info-column with-right-border hidden-xl flex-no-shrink">
+                        <span class="bold">DOB:</span>
+                        <span data-element="patient-ribbon-dob">{{format-date-time-utc patient.birthDate}}</span>
+                    </div>
+                    {{#if patient.mobilePhone}}
+                        {{patient-header-phone-column phoneNumber=patient.mobilePhone type="M" class="hidden-sm hidden-xs hidden-xl flex-no-shrink" data-element="patient-ribbon-mobile-phone"}}
+                    {{/if}}
+                    {{#if patient.homePhone}}
+                        {{patient-header-phone-column phoneNumber=patient.homePhone type="H" class="hidden-sm hidden-xs flex-no-shrink" data-element="patient-ribbon-home-phone"}}
+                    {{/if}}
+                    {{#if patient.officePhone}}
+                        {{patient-header-phone-column phoneNumber=patient.officePhone type="W" class="hidden-sm hidden-xs flex-no-shrink" data-element="patient-ribbon-work-phone"}}
+                    {{/if}}
+                </div>
+                <div class="hidden-md hidden-lg" data-element="patient-ribbon-third-row">
+                    {{#if patient.mobilePhone}}
+                        {{patient-header-phone-column phoneNumber=patient.mobilePhone type="M" data-element="patient-ribbon-mobile-phone"}}
+                    {{/if}}
+                    {{#if patient.homePhone}}
+                        {{patient-header-phone-column phoneNumber=patient.homePhone type="H" data-element="patient-ribbon-home-phone"}}
+                    {{/if}}
+                    {{#if patient.officePhone}}
+                        {{patient-header-phone-column phoneNumber=patient.officePhone type="W" data-element="patient-ribbon-work-phone"}}
+                    {{/if}}
+                </div>
+            {{/if}}
+        </div>
+    </div>
+{{else}}
+    <div class="patient-name-column patient-info-column with-right-border">
+        <span class="patient-name" data-element="patient-ribbon-no-patient-message">{{patientMissingMessage}}</span>
+    </div>
+    {{#if patientMissingMessageDetail}}
+        <div class="patient-info-column" data-element="patient-ribbon-no-patient-details">{{patientMissingMessageDetail}}</div>
+    {{/if}}
+{{/if}}

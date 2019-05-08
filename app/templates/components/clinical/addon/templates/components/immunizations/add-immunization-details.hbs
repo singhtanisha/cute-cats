@@ -1,0 +1,395 @@
+{{#unless isHistorical}}
+    <div class="{{unless isSearching "inline-flex-group-v2"}}">
+        {{#check-box checked=model.isPartiallyComplete class="item gutter-sm" disabled=disabled}}
+            Partially administered
+        {{/check-box}}
+    </div>
+{{/unless}}
+<div class="{{unless isSearching "inline-flex-group-v2"}}">
+    {{#unless isHistorical}}
+        <div class="{{unless isSearching "item gutter-sm"}}">
+            <div class="inline-flex-group-v2">
+                <div class="item gutter-sm box-fixed">
+                    <label class="field-label {{if isAdministered "required"}}">Date Administered</label>
+                    {{#if isAddingImmunization}}
+                        {{d-date-picker value=model.vaccinationDate data-element="date-administered" isLegacy=false isShorter=true
+                            errorMessage=errors.vaccinationvaccinationDate startDate="01/01/1900"}}
+                    {{else}}
+                        <div>
+                            {{#if model.vaccinationDate}}{{format-date-time model.vaccinationDate}}{{else}}n/a{{/if}}
+                        </div>
+                    {{/if}}
+                </div>
+                <div class="item gutter-sm box-fixed">
+                    <label class="field-label {{if isAdministered "required"}}">Time Administered</label>
+                    {{#if isAddingImmunization}}
+                        {{d-time-picker value=model.vaccinationTime data-element="time-administered" interval=15 isShorter=true
+                            errorMessage=errors.vaccinationvaccinationTime}}
+                    {{else}}
+                        <div>{{model.vaccinationTime}}</div>
+                    {{/if}}
+                </div>
+                <div class="item gutter-xs">
+                    <label class="field-label {{if isAdministered "required"}}">Ordered By</label>
+                    {{#composable-select
+                        content=eligibleProviders
+                        disabled=disabled
+                        errorMessage=errors.vaccinationorderingProviderGuid
+                        onSelect=(action "selectOrderingProvider")
+                        optionLabelPath="fullProviderName"
+                        data-element="select-ordered-by"
+                        selection=selectedOrderingProvider as |options|}}
+                        {{options.dropdown prompt="Select value"}}
+                        {{options.dropdown-menu}}
+                    {{/composable-select}}
+                </div>
+            </div>
+        </div>
+    {{/unless}}
+    <div class="{{unless isSearching "item gutter-sm"}}">
+        <div class="inline-flex-group-v2">
+            <div class="item gutter-sm">
+                <label class="field-label {{if isAdministered "required"}}">Administered By</label>
+                {{#composable-select
+                    content=eligibleProviders
+                    disabled=disabled
+                    errorMessage=errors.vaccinationadministeredByProviderGuid
+                    onSelect=(action "selectAdministeredByProvider")
+                    optionLabelPath="fullProviderName"
+                    selection=selectedAdministeringProvider as |options|}}
+                    {{options.dropdown prompt="Select value"}}
+                    {{options.dropdown-menu}}
+                {{/composable-select}}
+            </div>
+            {{#if isHistorical}}
+                <div class="item gutter-sm">
+                    <label class="field-label {{if isAdministered "required"}}">Ordered By</label>
+                    {{#composable-select
+                        content=eligibleProviders
+                        disabled=disabled
+                        errorMessage=errors.vaccinationorderingProviderGuid
+                        onSelect=(action "selectOrderingProvider")
+                        optionLabelPath="fullProviderName"
+                        selection=selectedOrderingProvider as |options|}}
+                        {{options.dropdown prompt="Select value"}}
+                        {{options.dropdown-menu}}
+                    {{/composable-select}}
+                </div>
+            {{else}}
+                <div class="item gutter-sm">
+                    <label class="field-label {{if isAdministered "required"}}">Administered facility</label>
+                    {{#if isAddingImmunization}}
+                        {{#composable-select
+                            content=knownFacilities
+                            selection=selectedFacility
+                            optionLabelPath="name"
+                            errorMessage=errors.vaccinationfacilityGuid
+                            onSelect=(action "selectFacility") as |options|}}
+                            {{options.dropdown prompt="Select value"}}
+                            {{options.dropdown-menu}}
+                        {{/composable-select}}
+                    {{else}}
+                        <div>{{if selectedFacility selectedFacility.facilityName "n/a"}}</div>
+                    {{/if}}
+                </div>
+            {{/if}}
+        </div>
+    </div>
+</div>
+<div class="{{unless isSearching "inline-flex-group-v2"}}">
+    <div class="{{unless isSearching "item gutter-sm"}}">
+        <div class="inline-flex-group-v2">
+            <div class="item gutter-sm">
+                <label class="field-label {{if isAdministered "required"}}">Manufacturer</label>
+                {{#if areInventoryFieldsReadonly}}
+                    <div>{{model.manufacturer.name}}</div>
+                {{else}}
+                    {{#composable-select
+                        content=reference.vaccineManufacturers
+                        disabled=isInventoryManufacturerDisabled
+                        errorMessage=errors.vaccinationmanufacturer
+                        optionLabelPath="name"
+                        onSelect=(action "selectManufacturer")
+                        selection=model.manufacturer as |options|}}
+                        {{options.dropdown prompt="Select value"}}
+                        {{options.dropdown-menu}}
+                    {{/composable-select}}
+                {{/if}}
+            </div>
+            <div class="item gutter-sm">
+                <label class="field-label {{unless isNdcNotRequired "required"}}">NDC code</label>
+                {{#if areInventoryFieldsReadonly}}
+                    <div>{{model.ndc}}</div>
+                {{else}}
+                    {{#composable-select
+                        content=reference.immunizationDrugs
+                        disabled=isNdcDisabled
+                        errorMessage=errors.vaccinationndc
+                        onSelect=(action "selectNdc")
+                        optionLabelPath="nationalDrugCode"
+                        selection=selectedNdc as |options|}}
+                        {{options.dropdown prompt="Select value"}}
+                        {{options.dropdown-menu}}
+                    {{/composable-select}}
+                {{/if}}
+            </div>
+            <div class="item gutter-sm">
+                <label class="field-label {{if isAdministered "required"}}">Lot</label>
+                {{#if areInventoryFieldsReadonly}}
+                    <div>{{model.vaccineLotNumber}}</div>
+                {{else if isInventoryMultipleLots}}
+                    {{#composable-select
+                        content=reference.vaccineInventories
+                        optionLabelPath="vaccineLotNumber"
+                        onSelect=(action "selectLotOption")
+                        selection=selectedInventoryLot as |options|}}
+                        {{options.dropdown prompt="Select value"}}
+                        {{#options.dropdown-menu as |menu|}}
+                            {{#menu.options as |menu-options|}}
+                                {{#each menu-options.content as |option|}}
+                                    {{#menu-options.option content=option}}
+                                        <span class="break-all">{{option.vaccineLotNumber}}</span>
+                                        <span> - </span>
+                                        <span class="{{if option.isExpired "text-color-error"}}">Exp {{option.vaccineExpirationDate}}</span>
+                                    {{/menu-options.option}}
+                                {{/each}}
+                            {{/menu.options}}
+                        {{/options.dropdown-menu}}
+                    {{/composable-select}}
+                {{else}}
+                    {{text-field value=model.vaccineLotNumber data-element="txt-lot" disabled=isInventoryLotDisabled errorMessage=errors.vaccinationvaccineLotNumber}}
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    <div class="{{unless isSearching "item gutter-sm"}}">
+        <div class="inline-flex-group-v2">
+            <div class="item gutter-xs box-fixed-sm">
+                <label class="field-label {{if isAdministered "required"}}">QTY</label>
+                {{#if areInventoryFieldsReadonly}}
+                    <div>{{model.dosesFromInventory}}</div>
+                {{else}}
+                    {{text-field value=model.dosesFromInventory data-element="txt-qty" errorMessage=errors.vaccinationdosesFromInventory}}
+                {{/if}}
+            </div>
+            <div class="item gutter-xs box-fixed-sm">
+                <label class="field-label {{if isAdministered "required"}}">Dose</label>
+                {{text-field
+                    data-element="txt-dose"
+                    type="number"
+                    disabled=disabled
+                    errorMessage=errors.vaccinationadministeredAmount
+                    refocusOnError=true
+                    value=model.administeredAmount}}
+            </div>
+            <div class="item gutter-sm">
+                <label class="field-label {{if isAdministered "required"}}">Units</label>
+                {{#composable-select
+                    content=reference.vaccinationUnits
+                    disabled=disabled
+                    errorMessage=errors.vaccinationadministeredUnits
+                    onSelect=(action "selectAdministeredUnits")
+                    optionLabelPath="code"
+                    selection=selectedUnits as |options|}}
+                    {{options.dropdown prompt="Select value"}}
+                    {{options.dropdown-menu}}
+                {{/composable-select}}
+            </div>
+            <div class="item gutter-sm">
+                <label class="field-label {{if isAdministered "required"}}">Expiration Date</label>
+                {{#if areInventoryFieldsReadonly}}
+                    <div>{{format-date-time model.vaccineLotExpirationDate}}</div>
+                {{else}}
+                    {{#popover-confirm
+                        isPopoverVisible=showExpirationWarning
+                        action=attrs.confirmSave
+                        title="Confirm vaccine"
+                        popoverContent="The vaccine you have selected from your inventory has an expiration date that is in the past. Are you sure you want to continue with the selected vaccine?"
+                        confirmLabel="Save"
+                        cancelLabel="Cancel"
+                        confirmType="warning"
+                        placement="left"
+                        tagName="i"}}
+                    {{/popover-confirm}}
+                    {{d-date-picker
+                        data-element="date-expiration"
+                        errorMessage=errors.vaccinationvaccineLotExpirationDate
+                        isLegacy=false
+                        isShorter=true
+                        disabled=isInventoryExpirationDisabled
+                        selectDate=(action "selectExpirationDate")
+                        startDate="01/01/1900"
+                        value=model.vaccineLotExpirationDate}}
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="{{unless isSearching "inline-flex-group-v2"}}">
+    <div class="{{unless isSearching "item gutter-sm"}}">
+        <div class="inline-flex-group-v2">
+            <div class="item gutter-sm">
+                <label class="field-label {{if isElectronicAndAdministered "required"}}">Route</label>
+                {{#composable-select
+                    content=vaccinationBodyRoutes
+                    disabled=disabled
+                    errorMessage=errors.vaccinationroute
+                    optionLabelPath="name"
+                    selection=model.route as |options|}}
+                    {{options.dropdown prompt="Select value"}}
+                    {{options.dropdown-menu}}
+                {{/composable-select}}
+            </div>
+            <div class="item gutter-sm">
+                <label class="field-label {{if isSiteRequired "required"}}">Body site</label>
+                {{#composable-select
+                    content=vaccinationBodySites
+                    disabled=isSiteDisabled
+                    errorMessage=errors.vaccinationsite
+                    optionLabelPath="name"
+                    selection=model.site as |options|}}
+                    {{options.dropdown prompt="Select value"}}
+                    {{options.dropdown-menu}}
+                {{/composable-select}}
+            </div>
+        </div>
+    </div>
+    <div class="{{unless isSearching "item gutter-sm"}}">
+        <div class="inline-flex-group-v2">
+            {{immunizations/vis-edition
+                class="item gutter-sm"
+                disabled=disabled
+                errorMessage=errors.vaccinationvisConceptGuidList
+                isRequired=isVisConceptRequired
+                vaccination=model
+                visConcepts=reference.visConcepts}}
+        </div>
+    </div>
+</div>
+<div class="{{unless isSearching "inline-flex-group-v2"}}">
+    <div class="{{unless isSearching "item gutter-sm"}}">
+        <div class="inline-flex-group-v2">
+            <div class="item gutter-sm">
+                <label class="field-label">
+                    Funding Source
+                    {{#composable-popover data-element="info-popover" classNames="box-margin-Lxs inline-option" as |options|}}
+                        {{options.popover-target tagName="a" classNames="icon-info" data-element="info-popover-target"}}
+                        {{#options.popover}}
+                            <div class="popover-content">
+                                This option allows you to record the source of funding for this vaccine.
+                            </div>
+                        {{/options.popover}}
+                    {{/composable-popover}}
+                </label>
+                {{#composable-select
+                    content=reference.immunizationFundingSources
+                    disabled=isInventoryFundingSourceDisabled
+                    errorMessage=errors.vaccinationimmunizationFundingSource
+                    optionLabelPath="preferredConceptName"
+                    selection=model.immunizationFundingSource as |options|}}
+                    {{options.dropdown prompt="Select value"}}
+                    {{options.dropdown-menu}}
+                {{/composable-select}}
+            </div>
+        </div>
+    </div>
+    <div class="{{unless isSearching "item gutter-sm"}}">
+        <div class="inline-flex-group-v2">
+            <div class="item gutter-sm">
+                <label class="field-label {{if isElectronicAndAdministered "required"}}">VFC financial class</label>
+                {{#composable-select
+                    content=reference.vfcStatuses
+                    disabled=disabled
+                    errorMessage=errors.vaccinationvfcStatus
+                    optionLabelPath="name"
+                    selection=model.vfcStatus as |options|}}
+                    {{options.dropdown prompt="Select value"}}
+                    {{options.dropdown-menu}}
+                {{/composable-select}}
+            </div>
+        </div>
+    </div>
+    {{#if showSelfPayRestrictionDropdown}}
+        <div class="{{unless isSearching "item gutter-sm"}}">
+            <div class="inline-flex-group-v2">
+                <div class="item gutter-sm limit-dropdown-width">
+                    <label class="field-label">Special indication</label>
+                    {{#composable-select
+                        content=reference.vaccinationScheduleSpecialIndications
+                        disabled=disabled
+                        optionLabelPath="scheduleSpecialIndicationDefinition"
+                        onSelect=(action "selectSpecialIndication")
+                        selection=selectedSpecialIndication as |options|}}
+                        {{options.dropdown prompt="Select indication"}}
+                        {{options.dropdown-menu}}
+                    {{/composable-select}}
+                </div>
+            </div>
+        </div>
+    {{/if}}
+</div>
+<div class="{{unless isSearching "inline-flex-group-v2"}}">
+    <div class="{{unless isSearching "item gutter-sm"}}">
+        <div class="inline-flex-group-v2">
+            {{#unless showSelfPayRestrictionDropdown}}
+                <div class="item gutter-sm limit-dropdown-width">
+                    <label class="field-label">Special indication</label>
+                    {{#composable-select
+                        content=reference.vaccinationScheduleSpecialIndications
+                        disabled=disabled
+                        optionLabelPath="scheduleSpecialIndicationDefinition"
+                        onSelect=(action "selectSpecialIndication")
+                        selection=selectedSpecialIndication as |options|}}
+                        {{options.dropdown prompt="Select indication"}}
+                        {{options.dropdown-menu}}
+                    {{/composable-select}}
+                </div>
+            {{/unless}}
+            <div class="item gutter-sm limit-dropdown-width">
+                <label class="field-label">Reaction</label>
+                {{#composable-select
+                    content=reference.vaccinationAdverseReactions
+                    disabled=disabled
+                    optionLabelPath="adverseReactionDefinition"
+                    onSelect=(action "selectReaction")
+                    selection=selectedReaction as |options|}}
+                    {{options.dropdown prompt="Select reaction"}}
+                    {{options.dropdown-menu}}
+                {{/composable-select}}
+            </div>
+            {{#if showSelfPayRestrictionDropdown}}
+                <div class="item gutter-sm limit-dropdown-width">
+                    {{self-pay-restriction-dropdown
+                        fixedWidth=false
+                        isNew=isAddingImmunization
+                        isSaveEnabled=false
+                        disabled=disabled value="deny"
+                        data-element="self-pay-restriction-dropdown"
+                        dropdownPadding=false
+                        patientPracticeGuid=model.patientPracticeGuid
+                        entityGuid=model.vaccinationGuid
+                        entityTypeCode="immz"
+                        entityTypeText="Immunizations"
+                        isImmunization=true
+                        selectSPR=(action selectPatientPrivacyConsent)}}
+                </div>
+            {{/if}}
+        </div>
+    </div>
+    <div class="{{unless isSearching "item gutter-sm"}}">
+        {{#if showComments}}
+            <div class="inline-flex-group-v2">
+                <div class="item gutter-sm" data-element="txt-comments">
+                    <label class="field-label">Comments</label>
+                    {{textarea
+                        class="immunization-comment"
+                        disabled=disabled
+                        maxlength="256"
+                        placeholder="Add a comment"
+                        rows="3"
+                        value=model.comment}}
+                </div>
+            </div>
+        {{/if}}
+    </div>
+</div>

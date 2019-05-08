@@ -1,0 +1,31 @@
+{{#detail-pane-v2 class="side-fixed col-xs-5 type-v2" as |section|}}
+    {{#section.right-module class="fill-space flex-column" as |right-module|}}
+        {{right-module.header smallHeaderText="Family health history" bigHeaderText=smallHeaderText
+            class="box-padding-Llg-v2" closeDetailPane=(action "cancel")}}
+        {{#right-module.body class="flex-grow box-padding-Alg-v2" as |body|}}
+            {{#view-spinner isLoading=save.isRunning}}
+                <div class="box-padding-Bmd-v2">
+                    {{#link-to "patient.familyhistory"}}Use structured family health history{{/link-to}}
+                </div>
+                <div data-element="family-health-history-text-area-container">
+                    <label class="field-label">Family health history</label>
+                    {{text-area-counter autofocus=true isDisabled=isNotAllowedToEdit autosize=true
+                        value=model.familyHealthHistory placeholderText="Enter family health history"
+                        maxlength="4000" rows="3"}}
+                </div>
+            {{/view-spinner}}
+        {{/right-module.body}}
+        {{#right-module.footer class="box-padding-TBmd-v2 box-padding-LRlg-v2" as |footer|}}
+            <div class="clearfix">
+                <div class="pull-left">
+                    <button class="btn--default" type="button" data-element="btn-cancel" onclick={{action "cancel"}}>Cancel</button>
+                </div>
+                {{#if isAllowedToEdit}}
+                    <div class="pull-right">
+                        <button class="btn--brand" type="button" data-element="btn-save-family-health-history" onclick={{perform save}}>Save</button>
+                    </div>
+                {{/if}}
+            </div>
+        {{/right-module.footer}}
+    {{/section.right-module}}
+{{/detail-pane-v2}}

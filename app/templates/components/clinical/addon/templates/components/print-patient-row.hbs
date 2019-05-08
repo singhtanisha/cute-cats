@@ -1,0 +1,6 @@
+<div class="col-xs-6 uppercase semibold">{{title}}</div>
+{{#if value}}
+    <div class="col-xs-6 formatted-text">{{unbound value}}</div>
+{{else}}
+    <div class="col-xs-6">{{#if dateValue}}{{format-date-time dateValue}}{{else}}-{{/if}}</div>
+{{/if}}

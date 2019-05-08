@@ -1,0 +1,18 @@
+{{#print-chart-section patientSummary=patient title=title chartNote=chartNote includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+    <div class="table-content">
+        {{#if healthConcernNote}}
+            <div class="table">
+                <div class="row header-row"><div class="col-xs-12"><h2>Health concern note</h2></div></div>
+                <div class="row no-stripe">
+                    <div class="col-xs-12 print-health-concern-note">{{healthConcernNote.healthConcernNote}}</div>
+                </div>
+            </div>
+        {{/if}}
+        {{#if showActiveHealthConcerns}}
+            {{print-health-concerns-section class="table" data=sortedActiveHealthConcerns noKnownHealthConcerns=noKnownHealthConcerns title="Active"}}
+        {{/if}}
+        {{#if showInactiveHealthConcerns}}
+            {{print-health-concerns-section class="table" data=sortedInactiveHealthConcerns title="Inactive"}}
+        {{/if}}
+    </div>
+{{/print-chart-section}}

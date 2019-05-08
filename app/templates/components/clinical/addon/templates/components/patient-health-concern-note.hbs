@@ -1,0 +1,31 @@
+{{#if isEditing}}
+    <div class="box-margin-Bxs-v2">
+        {{text-area autosize=true autofocus=true class="box-margin-Bmd-v2" maxlength=1024 placeholderText="Add health concern note" value=textAreaValue}}
+        <button class="btn--brand" type="button" onclick={{action "saveNote"}} data-element="btn-save-health-concern-note">Save</button>
+    </div>
+{{else}}
+    {{#if healthConcernNote}}
+        <div class="box-margin-Bxs-v2">
+            <span class="box-margin-Bn text-wrap" data-element="saved-health-concern-note-text">{{preserve-linebreak healthConcernNote.healthConcernNote}}</span>
+            {{#if isAllowedToEditHealthConcerns}}
+                <a role="link" class="box-margin-Lmd-v2" data-element="edit-health-concern-note-button" onclick={{action editNote}}>Edit</a>
+            {{/if}}
+        </div>
+    {{else if isAllowedToEditHealthConcerns}}
+        <div class="box-margin-Bxs-v2">
+            {{#reveal-input data-element="add-health-concern-note-button" inputComponent="text-area" as |options|}}
+                {{#options.link hideIconOnReveal=true}}Add a health concern note{{/options.link}}
+                {{options.input
+                    autofocus=true
+                    autosize=true
+                    class="box-margin-Bmd-v2"
+                    maxlength=1024
+                    placeholderText="Add health concern note"
+                    value=textAreaValue}}
+                {{#if options.isRevealed}}
+                    <button class="btn--brand" type="button" onclick={{action "saveNote"}} data-element="btn-save-health-concern-note">Save</button>
+                {{/if}}
+            {{/reveal-input}}
+        </div>
+    {{/if}}
+{{/if}}

@@ -1,0 +1,92 @@
+<div class="{{unless isSearching "inline-flex-group-v2"}}">
+    <div class="{{unless isSearching "item gutter-sm"}}">
+        <div class="inline-flex-group-v2">
+            <div class="item gutter-sm">
+                <label class="field-label required">Reason refused</label>
+                {{#if isAddingImmunization}}
+                    {{#composable-select
+                        content=reference.rejectionReasons
+                        errorMessage=errors.vaccinationrejectionReason
+                        optionLabelPath="rejectionReasonName"
+                        selection=model.rejectionReason as |options|}}
+                        {{options.typeahead-single-select placeholder="Search for a reason" shouldSearchOnFocus=true}}
+                        {{options.dropdown-menu}}
+                    {{/composable-select}}
+                {{else}}
+                    <div>{{model.rejectionReason.rejectionReasonName}}</div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    <div class="{{unless isSearching "item gutter-sm"}}">
+        <div class="inline-flex-group-v2">
+            <div class="item gutter-sm box-fixed">
+                <label class="field-label">Effective date</label>
+                {{#if isAddingImmunization}}
+                    {{d-date-picker value=model.vaccinationDate data-element="date-refused" isShorter=true isLegacy=false startDate="01/01/1900"}}
+                {{else}}
+                    <div>{{format-date-time model.vaccinationDate}}</div>
+                {{/if}}
+            </div>
+            {{#if showEndDate}}
+                <div class="item gutter-sm box-fixed">
+                    <label class="field-label">End date</label>
+                    {{#if isAddingImmunization}}
+                        {{d-date-picker value=model.rejectionReasonExpirationDate data-element="date-end" isShorter=true isLegacy=false startDate="01/01/1900"}}
+                    {{else}}
+                        <div>{{format-date-time model.rejectionReasonExpirationDate}}</div>
+                    {{/if}}
+                </div>
+            {{/if}}
+            <div class="item gutter-sm">
+                <label class="field-label">Reporting Facility</label>
+                {{#composable-select
+                    content=knownFacilities
+                    disabled=disabled
+                    errorMessage=errors.vaccinationfacilityGuid
+                    onSelect=(action "selectFacility")
+                    optionLabelPath="name"
+                    selection=selectedFacility as |options|}}
+                    {{options.dropdown prompt="Select value"}}
+                    {{options.dropdown-menu}}
+                {{/composable-select}}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="inline-flex-group-v2">
+    {{immunizations/vis-edition
+        class="item gutter-sm"
+        disabled=disabled
+        vaccination=model
+        visConcepts=reference.visConcepts}}
+    {{#if config.isSelfPayRestrictionOn}}
+        {{self-pay-restriction-dropdown
+            class="item gutter-sm"
+            fixedWidth=false
+            isNew=isAddingImmunization
+            isSaveEnabled=false
+            disabled=disabled value="deny"
+            data-element="self-pay-restriction-dropdown"
+            dropdownPadding=false
+            patientPracticeGuid=model.patientPracticeGuid
+            entityGuid=model.vaccinationGuid
+            entityTypeCode="immz"
+            entityTypeText="Immunizations"
+            isImmunization=true
+            selectSPR=(action selectPatientPrivacyConsent)}}
+    {{/if}}
+</div>
+<div class="inline-flex-group-v2">
+    <div class="item gutter-sm" data-element="txt-comments">
+        <label class="field-label">Comments</label>
+        {{textarea
+            class="immunization-comment"
+            dataElement="txt-comments"
+            disabled=disabled
+            maxlength="256"
+            placeholder="Add a comment"
+            rows="3"
+            value=model.comment}}
+    </div>
+</div>

@@ -1,0 +1,64 @@
+<i class="icon-urgent"></i>
+<span class="p-semibold box-margin-Lxs" data-element="you-may-have-duplicates-warning-top-panel">
+    You may have therapeutic duplications
+</span>
+<ul class="list list-selectable">
+    {{#each medicationDuplicates as |duplicateMedication|}}
+        <li class="inline-flex-group">
+            <div class="item gutter-xs">
+                <a href="#" data-element="duplicate-medication-name" {{action editMedication duplicateMedication}}>
+                    {{duplicateMedication.genericAndTradeName}}
+                </a>
+                <span data-element="duplicate-medication-strength-route-doseform">
+                    {{duplicateMedication.productStrength}} {{duplicateMedication.route}} {{duplicateMedication.doseForm}}
+                </span>
+                {{#if duplicateMedication.sig.patientDescription}}
+                    <div class="hint-text" data-element="duplicate-medication-sig">
+                        {{duplicateMedication.sig.patientDescription}}
+                    </div>
+                {{/if}}
+                {{#if duplicateMedication.lastModifiedDateTimeUtc}}
+                    <div class="small-666">Last modified:
+                        {{datetime-formatted datetime=duplicateMedication.lastModifiedDateTimeUtc isSourceInUtc=false humanize=true
+                            data-element="duplicate-medication-last-modified-datetime"}}
+                    </div>
+                {{/if}}
+            </div>
+            {{#if isEntitledToEditMedications}}
+                <div class="item gutter-sm box-fixed">
+                    <a href="#" data-element="discontinue-duplicate-link" {{action discontinueDuplicate duplicateMedication}}>
+                        Discontinue
+                    </a>
+                </div>
+            {{/if}}
+        </li>
+    {{/each}}
+</ul>
+{{#if isEditing}}
+    <ul class="list">
+
+        {{!-- Only shows the current one if we're editing (not for new ones) --}}
+        <li class="inline-flex-group">
+            <div class="item gutter-xs">
+                <span data-element="medication-name">
+                    {{newMedicationFromSearchResult.fullGenericName}} (viewing)
+                </span>
+                {{#if newMedicationFromSearchResult.sig.patientDescription}}
+                    <div class="hint-text">{{newMedicationFromSearchResult.sig.patientDescription}}</div>
+                {{/if}}
+                {{#if newMedicationFromSearchResult.lastModifiedDateTimeUtc}}
+                    <div class="small-666">
+                        Last modified:
+                        {{datetime-formatted datetime=newMedicationFromSearchResult.lastModifiedDateTimeUtc isSourceInUtc=false humanize=true}}
+                    </div>
+                {{/if}}
+            </div>
+            {{#if isEntitledToEditMedications}}
+                <div class="item gutter-sm box-fixed">
+                    <a href="#" {{action doStopDateTimeToToday}}>Discontinue</a>
+                </div>
+            {{/if}}
+        </li>
+
+    </ul>
+{{/if}}

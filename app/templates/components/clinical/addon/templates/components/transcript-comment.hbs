@@ -1,0 +1,18 @@
+{{#if commentText}}
+    {{#if commentType}}
+        <span class="hint-text">{{commentType}}: </span>
+    {{/if}}
+    {{#if isCollapsible}}
+        <span class={{if oneline "oneline"}} {{action 'toggleOneLine'}}>{{commentText}}</span>
+    {{else}}
+        <span data-element="print-comment-text" class={{if oneline "oneline"}}>{{commentText}}</span>
+    {{/if}}
+    {{#if providerName}}
+        <span class="hint-text"> by </span>
+        <span data-element="print-comment-provider-name">{{providerName}}</span>
+    {{/if}}
+    {{#if date}}
+        <span class="hint-text"> on </span>
+        <span>{{datetime-formatted datetime=date isSourceInUtc=convertToLocalTime data-element="print-comment-date"}}</span>
+    {{/if}}
+{{/if}}

@@ -1,0 +1,7 @@
+<p class="p-link" {{action "toggleSelection" diagnosis}} data-element="previous-diagnosis-item" data-guid="{{diagnosis.diagnosisGuid}}">
+    <span>{{diagnosis.description}}</span>
+    <span class="box-padding-Lsm-v2 acuity-display">{{diagnosis.acuityDisplay}}</span>
+    {{#if isEncounterDiagnosis}}
+        <i class="icon icon-checkmark pull-right"></i>
+    {{/if}}
+</p>

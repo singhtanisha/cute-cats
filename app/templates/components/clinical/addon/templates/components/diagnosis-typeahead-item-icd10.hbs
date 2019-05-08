@@ -1,0 +1,14 @@
+<div class="option-container" onclick={{action "selectSingleOption"}}>
+    <div class="option-label dx-code">{{content.icd10CodesText}}</div>
+    <div class="option-description term">{{content.term}}
+        {{#if content.codeToRefine}}
+            {{#popover-info
+                popoverContent="Refinement required: This term maps to more than one code."
+                classNames="icon-urgent force-refine-icd10"
+                tagName="i"
+                triggerOn="hover"
+                placement="left"
+            }}{{/popover-info}}
+        {{/if}}
+    </div>
+</div>

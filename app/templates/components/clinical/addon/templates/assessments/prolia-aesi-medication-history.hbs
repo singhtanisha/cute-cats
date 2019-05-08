@@ -1,0 +1,22 @@
+<div>
+    <div class="pull-right icon-go-away-small" {{action "dismiss"}} data-element="prolia-assessment-card-dismiss"></div>
+    <span class="bold">Be a part of the Prolia Safety Program</span>
+    {{popover-info
+        allowHtmlCode=true
+        classNames="icon icon-info box-margin-Lxs icon-assessment-info"
+        popoverContent=model.proliaMedicationHistory.popoverContent}}
+</div>
+<div class="field-label">Patient Prolia History Check</div>
+{{single-select
+    content=model.proliaMedicationHistory.options
+    data-element="prolia-assessment-card-history"
+    isShorter=true
+    optionLabelPath="label"
+    optionGroupPath="group"
+    optionValuePath="value"
+    prompt="Select patient's Prolia history..."
+    select="recorded"
+    selection=model.proliaMedicationHistory.selection
+    sortLabels=false
+    class="assessment-history-select"
+    value=model.proliaMedicationHistory.value}}

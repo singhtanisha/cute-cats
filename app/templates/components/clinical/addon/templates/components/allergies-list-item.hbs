@@ -1,0 +1,6 @@
+<div>
+    <a data-element="allergy-item-text" data-guid={{allergy.allergyGuid}}>{{allergy.allergenText}}</a>
+</div>
+<span class="h4 box-margin-Rmd-v2 box-margin-Bn"><i class="icon-triangle icon--md {{allergy.severityClass}} box-margin-Rsm-v2"></i>{{allergy.severityText}}</span>
+<span class="box-margin-Rmd-v2 {{unless allergy.reactionsText "hidden"}}">{{allergy.reactionsText}}</span>
+<span class="box-margin-Rmd-v2 {{unless allergy.onsetText "hidden"}}">{{allergy.onsetText}}</span>

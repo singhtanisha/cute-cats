@@ -1,0 +1,52 @@
+{{#if displayChartNoteMedications}}
+    {{#if chartNoteMedications}}
+        <div class="read-only-header">
+            <p>Medications attached to this encounter:</p>
+        </div>
+        <ul class="list read-only-list">
+            {{#each chartNoteMedications as |medication|}}
+                <li>
+                    <span>{{medication.description}}</span>
+                    {{#if medication.prescription}}
+                        <span class="spaced-item">prescription: {{medication.prescription}}</span>
+                    {{/if}}
+                </li>
+            {{/each}}
+        </ul>
+    {{/if}}
+{{else}}
+    {{#if isLoading}}
+        <p class="p-666 auto-saving-section--content">Loading medications...</p>
+    {{else}}
+        {{#if medicationsError}}
+            <p class="p-666 auto-saving-section--content">Can't load medications. Please
+                <a href="#" {{action "reloadMedications"}}>try again.</a>
+            </p>
+        {{else}}
+            {{#if encounterMedications.inEncounter}}
+                <div class="read-only-header">
+                    <p>Medications attached to this encounter:</p>
+                </div>
+                <ul class="list read-only-list">
+                    {{#each sortedMedications as |med|}}
+                        <li>
+                            <span>{{med.fullGenericName}}</span>
+                            {{#if showWarningOnDuplicateMedications}}
+                                {{#if med.duplicates}}
+                                    <span class="duplicate-medication-text">(Duplicate)</span>
+                                {{/if}}
+                            {{/if}}
+                            {{#if med.sig.patientDescription}}
+                                <span class="hint-text spaced-item">Sig:</span>
+                                <span>{{med.sig.patientDescription}}</span>
+                            {{/if}}
+                            {{transcript-comments class="medications-plan-list-read-only--comments" items=med.encounterCommentsWithComment isCollapsible=false
+                                commentType="Encounter Comments" patientPracticeGuid=med.patientPracticeGuid isExpanded=isExpanded hideCollapseLink=hideCollapseLink oneline=oneline firstCommentOneLine=firstCommentOneLine}}
+                        </li>
+                    {{/each}}
+                </ul>
+            {{/if}}
+        {{/if}}
+    {{/if}}
+
+{{/if}}

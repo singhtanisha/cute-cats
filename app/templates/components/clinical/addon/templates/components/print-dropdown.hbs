@@ -1,0 +1,13 @@
+<button class="btn dropdown-toggle borderless box-margin-Lmd-v2 {{if useIcons "icon print-icon print-icon-button box-padding-An"}}" data-toggle="dropdown">
+    {{#if useIcons}}
+        <a data-element={{concat dataElement "-button"}} class="icon-printer icon--md"></a>
+    {{else}}
+        Print
+    {{/if}}
+    <span class="icon-caret box-margin-Lsm-v2"></span>
+</button>
+<ul class="dropdown-menu" data-element={{concat dataElement "-dropdown"}}>
+    {{#each options as |option|}}
+        <li><a onclick={{action attrs.print option.value}}>{{option.label}}</a></li>
+    {{/each}}
+</ul>

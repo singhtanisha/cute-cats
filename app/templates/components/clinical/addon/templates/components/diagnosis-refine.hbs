@@ -1,0 +1,38 @@
+<div class="refine-diagnosis-title">Refine diagnosis from your search</div>
+<div class="select-refined-diagnosis">Select refined diagnosis based on matches below</div>
+
+<div class="inline-flex-group diagnosis-refine-show-hide-section">
+    <div class="item gutter-xs box-fixed">
+        <div class="diagnosis-facets-screen {{unless showFacets "hidden"}}" {{action "toggleProperty" "showFacets"}}></div>
+        <button type="button" class="btn-sm show-facets-btn icon-filter" data-element="facets-button" {{action "toggleProperty" "showFacets"}}/>
+        <a data-element="facets-filter-link" {{action "toggleProperty" "showFacets"}}>Filter</a>
+        {{!-- NOTE: using class bindings to hide instead of an if to avoid recreating the facets component --}}
+        {{#unless hideAllPopups}}
+            <div>
+                {{#ember-tether target=".diagnosis-refine-show-hide-section .show-facets-btn"
+                    targetAttachment="middle left"
+                    attachment="middle left"
+                    offset=facetOffset
+                    constraints=tetherConstraints}}
+                    {{diagnosis-facets diagnoses=diagnoses constraintsChanged="constraintsChanged" classNameBindings="showFacets::hidden"}}
+                {{/ember-tether}}
+            </div>
+        {{/unless}}
+    </div>
+</div>
+<div class="slc-header inline-flex-group diagnosis-header">
+    <div class="slc-header-inner item gutter-xs box-fixed">REFINE DIAGNOSIS:</div>
+</div>
+<div class="detail-inner">
+    {{#each filteredDiagnoses as |diagnosis|}}
+        <div class="slc-row" {{action "refineDiagnoses" diagnosis}}>
+            {{#each diagnosis.diagnosisCodes as |codeObject|}}
+                <div data-element="filtered-diagnosis-item">{{#if shouldShowCode}}(<span class="bold">{{codeObject.code}}</span>) {{/if}}{{codeObject.description}}</div>
+            {{/each}}
+        </div>
+    {{else}}
+        <div class="slc-row">
+            <p class="p-666">There were no matches to further refine this diagnosis.</p>
+        </div>
+    {{/each}}
+</div>

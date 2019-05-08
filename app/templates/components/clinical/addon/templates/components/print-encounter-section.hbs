@@ -1,0 +1,148 @@
+{{#print-chart-section patientSummary=patient title=title chartNote=chartNote encounterType=encounterType patientSnapshot=patientSnapshot
+    includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo facilitySnapshot=facilitySnapshot showFooter=showFooter}}
+    {{#if includeAllSections}}
+        {{print-encounter-vitals vitalsFlowsheet=vitalsFlowsheet}}
+    {{/if}}
+    <div class="table-content">
+        {{#if includeNoteTable}}
+            <div class="table">
+                <div class="row header-row"><div class="col-xs-12">{{tableHeader}}</div></div>
+                {{#if isSoapNote}}
+                    {{#if includeAllSections}}
+                        <div class="row no-stripe">
+                            <div class="col-xs-12">
+                                {{rich-text-with-empty-state title="subjective" value=chartNote.subjective isEmptyStateDisabled=true}}
+                            </div>
+                        </div>
+                        <div class="row header-row">
+                            <div class="col-xs-12">Objective</div>
+                        </div>
+                        <div class="row no-stripe">
+                            <div class="col-xs-12">
+                               {{rich-text-with-empty-state title="objective" value=chartNote.objective isEmptyStateDisabled=true}}
+                            </div>
+                        </div>
+                        <div class="row header-row">
+                            <div class="col-xs-12">Assessment</div>
+                        </div>
+                        <div class="row no-stripe">
+                            <div class="col-xs-12">
+                                {{rich-text-with-empty-state title="assessment" value=chartNote.assessment isEmptyStateDisabled=true}}
+                                {{diagnoses-assessment-list-read-only patientGuid=patient.patientPracticeGuid transcriptGuid=chartNote.transcriptGuid isExpanded=true hideCollapseLink=true oneline=false firstCommentOneLine=false chartNoteDiagnoses=chartNote.diagnoses isSigned=isSigned}}
+                            </div>
+                        </div>
+                        <div class="row header-row">
+                            <div class="col-xs-12">Plan</div>
+                        </div>
+                    {{/if}}
+                    {{#if includePlan}}
+                        <div class="row no-stripe">
+                            <div class="col-xs-12">
+                                {{rich-text-with-empty-state title="plan" value=chartNote.plan isEmptyStateDisabled=true}}
+                                {{medications-plan-list-read-only patientGuid=patient.patientPracticeGuid transcriptGuid=chartNote.transcriptGuid
+                                    chartNoteMedications=chartNote.medications isSigned=isSigned
+                                    isExpanded=true hideCollapseLink=true oneline=false firstCommentOneLine=false
+                                    showWarningOnDuplicateMedications=false}}
+                            </div>
+                        </div>
+                    {{/if}}
+                {{else}}
+                    <div class="row no-stripe">
+                        {{rich-text-with-empty-state title=noteTypeHeading value=chartNote.subjective class="col-xs-12" isEmptyStateDisabled=true}}
+                    </div>
+                {{/if}}
+            </div>
+        {{/if}}
+
+        {{#if includeAllSections}}
+            {{#if events.eventItems}}
+                <div class="table">
+                    <div class="row header-row"><div class="col-xs-12"><h2>Screenings/ Interventions/ Assessments</h2></div></div>
+                    <div class="row header-row">
+                        <div class="col-xs-4">Category</div>
+                        <div class="col-xs-6">Name</div>
+                        <div class="col-xs-2">Status</div>
+                    </div>
+                    {{#each events.eventItems as |item|}}
+                        <div class="row no-stripe">
+                            <div class="col-xs-4">{{item.eventType.category}}</div>
+                            <div class="col-xs-6">
+                                <p>{{item.eventType.displayName}}</p>
+                                {{#if item.children}}
+                                    <p class="field-label">Follow-up plan</p>
+                                    <ul class="list">
+                                        {{#each item.children as |child|}}
+                                            <li>{{child.eventType.category}}: {{child.eventType.displayName}} - {{child.selectedStatus}}</li>
+                                        {{/each}}
+                                    </ul>
+                                {{/if}}
+                            </div>
+                            <div class="col-xs-2">{{item.selectedStatus}}</div>
+                        </div>
+                    {{/each}}
+                </div>
+            {{/if}}
+
+            {{#if observations.eventItems}}
+                <div class="table">
+                    <div class="row header-row"><div class="col-xs-12"><h2>Observations</h2></div></div>
+                    {{#each observations.eventItems as |item|}}
+                        <div class="row header-row">
+                            <div class="col-xs-12">{{item.eventType.displayName}}</div>
+                        </div>
+                        <div class="row no-stripe">
+                            {{#if (compare item.resultCode.codeValue observations.nullResult.codeValue)}}
+                                <div class="col-xs-12 formatted-text">No impairment.</div>
+                            {{/if}}
+                            <div class="col-xs-12 formatted-text">{{item.comments}}</div>
+                        </div>
+                    {{/each}}
+                </div>
+            {{/if}}
+
+            {{#if careQuality.selectedEvents}}
+                <div class="table">
+                    <div class="row header-row"><div class="col-xs-12"><h2>Quality of care</h2></div></div>
+                    {{#each careQuality.selectedEvents as |item|}}
+                        <div class="row no-stripe">
+                            <div class="col-xs-12">{{item.eventType.displayName}}</div>
+                        </div>
+                    {{/each}}
+                </div>
+            {{/if}}
+        {{/if}}
+
+        {{#if includeCarePlan}}
+            <div class="table">
+                <div class="row header-row"><div class="col-xs-12"><h2>Care plan</h2></div></div>
+                {{#each carePlan.eventItems as |item|}}
+                    <div class="row no-stripe">
+                        <div class="col-xs-12 formatted-text">{{item.comments}}</div>
+                    </div>
+                {{/each}}
+            </div>
+        {{/if}}
+
+        {{#if includeAllSections}}
+            {{#if amendments}}
+                <div class="table">
+                    <div class="row header-row"><div class="col-xs-12"><h2>Addenda</h2></div></div>
+                    <div class="row header-row">
+                        <div class="col-xs-4">Addendum</div>
+                        <div class="col-xs-3">Status</div>
+                        <div class="col-xs-2">Source</div>
+                        <div class="col-xs-3">Date/Time</div>
+                    </div>
+                    {{#each amendments as |am|}}
+                        <div class="row no-stripe">
+                            <div class="col-xs-4" data-element="print-encounter-section-am-note">{{am.note}}</div>
+                            <div class="col-xs-3" data-element="print-encounter-section-am-status-name">{{am.status}} by {{am.providerName}}</div>
+                            <div class="col-xs-2">{{am.source}}</div>
+                            <div class="col-xs-3">{{format-date-time-local am.lastModifiedDateTimeUtc format="MM/DD/YYYY hh:mm a" defaultText="n/a"}}</div>
+                        </div>
+                    {{/each}}
+                </div>
+            {{/if}}
+        {{/if}}
+    </div>
+{{/print-chart-section}}

@@ -1,0 +1,21 @@
+{{#if isLoading}}
+    <p class="p-666">Loading frequent diagnoses...</p>
+{{else}}
+    {{#if loadFailed}}
+        <p class="p-666">Can't load frequent diagnoses. Please
+            <a href="#" {{action "reloadFrequentDiagnoses"}}>try again.</a>
+        </p>
+    {{else}}
+        {{#if frequentDiagnoses}}
+            <div class="results-list">
+                {{#each frequentDiagnoses as |diagnosis|}}
+                    <p class="p-link frequent-diagnoses--item" {{action "selectDiagnosis" diagnosis}}>
+                        {{diagnosis.description}}
+                    </p>
+                {{/each}}
+            </div>
+        {{else}}
+            <p class="p-666">There are no frequent diagnoses.</p>
+        {{/if}}
+    {{/if}}
+{{/if}}

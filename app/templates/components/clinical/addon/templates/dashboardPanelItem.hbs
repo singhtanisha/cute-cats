@@ -1,0 +1,58 @@
+<div data-qatest="dashboardpanel">
+    {{#with panelData}}
+        <header>
+            <h3 class="header3a">{{headerText}}</h3>
+        </header>
+
+        <h3 class="header3b">Drug Allergies</h3>
+        <section>
+            {{#if hasDrugAllergies}}
+                {{#each drugAllergiesList as |allergy|}}
+                    <span class="item"></span>
+                        <div>{{allergy.title}}
+                            {{#if allergy.description}}
+                            : {{allergy.description}}
+                            {{/if}}
+                        </div>
+                {{/each}}
+            {{else}}
+                <div>{{emptyText}}</div>
+            {{/if}}
+        </section>
+
+        <h3 class="header3b">Food Allergies</h3>
+        <section>
+            {{#each foodAllergiesList as |allergy|}}
+                <span class="item"></span>
+                <div>{{allergy.title}}
+                    {{#if allergy.description}}
+                    : {{allergy.description}}
+                    {{/if}}
+                </div>
+            {{else}}
+                <div>No Food Allergies recorded</div>
+            {{/each}}
+        </section>
+
+        <h3 class="header3b">Environmental Allergies</h3>
+        <section>
+            {{#each environmentalAllergiesList as |allergy|}}
+                <span class="item"></span>
+                <div>{{allergy.title}}
+                    {{#if allergy.description}}
+                    : {{allergy.description}}
+                    {{/if}}
+                </div>
+            {{else}}
+                <div>No Environmental Allergies recorded</div>
+            {{/each}}
+        </section>
+    {{/with}}
+
+    {{#if pmhData}}
+        <h3 class="header3b">Allergies (free text)</h3>
+        <section>
+            <p>{{pmhData}}</p>
+        </section>
+    {{/if}}
+</div>

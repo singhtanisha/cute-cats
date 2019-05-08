@@ -1,0 +1,28 @@
+{{#if patient}}
+    <div class="icon-history" {{action "togglePreviews"}} data-element="quick-preview-icon"></div>
+
+    {{#popover-modal isPopoverVisible=arePreviewsVisible
+        targetSelector=".patient-previews .icon-history" containerSelector=".charts.outlet"
+        height=height width=748 minimumArrowPadding=200}}
+
+        <div class="popover-content">
+            {{patient-preview-list isVisible=arePreviewsVisible patientPracticeGuid=patientPracticeGuid
+                selectPreview=(action "selectPreview") clearError=(action "clearError")
+                updateHeader=(action "updateHeader") previewError=(action "previewError")}}
+            {{patient-preview patient=patient currentPreview=currentPreview errorMessage=previewErrorMessage
+                headerTitle=headerTitle isLocked=showHeaderLock isAbnormal=showHeaderAbnormal
+                openPreview=(action "openPreview") togglePreviews=(action "togglePreviews")
+                previewError=(action "previewError")}}
+        </div>
+
+        <footer>
+            {{#unless noPreviewSelected}}
+                <button class="btn pull-right" {{action "openPreview"}} data-element="open-preview">
+                    {{openPreviewText}}
+                </button>
+            {{/unless}}
+
+            <button class="btn" {{action "togglePreviews"}} data-element="preview-footer-close">Close</button>
+        </footer>
+    {{/popover-modal}}
+{{/if}}

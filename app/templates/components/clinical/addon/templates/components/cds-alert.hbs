@@ -1,0 +1,43 @@
+<div class="ember-accordion-header {{if isExpanded "expanded"}}" {{action "toggleExpanded"}}>
+    <span class="ember-accordion-expand-icon"></span>
+    <span class="icon-go-away-small" id="dismissible-ember-accordion-header-close-button" {{action "dismiss" bubbles=false}}></span>
+    {{#if showActionLinks}}
+        <div class="custom-action">
+            {{#if isExternalLink}}
+                <a {{action "openUri" externalLinkUri bubbles=false}}>{{cdsAlert.actionLinkText}}</a>
+            {{else if internalRouteLink}}
+                <a {{action "routeLink" internalRouteLink.route internalRouteLink.arg1 bubbles=false}}>{{cdsAlert.actionLinkText}}</a>
+            {{else if actionLinkType}}
+                <a {{action "bubbleAction" cdsAlert bubbles=false}}>{{cdsAlert.actionLinkText}}</a>
+            {{/if}}
+        </div>
+    {{/if}}
+    <div class="cds-alert-text-custom-action cds-alert-text">{{cdsAlert.alertText}}</div>
+</div>
+{{#if isExpanded}}
+    <div class="ember-accordion-pane-content">
+        <div class="{{if error "ember-accordion-pane-content-error"}}">
+            <div class="accordion-indent">
+                <p class="{{unless cdsAlert.developer "hidden"}}" data-element="cds-developer"><span class="accordion-content-description">Intervention Developer:</span> <span class="accordion-content">{{cdsAlert.developer}}</span></p>
+                <p class="{{unless cdsAlert.sponsor "hidden"}}" data-element="cds-source"><span class="accordion-content-description">Funding Source:</span> <span class="accordion-content">{{cdsAlert.sponsor}}</span></p>
+                <p class="{{unless ruleVersion "hidden"}}" data-element="cds-version"><span class="accordion-content-description">Release Version:</span> <span class="accordion-content">{{ruleVersion}}</span></p>
+                <p class="{{unless cdsAlert.link "hidden"}}" data-element="cds-reference">
+                    <span class="accordion-content">
+                        <a href="{{cdsAlert.link}}" target="_blank" {{action "trackReferenceLinkClick" preventDefault=false}}>
+                            Reference Information
+                        </a>
+                        {{#if showInfobuttonLink}}
+                            <span class="vertical-divider"> | </span>
+                            <a href="{{cdsAlert.infobuttonLink}}" target="_blank">
+                                Diagnostic/Therapeutic Information
+                            </a>
+                        {{/if}}
+                    </span>
+                </p>
+                {{#each cdsAlert.citations as |citation|}}
+                    <p class="{{unless citation "hidden"}}" data-element="cds-citation"><span class="accordion-content-description">Citation:</span> <span class="accordion-content">{{citation}}</span></p>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+{{/if}}

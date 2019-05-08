@@ -1,0 +1,19 @@
+{{#detail-pane close="save" class="side-fixed col-xs-5 summary-details ad-detail" resizables=resizables resizeOnBreakPoint=true topSpacing=50 isToolBoxVisible=false smallHeaderText="Advance directives" bigHeaderText="Record advance directive" advanceDirective=advanceDirective as |section|}}
+    {{#detail-pane-body sectionContext=section}}
+        {{#if advanceDirective}}
+            <div class="field-label">DATE RECORDED</div>
+            {{d-date-picker isLegacy=false isShorter=true value=advanceDirective.formattedDate placeholder="MM/DD/YYYY" startDate="01/01/1900" endDate="01/01/2200" autoCorrectYear=true }}
+            {{text-area-counter autosize=true value=advanceDirective.comments placeholderText="Enter advance directive" maxlength="4000" rows="3"}}
+        {{/if}}
+    {{/detail-pane-body}}
+    {{#detail-pane-footer sectionContext=section}}
+        <button type="button" class="btn" {{action "cancel"}}>Cancel</button>
+        <div class="pull-right">
+            {{#unless advanceDirective.isNew}}
+                <button type="button" class="btn btn-delete">Delete</button>
+                {{confirm-dialog targetElement=".btn-delete" placement="top" title="Delete advance directive" content="This action is final, and will remove this advance directive from this patient's record." confirmText="Delete" cancelText="Cancel" action="delete"}}
+            {{/unless}}
+            <button type="button" class="btn btn-primary" {{action "save"}} disabled={{advanceDirective.saveDisabled}}>Save</button>
+        </div>
+    {{/detail-pane-footer}}
+{{/detail-pane}}

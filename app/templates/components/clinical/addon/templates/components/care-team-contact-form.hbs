@@ -1,0 +1,91 @@
+<div class="row input">
+    <div class="col-xs-6">
+        <label class="field-label is-required">First name</label>
+        {{validated-textfield placeholder="First name" class="first-name"
+            value=contact.firstName maxlength="128"
+            errorMessage=contact.errors.firstName tooltipTrigger=hover
+            classNameBindings="contact.errors.firstName:error"
+            data-element="care-team-form-first-name"
+            disabled=disabled}}
+    </div>
+    <div class="col-xs-6">
+        <label class="field-label is-required">Last name</label>
+        {{validated-textfield placeholder="First name"
+            value=contact.lastName maxlength="128"
+            errorMessage=contact.errors.lastName tooltipTrigger=hover
+            classNameBindings="contact.errors.lastName:error"
+            data-element="care-team-form-last-name"
+            disabled=disabled}}
+    </div>
+</div>
+
+<div class="row input">
+    <div class="col-xs-6">
+        <label class="field-label">Phone number</label>
+        {{validated-textfield placeholderText="(   )   -    "  maxlength="20"
+            value=contact.officePhone
+            errorMessage=contact.errors.officePhone tooltipTrigger=hover
+            classNameBindings="contact.errors.officePhone:error"
+            data-element="care-team-form-phone-number"
+            disabled=disabled}}
+    </div>
+    {{#unless contact.isProviderProfile}}
+        <label class="field-label is-required">Fax number</label>
+        <div class="col-xs-6">
+            {{validated-textfield placeholderText="(   )   -    " maxlength="20"
+                value=contact.fax
+                errorMessage=contact.errors.fax  tooltipTrigger=hover
+                classNameBindings="contact.errors.fax:error"
+                data-element="care-team-form-fax"
+                disabled=disabled}}
+        </div>
+    {{/unless}}
+</div>
+<div class="row input">
+    <div class="col-xs-12">
+        <label class="field-label">Email</label>
+        <div class="input">
+            <div class="email">
+                {{validated-textfield placeholderText="Email"  maxlength="80"
+                    value=contact.email
+                    errorMessage=contact.errors.email tooltipTrigger=hover
+                    classNameBindings="contact.email.officePhone:error"
+                    data-element="care-team-form-email"
+                    disabled=disabled}}
+            </div>
+        </div>
+    </div>
+</div>
+{{!-- <div {{bind-attr class=":row directEnabled::hidden"}}>
+    <div class="col-xs-12">
+        <label class="field-label">Direct address</label>
+    </div>
+</div>
+<div {{bind-attr class=":row :input directEnabled::hidden"}}>
+    <div class="col-xs-12">
+        <div class="direct-address">
+            {{validated-textfield id="directAddress" value=directAddress placeholderText="Direct address"
+            errorMessage=errors.directAddress" maxlength="80" }}
+        </div>
+    </div>
+</div> --}}
+<div class="row input">
+    <div class="col-xs-12">
+        <label class="field-label">Specialty</label>
+        <div class="input">
+            {{single-select
+                content=specialties
+                prompt="Choose specialty"
+                optionLabelPath="specializationName"
+                optionValuePath="specializationId"
+                selection=contact.specialty
+                classNameBindings=":dropdown"
+                hasError=false
+                tooltipMsg= 'Please choose a specialty.'
+                isTooltipVisible= false
+                tooltipPlacement='right'
+                data-element="care-team-form-specialty"
+                disabled=disabled}}
+        </div>
+    </div>
+</div>

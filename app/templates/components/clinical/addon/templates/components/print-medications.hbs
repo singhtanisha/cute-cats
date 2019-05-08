@@ -1,0 +1,10 @@
+{{#print-chart-section patientSummary=patient  title=title chartNote=chartNote includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+    <div class="table-content">
+        {{#if showActiveMeds}}
+            {{print-medications-section data=activePatientMedications noKnownMedications=medications.noKnownMedications showComments=showComments showEncounterComments=showEncounterComments showScripts=showScripts sortProperty=sortProperty sortAscending=sortAscending title="Active"}}
+        {{/if}}
+        {{#if showHistoricalMeds}}
+            {{print-medications-section data=historicalPatientMedications showComments=showComments showEncounterComments=showEncounterComments showScripts=showScripts sortProperty=sortProperty sortAscending=sortAscending title="Historical"}}
+        {{/if}}
+    </div>
+{{/print-chart-section}}

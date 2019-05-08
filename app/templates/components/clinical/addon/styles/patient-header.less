@@ -1,0 +1,195 @@
+.patient-header-component {
+    padding: 7px 105px 7px 13px;
+    background: @sky;
+    font-weight: 300;
+    flex: none;
+
+    &.inactive-patient {
+        color: @slate-light;
+    }
+    &:not(.inactive-patient) {
+        color: @white;
+    }
+
+    .flex-row {
+        display: flex;
+    }
+    .flex-row();
+
+    .flex-no-shrink {
+        flex: none;
+    }
+
+    .flex-shrink {
+        flex: 0 1 auto;
+        min-width: 50px;
+    }
+
+    .patient-photo {
+        display: inline-block;
+        vertical-align: top;
+        position: relative;
+        height: 30px;
+        width: 30px;
+        transition: height 0.5s, width 0.5s;
+        img {
+            border-radius: 50%;
+            height: 100%;
+            width: 100%;
+        }
+
+        &:not(.disabled){
+            cursor: pointer;
+            &:hover::after {
+                content: @icon-edit;
+                font-family: "ehr-icons";
+                background: rgba(0,0,0,0.5);
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                top: 0;
+                left: 0;
+                font-size: 17px;
+                padding: 5px 6px;
+                border-radius: 50%;
+            }
+        }
+    }
+    .ellipses {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .patient-info-column {
+        display: inline-block;
+        padding: 0 10px;
+        position: relative;
+        vertical-align: top;
+
+        &.with-right-border:not(:last-of-type)::after {
+            content: '';
+            width: 1px;
+            height: 16px;
+            background: @sky-dark;
+            position: absolute;
+            top: 0px;
+            right: -1px;
+        }
+
+        &:not(.patient-name-column) {
+            height: 22px;
+        }
+    }
+    .flex-row:first-of-type .patient-info-column:not(.patient-name-column) {
+        padding-top: 6px;
+        height: 28px;
+    }
+    .flex-row:first-of-type .patient-info-column.with-right-border::after, .patient-name-column.patient-info-column.with-right-border::after {
+        top: 6px;
+    }
+
+    .patient-name-column {
+        max-width: 200px;
+        font-weight: 600;
+        font-size: 16px;
+        padding-left: 5px;
+        padding-top: 3px;
+    }
+    .ellipsis-column {
+        .icon-ellipsis {
+            margin-top: -3px;
+            padding: 6px 6px 0;
+            display: block;
+            font-size: 14px;
+            cursor: pointer;
+            &:hover {
+                background: @sky-dark;
+            }
+        }
+    }
+
+    &:not(.is-expanded) {
+        .patient-name-column .patient-name {
+            .ellipses;
+            max-width: 100%;
+            display: inline-block;
+        }
+    }
+    &.is-expanded {
+        padding: 8px 105px 8px 13px;
+        .patient-photo {
+            height: 48px;
+            width: 48px;
+            &::after {
+                font-size: 22px;
+                padding: 10px 12px;
+            }
+        }
+        .patient-name-column {
+            min-height: 48px;
+            @media (max-width: @screen-md) {
+                min-height: 68px;
+            }
+
+            &.with-right-border::after {
+                height: calc(~"100% - 8px");
+                min-height: 16px;
+            }
+            .patient-name {
+                word-wrap: break-word;
+            }
+        }
+    }
+
+    .component-phr-enrollment {
+        padding: 3px;
+        min-width: 160px;
+
+        &:hover {
+            background-color: @sky-light;
+        }
+        &:active {
+            background-color: @sky-dark;
+        }
+    }
+
+    .patient-details-container {
+        position: relative;
+        .patient-details {
+            position: absolute;
+            width: 100%;
+        }
+    }
+
+    .patient-header-insurance-info {
+        .ellipses {
+            border-bottom: 1px dotted;
+            cursor: pointer;
+        }
+        .popover {
+            color: @black;
+            padding: 15px;
+
+            .field-label {
+                margin-bottom: 2px;
+            }
+            .arrow::after {
+                border-bottom-color: @white;
+            }
+        }
+    }
+
+    @media (min-width: 1320px) {
+        .hidden-xl {
+            display: none;
+        }
+        .patient-name-column {
+            max-width: 400px;
+        }
+    }
+    @media (max-width: 1319px) {
+        .visible-xl {
+            display: none;
+        }
+    }
+}

@@ -1,0 +1,32 @@
+<h4 data-element="sia-detail-display-name" class="h4">{{eventType.displayName}}</h4>
+
+<label class="field-label">Status</label>
+<p data-element="sia-detail-status">{{selectedStatus}}</p>
+
+{{#if reasonCodes}}
+    <label class="field-label">Reason</label>
+    <p data-element="sia-detail-reason">{{if reasonCode.displayName reasonCode.displayName "No reason recorded."}}</p>
+{{/if}}
+
+<label class="field-label">Result</label>
+<p data-element="sia-detail-result">{{if resultCode.displayName resultCode.displayName "No result recorded."}}</p>
+
+<div class="inline-flex-group-v2">
+    <div class="item gutter-xs">
+        <label class="field-label">Start date</label>
+        <p data-element="sia-detail-start-date">{{if startDateTimeUtc startDateTimeUtc "--"}}</p>
+    </div>
+    <div class="item gutter-xs">
+        <label class="field-label">End date</label>
+        <p data-element="sia-detail-end-date">{{if endDateTimeUtc endDateTimeUtc "--"}}</p>
+    </div>
+</div>
+
+<label class="field-label">Encounter type</label>
+<p data-element="sia-detail-encounter-type">{{encounterAndNoteType}}<a data-element="sia-detail-encounter-link" class="box-margin-Lmd-v2" onclick={{action attrs.openEncounterClicked}}>View encounter</a></p>
+
+<label class="field-label">Date of service</label>
+<p data-element="sia-detail-date-of-service">{{format-date-time-utc dateOfService}}</p>
+
+<label class="field-label">Comment</label>
+<p data-element="sia-detail-comments" class="box-margin-Bn">{{if comments comments "No comments recorded."}}</p>

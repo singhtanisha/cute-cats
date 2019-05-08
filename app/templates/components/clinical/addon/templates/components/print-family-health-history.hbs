@@ -1,0 +1,36 @@
+{{#print-chart-section chartNote=chartNote patientSummary=patient title=title
+    includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+    <div class="table-content">
+        <div class="table">
+            <div class="row header-row">
+                <div class="col-xs-12"><h2>Family health history</h2></div>
+            </div>
+            <div class="row header-row">
+                <div class="col-xs-10">Diagnosis</div>
+                <div class="col-xs-2">Onset date</div>
+            </div>
+            {{#each relatives as |relative|}}
+                <div class="row sub-header-row">
+                    <div class="col-xs-12" data-element="relative">{{relative.relationshipType.description}} - {{relative.firstName}}</div>
+                </div>
+                {{#each relative.observations as |observation|}}
+                    <div class="row no-stripe no-borders">
+                        <div class="col-xs-10" data-element="dx">{{observation.diagnosis.snomedDescription}}</div>
+                        <div class="col-xs-2" data-element="dx-onset-date">{{format-date-time-utc observation.onsetDate}}</div>
+                    </div>
+                    <div class="row no-stripe sub-paragraph">
+                        {{#if observation.comment}}
+                            <div class="col-xs-12" data-element="observation-comment">Comments: {{observation.comment}}</div>
+                        {{/if}}
+                    </div>
+                {{else}}
+                    <div class="row no-stripe">
+                        <div class="col-xs-12">No diagnoses recorded</div>
+                    </div>
+                {{/each}}
+            {{else}}
+                <p>No Family health history recorded</p>
+            {{/each}}
+        </div>
+    </div>
+{{/print-chart-section}}

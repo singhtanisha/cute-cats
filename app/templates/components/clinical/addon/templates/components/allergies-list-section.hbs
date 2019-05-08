@@ -1,0 +1,38 @@
+{{#if isInactiveSection}}
+    {{#if showInactive}}
+        <h4 class="h4">{{title}}</h4>
+        <ul class="list list--selectable list--hover">
+            {{#each data.severitySorted as |allergy index|}}
+                {{allergies-list-item allergy=allergy editAllergy="editAllergy" selectedAllergy=selectedAllergy data-element=(concat "inactive-allergy-" index)}}
+            {{/each}}
+        </ul>
+    {{/if}}
+    <a role="link" onclick={{action "toggleProperty" "showInactive"}} class="show-hide-toggle">
+        {{#if showInactive}}
+            Hide inactive
+        {{else}}
+            Show inactive ({{data.length}})
+        {{/if}}
+    </a>
+{{else}}
+    <h4 class="h4">{{title}}</h4>
+    <ul class="list list--selectable list--hover {{if hasNoActiveAllergies "hidden"}}">
+        {{#each data.active.severitySorted as |allergy index|}}
+            {{allergies-list-item allergy=allergy editAllergy="editAllergy" selectedAllergy=selectedAllergy data-element=(concat "active-allergy-" index)}}
+        {{/each}}
+    </ul>
+    {{#if isDrugAllergyCheckboxVisible}}
+        <div class="box-padding-Txs-v2">
+            {{#if isAllowedToEditAllegies}}
+                {{#check-box checked=isNoKnownChecked disabled=isLoadingNoKnown data-element="no-known-drug-allergies-label"}}
+                    Patient has no known drug allergies
+                {{/check-box}}
+            {{else}}
+                <p class="box-margin-Bn {{unless isNoKnownChecked "hidden"}}">Patient has no known drug allergies</p>
+                <p class="text-color-placeholder box-margin-Bn {{if isNoKnownChecked "hidden"}}">{{noAllergiesMessage}}</p>
+            {{/if}}
+        </div>
+    {{else}}
+        <p class="text-color-placeholder box-margin-Bn box-padding-Txs-v2 {{unless hasNoAllergies "hidden"}}">{{noAllergiesMessage}}</p>
+    {{/if}}
+{{/if}}

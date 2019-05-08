@@ -1,0 +1,21 @@
+<div class="row header-row"><div class="col-xs-12"><h2>{{title}} health concerns</h2></div></div>
+<div class="row header-row">
+    <div class="col-xs-10">Description</div>
+    <div class="col-xs-2">Effective Date</div>
+</div>
+{{#each data as |item|}}
+    <div class="row no-stripe">
+        <div class="col-xs-10 formatted-text" data-element="health-concern-item-title">{{item.title}}</div>
+        <div class="col-xs-2" data-element="health-concern-item-date">{{item.effectiveDate}}</div>
+    </div>
+{{else}}
+    <div class="row no-stripe">
+        <div class="col-xs-12">
+            {{#if noKnownHealthConcerns}}
+                Patient has no health concerns
+            {{else}}
+                No <span class="lowercase">{{title}}</span> health concerns recorded
+            {{/if}}
+        </div>
+    </div>
+{{/each}}

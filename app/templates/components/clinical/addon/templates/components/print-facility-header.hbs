@@ -1,0 +1,15 @@
+<div>FACILITY</div>
+<h2 data-element="print-header-facility-name">{{facility.name}}</h2>
+<div>
+    <div class="char-label semibold">{{#if facility.phone}}T{{/if}}</div>
+    <div class="ib" data-element="print-header-facility-phone">{{format-phone facility.phone}}</div>
+</div>
+{{#if facility.fax}}
+    <div>
+        <div class="char-label semibold">{{#if facility.fax}}F{{/if}}</div>
+        <div class="ib" data-element="print-header-facility-fax">{{format-phone facility.fax}}</div>
+    </div>
+{{/if}}
+<div data-element="print-header-facility-address">{{facility.address}}</div>
+<div data-element="print-header-facility-address">{{facility.suite}}</div>
+<div data-element="print-header-facility-city-state-zip">{{facilityCityStateZip}}</div>

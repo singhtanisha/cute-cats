@@ -1,0 +1,18 @@
+{{#content-modal
+    class="clinical-trials-modal"
+    modalStyle=7
+    isVisible=true
+    customClose=(action "navigateBack") as |section|}}
+    {{section.header title="You are leaving Practice Fusion" notifyCloseByX=(action "navigateBack")}}
+    {{#section.body}}
+    <p>You are leaving the Practice Fusion website and will be directed to the website of an independent third party. Practice Fusion is not responsible for that website, for the services provided by that independent third party, or for your use of such services. Practice Fusion has not reviewed the website or otherwise approved its content or information. Please review the website’s terms and conditions if you have any questions or concerns.</p>
+
+    {{!-- NOTE: we don't use the footer buttons in the content-modal since we need to call window.open within the same callback --}}
+    <div class="pull-right">
+        <button type="button" class="btn btn-modal-secondary" {{action "navigateBack"}}>Cancel</button>
+        <button type="button" class="btn btn-modal-primary" {{action "loginWithEPatientFinder"}}>Visit External Site</button>
+    </div>
+
+    {{/section.body}}
+    {{section.footer}}
+{{/content-modal}}

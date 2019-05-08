@@ -1,0 +1,17 @@
+{{#if isAllowedToEditAllegies}}
+    <button type="button" class="btn" data-element="cancel-btn" {{action "cancel"}}>Cancel</button>
+    <div class="pull-right">
+        {{#if showDeleteButton}}
+            <button type="button" class="btn btn-delete" data-element="btn-delete" disabled={{isDeleteDisabled}}>Delete</button>
+            {{confirm-dialog targetElement=".btn-delete" placement="top" title=deleteTitle content=deleteMessage confirmText="Delete" cancelText="Cancel" action="delete"}}
+        {{/if}}
+        <button type="button" {{action "save"}} class="btn {{unless showAddAnotherButton "btn-primary"}}" disabled={{isDoneDisabled}}>Save</button>
+        {{#if showAddAnotherButton}}
+            <button type="button" class="btn btn-primary" {{action "addAnother"}} disabled={{isDoneDisabled}}>Add another</button>
+        {{/if}}
+    </div>
+{{else}}
+    <div class="pull-right">
+        <button type="button" class="btn" data-element="cancel-btn" {{action "cancel"}}>Cancel</button>
+    </div>
+{{/if}}

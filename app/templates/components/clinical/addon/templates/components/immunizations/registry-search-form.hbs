@@ -1,0 +1,157 @@
+<p class="h4">Please confirm or edit the information below that will be used to locate your patient's immunization history and forecast.</p>
+<div class="inline-flex-group-v2 box-padding-Tmd-v2">
+    <div class="item gutter-md">
+        <label class="field-label">First name</label>
+        {{text-field value=model.firstName data-element="txt-firstname"}}
+    </div>
+    <div class="item gutter-md">
+        <label class="field-label">Middle name</label>
+        {{text-field value=model.middleName data-element="txt-middlename"}}
+    </div>
+    <div class="item gutter-md">
+        <label class="field-label">Last name</label>
+        {{text-field value=model.lastName data-element="txt-lastname"}}
+    </div>
+</div>
+<div class="inline-flex-group-v2">
+    <div class="item gutter-md box-fixed">
+        <label class="field-label">DOB</label>
+        {{d-date-picker value=model.dateOfBirth isLegacy=false data-element="date-dob" isShorter=true startDate="01/01/1900"}}
+    </div>
+    <div class="item gutter-md box-fixed">
+        <label class="field-label">Sex</label>
+        {{#composable-select 
+            content=genderOptions 
+            selection=selectedGender 
+            optionLabelPath="gender" 
+            onSelect=(action "selectGender")
+            as |options|}}
+            {{options.dropdown prompt="Select value"}}
+            {{options.dropdown-menu}}
+        {{/composable-select}}
+    </div>
+</div>
+<div class="inline-flex-group-v2">
+    <div class="item gutter-md">
+        <label class="field-label">Mother's maiden name</label>
+        {{text-field value=model.mothersMaidenName data-element="txt-mothersmaidenname"}}
+    </div>
+    {{#if model.mothersMaidenName}}
+        <div class="item gutter-md box-fixed box-padding-Tmd-v2">
+            <label class="field-label">&nbsp;</label>
+            <div><i class="icon-clear" onclick={{action "clearMaidenName"}}></i></div>
+        </div>
+    {{/if}}
+    <div class="item gutter-md"></div>
+</div>
+
+<nav class="box-margin-TBmd-v2">
+    <button class="btn--link" onclick={{action attrs.toggleAdvanced}}>{{toggleButtonText}}</button>
+</nav>
+
+{{#if isAdvancedVisible}}
+    <div class="inline-flex-group-v2">
+        <div class="item gutter-md box-fixed">
+            <label class="field-label">PRN</label>
+            {{text-field value=model.patientRecordNumber data-element="txt-prn"}}
+        </div>
+        {{#if model.patientRecordNumber}}
+            <div class="item gutter-md box-fixed box-padding-Tmd-v2">
+                <label class="field-label">&nbsp;</label>
+                <div><i class="icon-clear" onclick={{action "clearPatientRecordNumber"}}></i></div>
+            </div>
+        {{/if}}
+        <div class="item gutter-md box-fixed">
+            <label class="field-label">Phone Number</label>
+            {{text-field-phone value=model.phoneNumber data-element="txt-phone-number"}}
+        </div>
+        {{#if model.phoneNumber}}
+            <div class="item gutter-md box-fixed box-padding-Tmd-v2">
+                <label class="field-label">&nbsp;</label>
+                <div><i class="icon-clear" onclick={{action "clearPhoneNumber"}}></i></div>
+            </div>
+        {{/if}}
+    </div>
+    <div class="inline-flex-group-v2">
+        <div class="item gutter-md">
+            <label class="field-label">Street address</label>
+            {{text-field value=model.address1 data-element="txt-address1"}}
+        </div>
+        {{#if model.address1}}
+            <div class="item gutter-md">
+                <label class="field-label">Address line 2</label>
+                {{text-field value=model.address2 data-element="txt-address2"}}
+            </div>
+            <div class="item gutter-md box-fixed box-padding-Tmd-v2">
+                <label class="field-label">&nbsp;</label>
+                <div><i class="icon-clear" onclick={{action "clearAddress"}}></i></div>
+            </div>
+        {{/if}}
+    </div>
+    <div class="inline-flex-group-v2">
+        <div class="item gutter-md">
+            <label class="field-label">City</label>
+            {{text-field value=model.city data-element="txt-city"}}
+        </div>
+        <div class="item gutter-md box-fixed">
+            <label class="field-label">State</label>
+            {{#composable-select 
+                content=stateOptions 
+                selection=selectedState 
+                optionLabelPath="state" 
+                onSelect=(action "selectState") as |options|}}
+                {{options.dropdown prompt="Select value"}}
+                {{options.dropdown-menu}}
+            {{/composable-select}}
+        </div>
+        <div class="item gutter-md box-fixed">
+            <label class="field-label">Zip</label>
+            {{text-field value=model.postalCode data-element="txt-zip"}}
+        </div>
+    </div>
+    <div class="inline-flex-group-v2">
+        <div class="item gutter-md">
+            <div class="inline-flex-group-v2">
+                <div class="item gutter-md">
+                    <label class="field-label">Multiple gestation</label>
+                    {{#composable-select 
+                        content=gestationOptions 
+                        selection=selectedGestation 
+                        optionLabelPath="display" 
+                        optionValuePath="value" 
+                        onSelect=(action "selectGestation") as |options|}}
+                        {{options.dropdown prompt="Select value"}}
+                        {{options.dropdown-menu}}
+                    {{/composable-select}}
+                </div>
+                {{#if model.isMultipleBirth}}
+                    <div class="item gutter-md">
+                        <label class="field-label">Birth order</label>
+                        {{#composable-select 
+                        content=birthOrderOptions 
+                        selection=selectedBirthOrder 
+                        optionLabelPath="display" 
+                        optionValuePath="value" 
+                        onSelect=(action "selectBirthOrder") as |options|}}
+                            {{options.dropdown prompt="Select value"}}
+                            {{options.dropdown-menu}}
+                        {{/composable-select}}
+                    </div>
+                {{else}}
+                    <div class="item gutter-md"></div>
+                {{/if}}
+            </div>
+        </div>
+        <div class="item gutter-md box-fixed box-padding-Tmd-v2">
+            {{#if model.isMultipleBirth}}
+                <label class="field-label">&nbsp;</label>
+                <div class="box-padding-Tsm-v2">
+                    <i class="icon-clear" onclick={{action "clearGestation"}}></i>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+{{/if}}
+<nav class="box-margin-TBmd-v2">
+    <button class="btn--brand pull-left box-margin-TBmd-v2" onclick={{action attrs.search}}>Search</button>
+</nav>

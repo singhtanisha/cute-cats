@@ -1,0 +1,20 @@
+{{#print-chart-section patientSummary=patient includeHeaderAndFooter=includeHeaderAndFooter}}
+    <div class="table-content">
+        <div class="row print-devices-header header-row">
+            <div><h2>Implantable devices</h2></div>
+        </div>
+        {{#each devices as |device|}}
+            {{print-device device=device users=users}}
+        {{else}}
+            <div class="row no-stripe">
+                <div class="col-xs-12">
+                    {{#if noImplantableDevices}}
+                        Patient has no implantable devices
+                    {{else}}
+                        No implantable devices recorded
+                    {{/if}}
+                </div>
+            </div>
+        {{/each}}
+    </div>
+{{/print-chart-section}}

@@ -1,0 +1,28 @@
+{{#unless isIcd10Display}}
+    <header><h3 class="header3b">{{title}} diagnoses</h3></header>
+{{/unless}}
+{{#each activeDiagnoses as |diagnosis|}}
+    <div class="active-diagnosis" data-element={{title}} {{action "editDiagnosis" diagnosis}}>
+        {{deprecated/diagnoses-summary-list-item isIcd10Display=isIcd10Display diagnosis=diagnosis selectedDiagnosisGuid=selectedDiagnosisGuid diagnosisDescriptionDisplay=diagnosisDescriptionDisplay}}
+    </div>
+{{else}}
+    <p class="p-666">No active <span class="lowercase">{{title}}</span>diagnoses.</p>
+{{/each}}
+
+{{#if historicalDiagnosesVisible}}
+    <div><h4 class="header4">Historical</h4></div>
+    {{#each historicalDiagnoses as |diagnosis|}}
+        <div class="historical-diagnosis" data-element={{title}} {{action "editDiagnosis" diagnosis}}>
+            {{deprecated/diagnoses-summary-list-item isIcd10Display=isIcd10Display diagnosis=diagnosis selectedDiagnosisGuid=selectedDiagnosisGuid  diagnosisDescriptionDisplay=diagnosisDescriptionDisplay}}
+        </div>
+    {{/each}}
+{{/if}}
+{{#if historicalDiagnoses}}
+    <a href="#" data-element={{title}} {{action 'toggleProperty'  'historicalDiagnosesVisible'}}>
+        {{#if historicalDiagnosesVisible}}
+            Hide historical
+        {{else}}
+            Show historical ({{historicalDiagnoses.length}})
+        {{/if}}
+    </a>
+{{/if}}

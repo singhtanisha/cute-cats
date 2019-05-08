@@ -1,0 +1,45 @@
+{{#if isVisible}}
+    <div class="modal-backdrop in copy-modal"></div>
+{{/if}}
+{{#content-modal
+    class=modalClassNames
+    modalStyle=0
+    isVisible=isVisible
+    isDraggable=false
+    includeBackdrop=false
+    customClose=(action "cancel") as |section|}}
+    {{#section.header notifyCloseByX=(action "cancel")}}
+            <h4>{{title}}</h4>
+    {{/section.header}}
+    {{#section.body}}
+        <div class="example-modal-content-0 container-fluid assessment-modal-content">
+            {{partial contentTemplate}}
+        </div>
+    {{/section.body}}
+    {{#section.footer}}
+        {{#if isUpdatedProliaModal}}
+            {{#if model.proliaAnyAesi.isSelected}}
+                <div class="pull-left assessment-modal-buttons">
+                    <button data-element="save-prolia-modal" class="btn-sm" type="button" onclick={{action "save"}} disabled={{isLoading}}>Save and create task to report later</button>
+                </div>
+                <div class="pull-right assessment-modal-buttons">
+                    <a data-element="prolia-reporting-link" href={{config.proliaReportAdverseEventsUrl}} target="_blank" onclick={{action "trackAndSetProperty" "Assessment Modal Link" "proliaLinkClicked.isSelected" true preventDefault=false}}>
+                        <button class="btn-sm btn-primary" type="button">Report adverse events to manufacturer</button>
+                    </a>
+                </div>
+            {{else}}
+                <div class="pull-left assessment-modal-buttons">
+                    <button class="btn-sm" type="button" onclick={{action "cancel"}}>Show me later</button>
+                </div>
+                <div class="pull-right assessment-modal-buttons">
+                    <button data-element="save-prolia-modal" class="btn-sm btn-primary" type="button" onclick={{action "save"}} disabled={{isLoading}}>Save</button>
+                </div>
+            {{/if}}
+        {{else}}
+            <div class="pull-right assessment-modal-buttons">
+                <button class="btn-sm" type="button" {{action "cancel"}}>Cancel</button>
+                <button data-element="save-prolia-modal" class="btn-sm btn-primary" type="button" {{action "save"}} disabled={{isLoading}}>Save</button>
+            </div>
+        {{/if}}
+    {{/section.footer}}
+{{/content-modal}}

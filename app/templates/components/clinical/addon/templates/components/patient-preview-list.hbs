@@ -1,0 +1,32 @@
+<div class="filter-bar">
+    {{single-select value=selectedPreviewType content=previewTypes data-element="preview-type"
+        optionLabelPath="label" optionValuePath="value" sortLabels=false isShorter=true}}
+</div>
+
+<div class="previews">
+    {{#each sortedPreviews as |preview index|}}
+        <div class="slc-row {{if preview.isSelected "active"}}" data-guid="{{preview.identifyingGuid}}" {{action "selectPreview" preview}}
+            data-element="preview-{{index}}">
+
+            {{#if preview.isSigned}}
+                <div class="pull-right icon-lock"></div>
+            {{/if}}
+
+            {{#if preview.isAbnormal}}
+                <div class="pull-right icon-disk"></div>
+            {{/if}}
+
+            {{#if preview.isEncounter}}
+                <p class="{{unless preview.isSelected "p-link"}}">{{format-date-time-utc preview.eventDateTimeUtc format="MMM DD YYYY"}}</p>
+                {{#if preview.secondaryEventType}}<p class="p-666">{{preview.secondaryEventType}}</p>{{/if}}
+                <p class="p-666">{{preview.primaryEventType}}</p>
+                {{#if preview.eventDetail}}
+                    <p class="p-666">CC: {{preview.eventDetail}}</p>
+                {{/if}}
+            {{else}}
+                <p class="{{unless preview.isSelected "p-link"}}">{{format-date-time-local preview.eventDateTimeUtc format="MMM DD YYYY"}}</p>
+                <p class="p-666">{{preview.displayText}}</p>
+            {{/if}}
+        </div>
+    {{/each}}
+</div>

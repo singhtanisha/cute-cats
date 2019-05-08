@@ -1,0 +1,18 @@
+<header>
+    {{#if pastMedicalHistory}}<a data-element="add-all-pmh-link" {{action "addAll"}}>Add all</a>{{/if}}
+</header>
+<div class="results-list">
+    {{#if isLoading}}
+        <div class="results-error">Loading past medical history...</div>
+    {{else}}
+        {{#if error}}
+            <div class="results-error">{{error}}</div>
+        {{else}}
+            {{#each sortedPastMedicalHistory as |item|}}
+                <p class="p-link flex-template-item-container" {{action "insertText" item}} title={{item.text}}><span class="template-item">{{item.text}}</span>{{#if item.wasInserted}}<i class="icon icon-checkmark"></i>{{/if}}</p>
+            {{else}}
+                <div class="results-error">No past medical history</div>
+            {{/each}}
+        {{/if}}
+    {{/if}}
+</div>

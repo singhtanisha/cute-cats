@@ -1,0 +1,80 @@
+<h4 data-element="worksheet-display-name" class="h4">{{responses.content.worksheet.title}}</h4>
+
+<p data-element="worksheet-description">
+    {{responses.content.worksheet.description}}
+    {{#if responses.content.worksheet.printoutUrl}}
+        <a target="_blank" href="{{unbound responses.content.worksheet.printoutUrl}}">Print Test</a>
+    {{/if}}
+</p>
+
+<label class="field-label">Status</label>
+<p data-element="worksheet-status">{{selectedStatus}}</p>
+
+{{#if reasonCodes}}
+    <label class="field-label">Reason</label>
+    <p data-element="worksheet-reason">{{if reasonCode.displayName reasonCode.displayName "No reason recorded."}}</p>
+{{/if}}
+
+<label class="field-label">Result</label>
+<p data-element="worksheet-result">{{if resultCode.displayName resultCode.displayName "No result recorded."}}</p>
+
+<div class="inline-flex-group-v2">
+    <div class="item gutter-xs box-padding-TBn">
+        <label class="field-label">Start date</label>
+        <p data-element="worksheet-start-date">{{if startDateTimeUtc startDateTimeUtc "--"}}</p>
+    </div>
+    <div class="item gutter-xs box-padding-TBn">
+        <label class="field-label">End date</label>
+        <p data-element="worksheet-end-date">{{if endDateTimeUtc endDateTimeUtc "--"}}</p>
+    </div>
+</div>
+
+<label class="field-label">Encounter type</label>
+<p data-element="worksheet-encounter-type">{{encounterAndNoteType}}<a data-element="worksheet-encounter-link" class="box-margin-Lmd-v2" onclick={{action openEncounterClicked}}>View encounter</a></p>
+
+<label class="field-label">Comment</label>
+<p data-element="worksheet-comments">{{if comments comments "No comments recorded."}}</p>
+
+{{#unless reasonCodes}}
+    <label class="field-label">Assessment responses</label>
+    <ol data-element="worksheet-questions" class="list list--unstyled">
+        {{#each responses.questions as |question index|}}
+            {{#if question.isShowing}}
+                {{#unless question.isSeparator}}
+                    <li data-element="worksheet-question-{{index}}" class="box-padding-Tn box-padding-Bn box-margin-Blg-v2">
+                        <p class="box-margin-Bn">
+                            {{#if question.numbering}}
+                                {{question.numbering}}.
+                            {{/if}}
+                            <span data-element="worksheet-question-label-{{index}}">{{{question.label}}}</span>
+                        </p>
+                        <div data-element="worksheet-question-anwser-{{index}}">
+                            {{#if question.isRadioQuestion}}
+                                <span class="p-semibold">{{question.responseText}}</span>
+                            {{/if}}
+                            {{#if question.isNumericType}}
+                                Number of days:<span class="box-margin-Lmd-v2 p-semibold">{{question.value}}</span>
+                            {{/if}}
+                        </div>
+                        {{#if question.secondaryLabel}}
+                            <p class="secondary-label">{{question.secondaryLabel}}</p>
+                        {{/if}}
+                    </li>
+                {{/unless}}
+                {{#if question.isTextSeparator}}
+                    <li data-element="worksheet-question-{{index}}" class="box-padding-Tn box-padding-Bn box-margin-Bmd-v2"><span data-element="worksheet-question-label">{{{question.label}}}</span></li>
+                {{/if}}
+            {{/if}}
+        {{/each}}
+    </ol>
+    <label class="field-label">Score</label>
+    {{#if responses.isComplete}}
+        <h4 data-element="worksheet-score" class="box-margin-Bmd-v2">{{responses.score}} - {{responses.midasAssessmentResult}}</h4>
+    {{else}}
+        <h4 data-element="worksheet-score" class="box-margin-Bmd-v2">No score</h4>
+    {{/if}}
+    {{#if responses.content.worksheet.summary}}
+        <label class="field-label">Score key</label>
+        <p data-element="worksheet-summary" class="box-margin-Bn">{{{responses.content.worksheet.summary}}}</p>
+    {{/if}}
+{{/unless}}

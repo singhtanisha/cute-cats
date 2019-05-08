@@ -1,0 +1,174 @@
+{{#print-preview-content printTitle="Immunizations" isVisible=isVisible class="type-v2 immunizations-print"}}
+	{{#if isRegistryRecord}}
+		<h2>{{registryName}}</h2>
+		<section class="inline-flex-group-v2" data-element="query-patient-summary-info">
+			<div class="item item-fixed gutter-md">
+				<span class="h4">Name:</span> <span>{{registryContent.patientFilters.fullName}}</span>
+			</div>
+			<div class="item item-fixed gutter-md">
+				<span class="h4">DOB:</span> <span>{{format-date-time-utc registryContent.patientFilters.dateOfBirth 'MM/DD/YYYY'}}</span>
+			</div>
+			<div class="item item-fixed gutter-md">
+				<span class="h4">Sex:</span> <span>{{registryContent.patientFilters.gender}}</span>
+			</div>
+			<div class="item item-fixed gutter-md">
+				<span class="h4">PRN:</span> <span>{{registryContent.patientFilters.patientRecordNumber}}</span>
+			</div>
+		</section>
+		<h3>History</h3>
+		<div class="immunizations-print-table table-content">
+			<div class="table">
+				{{#if noHistoryResults}}
+					<div class="row no-stripe">
+						<p>No results found</p>
+					</div>
+				{{else}}
+					<div class="row header-row">
+						<div class="col-xs-3">Vaccine Group</div>
+						<div class="col-xs-2">Date Administered</div>
+						<div class="col-xs-2">Age</div>
+						<div class="col-xs-2">Valid Dose</div>
+						<div class="col-xs-3">Status</div>
+					</div>
+					{{#each registryContent.history as |vaccineGroup vaccineGroupIndex|}}
+						<div class="immunization-group">
+							<div class="row immunization-group-header no-stripe">
+								<div class="col-xs-12">{{vaccineGroup.name}}</div>
+							</div>
+							{{#each vaccineGroup.vaccines as |vaccine index|}}
+								<div class="row no-stripe">
+									<div class="col-xs-3">{{vaccine.vaccineAdministered}}</div>
+									<div class="col-xs-2">{{format-date-time-utc vaccine.dateAdministered 'MM/DD/YYYY'}}</div>
+									<div class="col-xs-2">{{age-on-date patient.birthDate vaccine.dateAdministered}}</div>
+									<div class="col-xs-2">
+										<div class="pull-left">
+											<div>{{vaccine.isValidDose}}</div>
+											<div>{{vaccine.validityReason}}</div>
+										</div>
+									</div>
+									<div class="col-xs-3">{{vaccine.completionStatus}}</div>
+								</div>
+							{{/each}}
+						</div>
+					{{/each}}
+				{{/if}}
+			</div>
+		</div>
+		<h3>Forecast</h3>
+		<h4>Schedule: {{registryContent.schedule}}</h4>
+		<div class="immunizations-print-table table-content">
+			<div class="table">
+				{{#if noForecastResults}}
+					<div class="row no-stripe">
+						<p>No results found</p>
+					</div>
+				{{else}}
+					<div class="row header-row">
+						<div class="col-xs-3">Vaccine Group</div>
+						<div class="col-xs-3">Due Date</div>
+						<div class="col-xs-3">Earliest date to give</div>
+						<div class="col-xs-3">Latest date to give</div>
+					</div>
+					{{#each registryContent.forecast as |vaccineGroup vaccineGroupIndex|}}
+						<div class="row no-stripe no-group">
+							<div class="col-xs-3">{{vaccineGroup.vaccineGroup}}</div>
+							<div class="col-xs-3">{{format-date-time-utc vaccineGroup.dueDate 'MM/DD/YYYY'}}</div>
+							<div class="col-xs-3">{{format-date-time-utc vaccineGroup.earliestDateToGive 'MM/DD/YYYY'}}</div>
+							<div class="col-xs-3">{{format-date-time-utc vaccineGroup.latestDateToGive 'MM/DD/YYYY'}}</div>
+						</div>
+					{{/each}}
+				{{/if}}
+			</div>
+		</div>
+	{{else}}
+		<h2 class="box-padding-Lmd">EHR Immunization Record {{if showComments "(with comments)"}}</h2>
+		{{#print-chart-section 
+			chartNote=chartNote 
+			patientSummary=patient 
+			title="Immunizations" 
+			class="chart-print-container"
+			includeHeaderAndFooter=true 
+			chartNotePrintInfo=chartNotePrintInfo}}
+					<div class="immunizations-print-table table-content">
+						<div class="table">
+							<div class="row header-row">
+								{{#if showComments}}
+									<div class="col-xs-2">Vaccine Group</div>
+									<div class="col-xs-2">Date Administered</div>
+									<div class="col-xs-2">Age</div>
+									<div class="col-xs-3">Status</div>
+									<div class="col-xs-3">Comment</div>
+								{{else}}
+									<div class="col-xs-4">Vaccine Group</div>
+									<div class="col-xs-3">Date Administered</div>
+									<div class="col-xs-2">Age</div>
+									<div class="col-xs-3">Status</div>
+								{{/if}}
+							</div>
+
+							{{#each content as |immunization|}}
+								<div class="immunization-group">
+									<div class="row immunization-group-header no-stripe">
+										<div class="col-xs-12">{{immunization.description}}</div>
+									</div>
+									{{#each immunization.sortedVaccinations as |vaccination|}}
+										<div class="row no-stripe">
+											{{#if showComments}}
+												<div class="col-xs-2">{{vaccination.vaccineName}}</div>
+												<div class="col-xs-2">{{format-date-time vaccination.vaccinationDate format="MM/DD/YY"}}</div>
+												<div class="col-xs-2">{{age-on-date patient.birthDate vaccination.vaccinationDate "-"}}</div>
+												<div class="col-xs-3">
+													<p data-element="vaccination-source-type" class="{{if vaccination.source.isRefused "is-refused"}}">
+														{{vaccination.source.sourceType}}
+													</p>
+													{{#if vaccination.source.isAdministered}}
+														<p data-element="vaccination-source-description">
+															By: {{vaccination.administeredByProviderName}}
+														</p>
+													{{else if vaccination.source.isHistorical}}
+														<p data-element="vaccination-source-description">
+															{{vaccination.source.vaccinationSourceName}}
+														</p>
+													{{else if vaccination.source.isRefused}}
+														<p data-element="vaccination-source-description" class="is-refused">
+															{{vaccination.rejectionReason.rejectionReasonName}}
+														</p>
+													{{/if}}
+												</div>
+												<div class="col-xs-3">{{vaccination.comment}}</div>
+											{{else}}
+												<div class="col-xs-4">{{vaccination.vaccineName}}</div>
+												<div class="col-xs-3">{{format-date-time vaccination.vaccinationDate format="MM/DD/YY"}}</div>
+												<div class="col-xs-2">{{age-on-date patient.birthDate vaccination.vaccinationDate "-"}}</div>
+												<div class="col-xs-3">
+													<p data-element="vaccination-source-type" class="{{if vaccination.source.isRefused "is-refused"}}">
+														{{vaccination.source.sourceType}}
+													</p>
+													{{#if vaccination.source.isAdministered}}
+														<p data-element="vaccination-source-description">
+															By: {{vaccination.administeredByProviderName}}
+														</p>
+													{{else if vaccination.source.isHistorical}}
+														<p data-element="vaccination-source-description">
+															{{vaccination.source.vaccinationSourceName}}
+														</p>
+													{{else if vaccination.source.isRefused}}
+														<p data-element="vaccination-source-description" class="is-refused">
+															{{vaccination.rejectionReason.rejectionReasonName}}
+														</p>
+													{{/if}}
+												</div>
+											{{/if}}
+										</div>
+									{{/each}}
+								</div>
+							{{else}}
+								<div class="row">
+									<div class="col-xs-12">No immunizations recorded for this patient.</div>
+								</div>
+							{{/each}}
+						</div>
+					</div>
+		{{/print-chart-section}}
+	{{/if}}
+{{/print-preview-content}}

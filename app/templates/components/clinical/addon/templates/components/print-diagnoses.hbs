@@ -1,0 +1,12 @@
+{{#print-chart-section patientSummary=patient  title=title chartNote=chartNote includeHeaderAndFooter=includeHeaderAndFooter chartNotePrintInfo=chartNotePrintInfo}}
+    <div class="table-content">
+        <div class="table">
+            {{print-diagnoses-section content=activeDiagnoses title="Current" isIcd10=true
+                showDiagnosisComment=showDiagnosisComment showEncounterComment=showEncounterComment showMedication=showMedication}}
+        </div>
+        <div class="table">
+            {{print-diagnoses-section content=historicalDiagnoses title="Historical" isIcd10=true
+                showDiagnosisComment=showDiagnosisComment showEncounterComment=showEncounterComment showMedication=showMedication}}
+        </div>
+    </div>
+{{/print-chart-section}}

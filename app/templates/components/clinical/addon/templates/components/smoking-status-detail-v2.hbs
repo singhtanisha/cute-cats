@@ -1,0 +1,84 @@
+{{#detail-pane-v2 class="side-fixed col-xs-5 type-v2" as |section|}}
+    {{#section.right-module class="fill-space flex-column" as |right-module|}}
+        {{right-module.header
+            bigHeaderText=bigHeaderText
+            smallHeaderText=smallHeaderText
+            closeDetailPane=(action "closeDetailPane")}}
+        {{#right-module.body class="flex-grow box-padding-Alg-v2"}}
+            {{#if smokingStatusTypes}}
+                <p class="field-label field-title">Current tobacco use
+                    {{#if showUndo}}
+                        <a data-element="undo-link" class="box-margin-Lmd-v2 field-label__link" onclick={{action "undo"}}>Undo</a>
+                    {{/if}}
+                </p>
+                {{#if inActiveSmokingStatusType}}
+                    <div>
+                        {{d-radio-button
+                            data-element="smoking-option-old"
+                            id="smoking-option-old"
+                            name="smoking-option-old"
+                            value=inActiveSmokingStatusType.id
+                            selectedValue=smokingStatus.smokingStatusIdString
+                            disabled=disableOldOption
+                        }}
+                        <label for="smoking-option-old" data-element="smoking-option-old-label" class="pf-input pf-input--radio-label">
+                            {{inActiveSmokingStatusType.description}}
+                                {{#composable-popover data-element="info-popover" tagName="span" as |options|}}
+                                    {{options.popover-target tagName="a" classNames="icon-info text-color-placeholder" data-element="info-popover-target"}}
+                                    {{#options.popover}}
+                                        <div class="popover-content" data-element="smoking-popover-content">
+                                            The selection options for tobacco use have been updated. This option, which was previously selected, will be maintained in the patient record.
+                                        </div>
+                                    {{/options.popover}}
+                                {{/composable-popover}}
+                        </label>
+                    </div>
+                {{/if}}
+                {{#each smokingStatusTypes as |statusType index|}}
+                    <div>
+                        {{d-radio-button
+                            data-element=(concat "smoking-option-" index)
+                            id=(concat "smoking-option-" index)
+                            name=(concat "smoking-option-" index)
+                            value=statusType.id
+                            selectedValue=smokingStatus.smokingStatusIdString
+                            disabled=isNotAllowedToEdit
+                        }}
+                        <label for="smoking-option-{{index}}" data-element="smoking-option-{{index}}-label" class="pf-input pf-input--radio-label">
+                            {{statusType.description}}
+                        </label>
+                    </div>
+                {{/each}}
+            {{/if}}
+            <div class="box-margin-Tlg-v2" data-element="effective-date">
+                <p class="field-label">Effective date</p>
+                {{d-date-picker isLegacy=false value=smokingStatus.formattedDate placeholder="MM/DD/YYYY" startDate="01/01/1900" endDate=maxDate autoCorrectYear=true disabled=isNotAllowedToEdit}}
+            </div>
+        {{/right-module.body}}
+        {{#right-module.footer class="inline-flex-group-v2 box-padding-LRlg-v2 box-padding-TBsm-v2"}}
+            {{#if isAllowedToEdit}}
+                <div class="item gutter-sm box-fixed">
+                    <button type="button" class="btn--default" onclick={{action "cancel"}}>Cancel</button>
+                </div>
+                {{#unless smokingStatus.isNew}}
+                    <div class="item gutter-sm box-fixed">
+                        {{#popover-confirm action="delete" title="Delete tobacco use" popoverContent="This will remove this tobacco use record from this patient's record." confirmLabel="Delete" classNames="btn--default" tagName="button"}}
+                            Delete
+                        {{/popover-confirm}}
+                    </div>
+                    <div class="item gutter-sm text-right">
+                        <button type="button" class="btn--brand" data-element="save-button" onclick={{action "save"}} disabled={{smokingStatus.saveDisabled}}>{{if isDirty "Save" "Mark as reviewed"}}</button>
+                    </div>
+                {{else}}
+                    <div class="item gutter-sm text-right">
+                        <button type="button" class="btn--brand" data-element="save-button" onclick={{action "save"}} disabled={{smokingStatus.saveDisabled}}>Save</button>
+                    </div>
+                {{/unless}}
+            {{else}}
+                <div class="item gutter-sm text-right">
+                    <button type="button" class="btn--brand" data-element="close-button" onclick={{action "cancel"}}>Close</button>
+                </div>
+            {{/if}}
+        {{/right-module.footer}}
+    {{/section.right-module}}
+{{/detail-pane-v2}}

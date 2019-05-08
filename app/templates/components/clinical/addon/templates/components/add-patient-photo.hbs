@@ -1,0 +1,77 @@
+{{#content-modal
+    isVisible=isVisible
+    modalStyle=3
+    class="add-photo-modal" as |section|}}
+    {{section.header title="Add patient photo" isCloseByXorOutsideVisible=true}}
+    {{#section.body}}
+    <div class="add-photo-container">
+      <div class="placeholder">
+        {{#if isUploadError}}
+            <div class="placeholder-icon">
+                <i class="icon-urgent"></i>
+            </div>
+          <div class="small upload-error-message">{{errorMessage}}</div>
+        {{else}}
+          <div class="placeholder-icon">
+              <i class="icon-camera"></i>
+          </div>
+          <ul class="small">
+              <li>Photos must be JPG, PNG, or GIF</li>
+              <li>No larger than 3 MB</li>
+              <li>Minimum resolution of 200 x 200</li>
+          </ul>
+        {{/if}}
+      </div>
+      <div class="upload-button">
+        {{#if isUploading}}
+          {{progress-bar progressTotal=uploadProgress progressTotalPositionInside=true
+          barColor="#14a4ec" isLabelVisible=false}}
+        {{else}}
+          {{#file-upload
+            saveUrl=uploadUrl
+            inputName="Filedata"
+            accept="image/*"
+            multiple=false
+            errorAction="onUploadError"
+            uploadAction="onUpload"
+            progressAction="onUploadProgress"
+            successAction="onUploadSuccess"
+            data-element="document-upload-button"
+            class="btn btn-primary"
+            maxBytes="3000000"
+          }}
+              Upload photo
+          {{/file-upload}}
+        {{/if}}
+      </div>
+      {{#unless isUploadError}}
+        <img class="photo-preview" src={{photoUrlAuthenticated}} onerror="$(this).hide(); $('.link-change-photo').hide();">
+        {{#unless isUploading}}
+          {{#file-upload
+            saveUrl=uploadUrl
+            inputName="Filedata"
+            accept="image/*"
+            multiple=false
+            errorAction="onUploadError"
+            uploadAction="onUpload"
+            progressAction="onUploadProgress"
+            successAction="onSuccess"
+            data-element="document-upload-link"
+            class="link-change-photo"
+          }}
+            <div class="photo-cover">Change photo</div>
+          {{/file-upload}}
+        {{/unless}}
+      {{/unless}}
+    </div>
+    <div>
+        <h4 class="header4semibold">Photo guidelines</h4>
+        <ul>
+            <li>Select a square photo (200 x 200px ideal)</li>
+            <li>We will scale down anything larger</li>
+            <li>.jpg, .png, .gif accepted</li>
+        </ul>
+    </div>
+    {{/section.body}}
+    {{section.footer buttonRightPrimaryText="Done" buttonRightPrimaryAction=(action "done")}}
+{{/content-modal}}

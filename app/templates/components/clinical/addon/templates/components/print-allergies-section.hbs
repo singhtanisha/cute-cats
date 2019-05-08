@@ -1,0 +1,43 @@
+<div class="row header-row">
+    <div class="col-xs-12"><h2>{{title}} Allergies</h2></div>
+</div>
+<div class="row header-row">
+    <div class="col-xs-7">Active Allergies</div>
+    <div class="col-xs-3">Severity/Reactions</div>
+    <div class="col-xs-2">Onset</div>
+</div>
+{{#if data}}
+    {{#each data.active.severitySorted as |allergy|}}
+        {{print-allergy-item allergy=allergy showComments=showComments showEncounterComments=showEncounterComments }}
+    {{else}}
+        <div class="row no-stripe">
+            <div class="col-xs-12">
+                {{#if noKnownAllergies}}
+                    Patient has no known active drug allergies
+                {{else}}
+                    No active <span class="lowercase">{{title}}</span> allergies
+                {{/if}}
+            </div>
+        </div>
+    {{/each}}
+    {{#if data.inactive}}
+        <div class="row header-row">
+            <div class="col-xs-7">Inactive Allergies</div>
+            <div class="col-xs-3">Severity/Reactions</div>
+            <div class="col-xs-2">Onset</div>
+        </div>
+        {{#each data.inactive.severitySorted as |allergy|}}
+            {{print-allergy-item allergy=allergy showComments=showComments showEncounterComments=showEncounterComments }}
+        {{/each}}
+    {{/if}}
+{{else}}
+    <div class="row no-stripe">
+        <div class="col-xs-12">
+            {{#if noKnownAllergies}}
+                Patient has no known drug allergies
+            {{else}}
+                No <span class="lowercase">{{title}}</span> allergies recorded
+            {{/if}}
+        </div>
+    </div>
+{{/if}}

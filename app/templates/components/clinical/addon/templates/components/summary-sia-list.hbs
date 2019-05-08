@@ -1,0 +1,32 @@
+{{data-tunnel name="summary-sia-list" onDataReceived=(perform loadSIAs)}}
+
+{{#composable-card as |card|}}
+    {{#card.header as |header|}}
+        {{#header.title}}
+            Screenings/ Interventions/ Assessments
+            <a class="icon-printer icon--md text-color-placeholder box-margin-Lmd-v2 {{if isLoading "hidden"}}" onclick={{action "print"}} data-element="print-sia-button"></a>
+        {{/header.title}}
+    {{/card.header}}
+    {{#card.content}}
+        {{#if isError}}
+            <p class="box-margin-Bn">{{errorText}}</p>
+        {{else}}
+            {{#if patientSummarySIAs}}
+                <ul class="list list--hover list--selectable" data-element="sia-list">
+                    {{#each patientSummarySIAs as |sia index|}}
+                        {{summary-sia-list-item selectedItem=selectedItem index=index sia=sia edit=(action "edit")}}
+                    {{/each}}
+                </ul>
+                {{#if showLoadMore}}
+                    <a data-element="load-more-button" onclick={{perform loadSIAs}}>Show more ({{restSIAsCount}})</a>
+                {{/if}}
+            {{else}}
+                <p class="text-color-placeholder box-margin-Bn">No screening/interventions/assessments for this patient</p>
+            {{/if}}
+        {{/if}}
+    {{/card.content}}
+{{/composable-card}}
+
+{{#print-preview-content printTitle=printTitle isVisible=isPrintPreviewVisible}}
+    {{print-patient-sia-section printSummarySIAs=printSummarySIAs patient=patient class="sh-print chart-print-container"}}
+{{/print-preview-content}}

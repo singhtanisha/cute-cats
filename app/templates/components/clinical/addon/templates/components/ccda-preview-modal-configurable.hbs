@@ -1,0 +1,173 @@
+{{#content-modal
+    modalStyle=0
+    isVisible=isVisible
+    isDraggable=false
+    includeBackdrop=true
+    modalSize="responsive912w"
+    isLoading=isLoading as |section|}}
+    {{section.header title=titleConfigurable isCloseByXorOutsideVisible=true}}
+    {{#section.body}}
+        {{#if showErrorPane}}
+            <div class="ccda-preview-modal-error-content type-v2">
+                <ul class="ccda-error-body">
+                    {{#each ccda.validationErrors.errorList as |error|}}
+                        <li class="ccda-error-item">
+                            {{#content-expander expandableContentSelector=error.dataElementClass }}
+                                <i class="icon-urgent"></i>
+                                <span class="upper p-semibold">{{error.errorTypeIndicator}} - {{error.description}}</span>
+                            {{/content-expander}}
+                            {{!-- SEC-1204 html comes from our ccd transform in service --}}
+                            <div class="ccd-error-details {{error.dataElement}}">
+                                {{#if error.documentLineNumber}}
+                                    <div class="row">
+                                        <div class="col-xs-3 upper p-semibold">Line number</div>
+                                        <div class="col-xs-9">{{error.documentLineNumber}}</div>
+                                    </div>
+                                {{/if}}
+                                {{#if error.type}}
+                                    <div class="row">
+                                        <div class="col-xs-3 upper p-semibold">Type</div>
+                                        <div class="col-xs-9">{{error.type}}</div>
+                                    </div>
+                                {{/if}}
+                                {{#if error.xpath}}
+                                    <div class="row">
+                                        <div class="col-xs-3 upper p-semibold">Xpath</div>
+                                        <div class="col-xs-9">{{error.xpath}}</div>
+                                    </div>
+                                {{/if}}
+                            </div>
+                        </li>
+                    {{/each}}
+                    {{ccda.validationErrors.errorText}}
+                </ul>
+            </div>
+        {{else}}
+            {{#if isValidating}}
+                <div class="ccda-notification">
+                    {{#view-spinner class="loading-indicator"
+                        contentElement=".ccda-notification .loading-indicator > div" isShorter=true
+                        isLoading=isValidating}}
+                        <div></div>
+                    {{/view-spinner}}
+                    <div class="spinner-label">Validating file</div>
+                </div>
+            {{else if showNotification}}
+                {{#if isValidationError}}
+                    <div class="ccda-notification ccda-error-indicator">
+                        <i class="icon-urgent"></i>
+                        <span data-element="validation-error-message">{{validationErrorMessage}}</span>
+                        <a data-element="view-validation-errors-link" onclick={{action "toggleErrorPane"}}>View details</a>
+                        <a class="icon-go-away pull-right" onclick={{action "closeNotification"}}></a>
+                    </div>
+                {{else}}
+                    <div class="ccda-notification ccda-success-indicator">
+                        <i class="icon-checkmark"></i>
+                        <span>File validation complete</span>
+                    </div>
+                {{/if}}
+            {{/if}}
+            <div class="left-panel left-panel-v2 ccda-preview-modal-content type-v2 {{if isNotificationDisplayed "with-notification"}}">
+                <h4 class="header4semibold">{{patientName}}</h4>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="row">
+                            <div class="col-xs-6 upper">Date of birth</div>
+                            <div class="col-xs-6">{{format-date-time-ignore-offset ccda.patientDemographics.dateOfBirth "MM/DD/YYYY"}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 upper">Sex</div>
+                            <div class="col-xs-6">{{ccda.patientDemographics.sex}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 upper">Care team</div>
+                            <div class="col-xs-6">
+                                {{#each careTeamNames as |name|}}
+                                    <div class="box-margin-Bsm-v2">
+                                        <div>{{name}}</div>
+                                    </div>
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="row">
+                            <div class="col-xs-6 upper">Race</div>
+                            <div class="col-xs-6">{{ccda.patientDemographics.race}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 upper">Ethnicity</div>
+                            <div class="col-xs-6">{{ccda.patientDemographics.ethnicity}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 upper">Preferred language</div>
+                            <div class="col-xs-6">{{preferredLanguage}}</div>
+                        </div>
+                    </div>
+                </div>
+                {{#each sortedComponents as |component|}}
+                    {{#unless component.isTocOnly}}
+                        {{#if component.isDisplayActive}}
+                            <div class="box-margin-Tmd-v2" data-element="{{component.dataElement}}">
+                                {{#content-expander expandableContentSelector=component.dataElementClass isExpanded=true }}
+                                    <div class="p-semibold">{{component.title}}</div>
+                                {{/content-expander}}
+                                {{!-- SEC-1204 html comes from our ccd transform in service --}}
+                                <div class="ccd-component-container {{component.dataElement}}">
+                                    {{{component.html}}}
+                                </div>
+                            </div>
+                        {{/if}}
+                    {{/unless}}
+                {{/each}}
+            </div>
+            <div class="right-panel-v2 type-v2 {{if isNotificationDisplayed "with-notification"}}">
+                <h4>Table of contents</h4>
+                {{#each sortedComponents as |component|}}
+                    {{#unless component.isChild}}
+                        <div class="ccda-toc-item inline-flex-group" data-element="{{component.dataElementToc}}">
+                            <div class="item gutter-xs-v2">
+                                <a {{action "goToSection" component.dataElement}}>{{component.title}}</a>
+                            </div>
+                            {{d-checkbox-switch checked=component.isDisplayActive class="item box-fixed-md-v2"}}
+                        </div>
+                    {{/unless}}
+                {{/each}}
+            </div>
+        {{/if}}
+    {{/section.body}}
+    {{#section.footer}}
+        {{#if showErrorPane}}
+            <div class="pull-left box-padding-Lmd-v2 box-padding-Txs-v2">
+                <a onclick={{action "toggleErrorPane"}} data-element="link-back-to-ccda">Back to view CCDA information</a>
+            </div>
+            <div class="pull-right">
+                <a class="btn btn-sm" href="{{config.ccdaParsingLearnMoreURL}}" target="_blank">Learn more</a>
+                <a class="btn btn-sm" {{action "print"}}>Print</a>
+                {{#unless shouldHideDownloadButton}}
+                    <button class="btn btn-sm btn-primary" {{action "download" false}}>Download XML</button>
+                {{/unless}}
+            </div>
+        {{else}}
+            {{#unless shouldHideSettingsLink}}
+                <div class="pull-left box-padding-Lmd-v2 box-padding-Txs-v2">
+                    <a onclick={{action "gotoCcdSettings"}} data-element="link-ccda-settings">Manage order &amp; display of content</a>
+                </div>
+            {{/unless}}
+            <div class="pull-right">
+                {{#if isLoading}}
+                    <a class="btn btn-sm" disabled=true>Download</a>
+                    <a class="btn btn-sm" disabled=true>Print</a>
+                {{else}}
+                    {{#unless shouldHideDownloadButton}}
+                        {{#unless isValidationError}}
+                            <button class="btn btn-sm" data-element="button-download-ccda-html" {{action "download" true}}>Download HTML</button>
+                        {{/unless}}
+                        <button class="btn btn-sm" data-element="button-download-ccda-xml" {{action "download" false}}>Download XML</button>
+                    {{/unless}}
+                    <a class="btn btn-sm btn-primary" {{action "print"}}>Print</a>
+                {{/if}}
+            </div>
+        {{/if}}
+    {{/section.footer}}
+{{/content-modal}}

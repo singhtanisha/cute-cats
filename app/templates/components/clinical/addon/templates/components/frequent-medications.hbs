@@ -1,0 +1,24 @@
+{{#if isLoading}}
+    <p class="p-666">Loading frequent medications...</p>
+{{else}}
+    {{#if loadFailed}}
+        <p class="p-666">Can't load frequent medications. Please
+            <a href="#" {{action "reloadFrequentMedications"}}>try again.</a>
+        </p>
+    {{else}}
+        {{#if frequentMedications}}
+            {{#unless hideFilter}}
+                <div class="search-container">
+                    {{input classNames="no-borders search-input" placeholder="Search frequent medications" value=medicationsFilter}}
+                </div>
+            {{/unless}}
+            <div class="results-list flex-grow">
+                {{#each filteredMedications as |item|}}
+                    <p class="p-link frequent-medications--item" {{action "selectMedication" item}} data-guid="{{item.id}}">{{item.drugName}}</p>
+                {{/each}}
+            </div>
+        {{else}}
+            <p class="p-666">There are no frequent medications.</p>
+        {{/if}}
+    {{/if}}
+{{/if}}
