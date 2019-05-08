@@ -1,0 +1,8 @@
+.cat-resize {
+    object-fit: cover;
+    width: 100px;
+    height: 50%;
+}
+.image-row {
+    display: inline-block
+}
