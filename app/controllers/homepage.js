@@ -10,12 +10,12 @@ export default Controller.extend({
     showLoadingMoreCatsMessage: computed('loadCats.isRunning', 'rows.length', function() {
         return this.get('loadCats.isRunning') && this.get('rows.length') > 0;
     }),
+    landingMessage: 'LOADING CUTE CATS...',
     init() {
         this._super();
         this.get('loadCats').perform();
     },
     loadCats: task(function* () {
-        debugger;
         var url = 'http://127.0.0.1:8000/';
         yield $.ajax({
             url: url,
@@ -26,7 +26,7 @@ export default Controller.extend({
             this.set('cats', cats.pushObjects(response.slice(0,100)));
             this.generateRows();
         }).fail((error) => {
-            debugger;
+            this.set('landingMessage', `OH NO! WE CAN'T FIND THE CATS. TRY REFRESHING THE PAGE.`);
         });
     }),
     generateRows() {
@@ -39,7 +39,6 @@ export default Controller.extend({
             rows.pushObject(cats.slice(i, i+10))
             i = i + 10;
         }
-        debugger;
         this.set('rows', rows);
         this.set('lastImageIndex', i);
 

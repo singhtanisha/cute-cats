@@ -5,7 +5,7 @@
                 {{image-row row=row viewFullScreen=(action "viewFullScreen")}}
             {{/vertical-collection}}
         {{else}}
-            <div class="cat-loading-text">LOADING CUTE CATS...</div>
+            <div class="cat-loading-text">{{landingMessage}}</div>
         {{/if}}
     </div>
     {{#if showLoadingMoreCatsMessage}}
