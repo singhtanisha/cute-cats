@@ -4,6 +4,11 @@
             {{#vertical-collection rows estimateHeight=200 containerSelector=".search-results" lastReached="loadMore" as |row|}}
                 {{image-row row=row viewFullScreen=(action "viewFullScreen")}}
             {{/vertical-collection}}
+        {{else}}
+            <div class="cat-loading-text">LOADING CUTE CATS...</div>
         {{/if}}
     </div>
+    {{#if showLoadingMoreCatsMessage}}
+        <div class="cat-loading-more-text">LOADING MORE CUTE CATS...</div>
+    {{/if}}
 </div>

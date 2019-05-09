@@ -7,9 +7,9 @@ export default Controller.extend({
     cats: [],
     rows: [],
     lastImageIndex: 0,
-    // showLoadingMoreCatsMessage: computed('loadCats.isRunning', 'rows.length', function() {
-    //     return this.get('loadCats.isRunning') && this.get('rows.length') > 0;
-    // }),
+    showLoadingMoreCatsMessage: computed('loadCats.isRunning', 'rows.length', function() {
+        return this.get('loadCats.isRunning') && this.get('rows.length') > 0;
+    }),
     init() {
         this._super();
         this.get('loadCats').perform();
