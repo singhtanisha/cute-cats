@@ -13,7 +13,6 @@ export default Controller.extend({
         this.get('loadCats').perform();
     },
     loadCats: task(function* () {
-
         var url = 'http://127.0.0.1:8000/';
         $.ajax({
             url: url,
@@ -23,18 +22,6 @@ export default Controller.extend({
             const cats = this.get('cats');
             this.set('cats', cats.pushObjects(response.slice(0,100)));
             this.generateRows();
-
-            // let i;
-            // const rows = this.get('rows');
-            // for (i = 0; i < res.length;) {
-            //     rows.pushObjects(res.slice(i, i+5))
-            //     i = i + 5;
-            // }
-            //
-            // const cats = this.get('cats');
-            // cats.pushObjects(res.slice(1, 20))
-            // debugger;
-            // this.set('cats', res.slice(1, 11));
         }).fail((error) => {
             debugger;
         });
@@ -67,6 +54,10 @@ export default Controller.extend({
     actions: {
         loadNextPage() {
             this.fetchMoreRows();
+        },
+        zoomImage(url) {
+            const imgurId = url.match(/imgur.com\/(.{7})/)[1];
+            this.transitionToRoute('full-screen', imgurId);
         }
     }
 })

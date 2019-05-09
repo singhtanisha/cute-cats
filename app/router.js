@@ -8,6 +8,7 @@ const Router = EmberRouter.extend({
 
 Router.map(function() {
   this.route('homepage');
+  this.route('full-screen', { path: '/:imageId' });
 });
 
 export default Router;
