@@ -1,6 +1,5 @@
-import EmberObject from '@ember/object';
-import { observer } from '@ember/object';
 import { task } from 'ember-concurrency';
+import { computed } from '@ember/object';
 import Controller, { inject as controller } from '@ember/controller';
 
 export default Controller.extend({
@@ -8,13 +7,17 @@ export default Controller.extend({
     cats: [],
     rows: [],
     lastImageIndex: 0,
+    // showLoadingMoreCatsMessage: computed('loadCats.isRunning', 'rows.length', function() {
+    //     return this.get('loadCats.isRunning') && this.get('rows.length') > 0;
+    // }),
     init() {
         this._super();
         this.get('loadCats').perform();
     },
     loadCats: task(function* () {
+        debugger;
         var url = 'http://127.0.0.1:8000/';
-        $.ajax({
+        yield $.ajax({
             url: url,
             type: 'GET',
             dataType: 'json'
@@ -52,10 +55,10 @@ export default Controller.extend({
         }
     },
     actions: {
-        loadNextPage() {
+        loadMore() {
             this.fetchMoreRows();
         },
-        zoomImage(url) {
+        viewFullScreen(url) {
             const imgurId = url.match(/imgur.com\/(.{7})/)[1];
             this.transitionToRoute('full-screen', imgurId);
         }

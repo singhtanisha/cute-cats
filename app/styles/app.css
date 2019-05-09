@@ -1,12 +1,29 @@
 .cat-homepage--centered {
     margin: 0 auto;
-    width: 1050px;
+    width: 2150px;
+    height: 100vh;
 }
 .cat-tile--image-sm {
     object-fit: cover;
-    width: 100px;
+    width: 200px;
     height: 50%;
 }
 .cat-tiles--inline-display {
     display: inline-block
+}
+.cat-loading-text {
+    text-align: center;
+    padding: 200px;
+    font-size: 40px;
+}
+
+.search-results {
+    max-height: 1500px;
+    overflow-y: auto;
+}
+.cat-image-row--height{
+    /* height: 200px; */
+}
+body {
+    overflow: hidden;
 }
