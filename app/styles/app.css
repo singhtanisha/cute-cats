@@ -1,12 +1,12 @@
-.cat-resize {
+.cat-homepage--centered {
+    margin: 0 auto;
+    width: 1050px;
+}
+.cat-tile--image-sm {
     object-fit: cover;
     width: 100px;
     height: 50%;
 }
-.image-row {
+.cat-tiles--inline-display {
     display: inline-block
-}
-.cat-container {
-    margin: 0 auto;
-    width: 1050px;
 }

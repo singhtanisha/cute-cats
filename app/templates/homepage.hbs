@@ -1,9 +1,9 @@
 {{#if rows}}
-    <div class="cat-container">
+    <div class="cat-homepage--centered">
         {{#if fullScreenUrl}}
             <img src={{fullScreenUrl}} alt="Flowers in Chania">
         {{else}}
-            {{#vertical-collection rows estimateHeight=38 containerSelector=".cat-container" lastReached="loadNextPage" as |row|}}
+            {{#vertical-collection rows estimateHeight=38 containerSelector=".cat-homepage--centered" lastReached="loadNextPage" as |row|}}
                 {{image-row row=row zoomImage=(action "zoomImage")}}
             {{/vertical-collection}}
         {{/if}}
