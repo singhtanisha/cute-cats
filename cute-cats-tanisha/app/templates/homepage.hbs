@@ -1,0 +1,14 @@
+<div class="cat-homepage--centered">
+    <div class="cat-tile-display">
+        {{#if rows}}
+            {{#vertical-collection rows estimateHeight=200 containerSelector=".cat-tile-display" lastReached="loadMore" as |row|}}
+                {{image-row row=row viewFullScreen=(action "viewFullScreen")}}
+            {{/vertical-collection}}
+        {{else}}
+            <div class="cat-loading-text">{{landingMessage}}</div>
+        {{/if}}
+    </div>
+    {{#if showLoadingMoreCatsMessage}}
+        <div class="cat-loading-more-text">LOADING MORE CUTE CATS...</div>
+    {{/if}}
+</div>

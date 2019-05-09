@@ -1,0 +1,30 @@
+body {
+    overflow: hidden;
+}
+.cat-homepage--centered {
+    margin: 0 auto;
+    width: 2150px;
+    height: 100vh;
+}
+.cat-tile--image-sm {
+    object-fit: cover;
+    width: 200px;
+    height: 50%;
+}
+.cat-tile--inline-display {
+    display: inline-block
+}
+.cat-loading-text {
+    text-align: center;
+    padding: 200px;
+    font-size: 40px;
+}
+.cat-loading-more-text {
+    text-align: center;
+    padding-top: 40px;
+    font-size: 40px;
+}
+.cat-tile-display {
+    max-height: 1500px;
+    overflow-y: auto;
+}
