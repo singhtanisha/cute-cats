@@ -1,7 +1,7 @@
 <div class="cat-homepage--centered">
-    <div class="search-results">
+    <div class="cat-tile-display">
         {{#if rows}}
-            {{#vertical-collection rows estimateHeight=200 containerSelector=".search-results" lastReached="loadMore" as |row|}}
+            {{#vertical-collection rows estimateHeight=200 containerSelector=".cat-tile-display" lastReached="loadMore" as |row|}}
                 {{image-row row=row viewFullScreen=(action "viewFullScreen")}}
             {{/vertical-collection}}
         {{else}}

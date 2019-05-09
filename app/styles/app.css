@@ -1,3 +1,6 @@
+body {
+    overflow: hidden;
+}
 .cat-homepage--centered {
     margin: 0 auto;
     width: 2150px;
@@ -8,7 +11,7 @@
     width: 200px;
     height: 50%;
 }
-.cat-tiles--inline-display {
+.cat-tile--inline-display {
     display: inline-block
 }
 .cat-loading-text {
@@ -21,13 +24,7 @@
     padding-top: 40px;
     font-size: 40px;
 }
-.search-results {
+.cat-tile-display {
     max-height: 1500px;
     overflow-y: auto;
-}
-.cat-image-row--height{
-    /* height: 200px; */
-}
-body {
-    overflow: hidden;
 }
