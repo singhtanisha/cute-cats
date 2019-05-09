@@ -1,7 +1,13 @@
 # cute-cats-tanisha
+Cute Cats! is a simple web application that displays an endless assortment of cat image tiles.
+Clicking on any one of them will allow you to view the image in full screen mode. Simply use the
+browser's "Back" button to navigate back to the homepage.
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+Happy Browsing!
+
+NOTE:
+To run this app, make sure you're running the provided cat_server at http://127.0.0.1:8000/.
+Please follow the Ember app setup/run instructions that follow to view the app locally.
 
 ## Prerequisites
 
